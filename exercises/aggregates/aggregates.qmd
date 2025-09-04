@@ -207,7 +207,7 @@ So again, no surprise, shooting guards spend the most minutes on the floor in th
 
 Among the top five positions, which one seems the most interesting to you and why? What's a possible story here?
 
-I'd chase a story here with a bit of a question headline, something like: "Why does the NBA have so many shooting guards?" or "How an overpopulation of shooting guard complicates how much each one can get playing time." 
+**Answer** I'd chase a story here with a bit of a question headline, something like: "Why does the NBA have so many shooting guards?" or "How an overpopulation of shooting guard complicates balance of playing time." 
 
 I go that route because we know there are comfortably more shooting guards than any other position and shooting guards account for the second largest minutes average. But that comes with a large standard deviation. So are there too many shooting guards? Is the NBA's modern desire to shoot 3s causing teams to roster too many players at that position, which thus create a massive minutes dispersion because, in reality, only so many shooting guards can play and a team is going to lean on their best players. Are lesser players being dragged along on active NBA rosters just because of a fad at that position, even if those players have no hope of actually playing? 
 
