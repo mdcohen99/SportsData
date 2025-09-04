@@ -82,7 +82,7 @@ The `read_csv` bits are pretty obvious, except for one thing. What happens in th
 ```{r}
 nbaplayers <- read_csv("data/nbaadvancedplayers2425.csv")
 ```
-**Answer** DESCRIBE THE RESULTS HERE
+**Answer** This is a list of 735 NBA players ordered by how many minutes they played. It includes several other bits of information including age, team, games played, rate of assists/blocks/steals and other analytical stats for each player. 
 
 Now we can inspect the data we imported. What does it look like? To do that, we use `head(nbaplayers)` to show the headers and **the first six rows of data**. If we wanted to see them all, we could just simply enter `nbaplayers` and run it.
 
@@ -113,10 +113,11 @@ nbaplayers |>
   group_by(Pos) |>
   summarise(
     total = n()
-  )
+  ) |> 
+  arrange(desc(total))
 ```
 
-**Answer** DESCRIBE THE RESULTS HERE
+**Answer** This shows how many players there are at each position in the data set. I added a line of code to reorder it in descending order so that we can see there are a lot more shooting guards than any other position in the NBA, leading the way with 191 players. The next closest is small forwards with 139.
 
 So let's walk through that. We start with our dataset -- `nbaplayers` -- and then we tell it to group the data by a given field in the data which we get by looking at either the output of `head` or you can look in the environment where you'll see `nbaplayers`.
 
@@ -133,7 +134,7 @@ nbaplayers |>
   arrange(desc(total))
 ```
 
-**Answer** HOW WOULD YOU DESCRIBE THE RESULTS?
+**Answer** Well, I got a step ahead in the last one. So same answer applies, there are way more shooting guards. We know the total number isn't exactly right because of repeated players, but based on the numbers we do see, there are 52 more shooting guards than the next closest position (about 7% more based on the flawed total).
 
 We can, if we want, group by more than one thing. Which team has the most of a single position? To do that, we can group by the team -- called Team in the data -- and position, or Pos in the data:
 
@@ -206,4 +207,8 @@ So again, no surprise, shooting guards spend the most minutes on the floor in th
 
 Among the top five positions, which one seems the most interesting to you and why? What's a possible story here?
 
-**ANSWER** 
+I'd chase a story here with a bit of a question headline, something like: "Why does the NBA have so many shooting guards?" or "How an overpopulation of shooting guard complicates how much each one can get playing time." 
+
+I go that route because we know there are comfortably more shooting guards than any other position and shooting guards account for the second largest minutes average. But that comes with a large standard deviation. So are there too many shooting guards? Is the NBA's modern desire to shoot 3s causing teams to roster too many players at that position, which thus create a massive minutes dispersion because, in reality, only so many shooting guards can play and a team is going to lean on their best players. Are lesser players being dragged along on active NBA rosters just because of a fad at that position, even if those players have no hope of actually playing? 
+
+
