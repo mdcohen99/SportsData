@@ -51,14 +51,13 @@ head(attendance)
 
 What's one thing you notice about the data that might make year-over-year comparisons more complex?
 
-**Answer** DESCRIBE IT HERE
+**Answer** Well, the NAs in the data set based on teams changing conferences will be annoying, and more so cause not every conference change has two lines. Also, there was that whole pandemic thing which throws a wrench in it. 
 
 The code to calculate percent change is pretty simple. Remember, with `summarize`, we used `n()` to count things. With `mutate`, we use very similar syntax to calculate a new value using other values in our dataset. So in this case, we're trying to do (new-old)/old, but we're doing it with fields. If we look at what we got when we did `head`, you'll see there's \`2024\` as the new data, and we'll use \`2023\` as the old data. So we're looking at one year. Then, to help us, we'll use arrange again to sort it, so we get the fastest growing school over one year.
 
 ```{r}
 attendance |> mutate(
-  change = (`2024` - `2023`)/`2023`
-) 
+  change = (`2024` - `2023`)/`2023`) 
 ```
 What do we see right away? Do those numbers look like we expect them to? No. They're a decimal expressed as a percentage. So let's fix that by multiplying by 100. 
 
@@ -72,12 +71,12 @@ Now, does this ordering do anything for us? No. Let's fix that with arrange.
 ```{r}
 attendance |> mutate(
   change = ((`2024` - `2023`)/`2023`)*100
-) |> arrange(desc(change))
+) |> arrange(desc(change)) 
 ```
 
 Who had the most growth in 2024 compared to the year before? What could account for that change? And what team(s) are the most interesting here?
 
-**Answer** YOUR ANSWER HERE
+**Answer** SMU had the biggest increase because SMU was very good last year and made the Playoff. Most interesting of course, with no bias here whatsoever, would be the Indiana University football Hoosiers. A long time noted football school. I speak from personal experience when I say that IU football crowds are horrible! Both students and adults. If you stay until halftime you deserve a medal. But our guy Curt Cignetti turned thing around and when the team started winning, people started showing up. Indiana sold out the stadium for the first time in God knows how long and had a 44% increase in attendance. 
 
 ## Back to women's soccer
 
@@ -92,16 +91,31 @@ matches_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSo
 Previously we calculated totals for shots attempted and shots on goal for each time. Now let's do shots on goal and goals, using group_by() and summarize(), and then we'll use mutate to add a percentage to that and see what stands out.
 
 ```{r}
-matches_2025 |> 
-  group_by(REPLACE WITH GROUP_BY) |> 
-  summarise(
-    total_on_goal = REPLACE WITH FORMULA,
-    total_goals = REPLACE WITH FORMULA
-  ) |> 
-  mutate(percent = REPLACE WITH FORMULA) |> 
-  arrange(desc(percent))
+top25 <- c("Stanford Cardinal", "Tennessee Volunteers", "Duke Blue Devils", "TCU Horned Frogs", "Notre Dame Fighting Irish", "Southern California Trojans", "Florida St. Seminoles", "Virginia Cavaliers", "Penn St. Nittany Lions", "South Carolina Gamecocks", "BYU Cougars", "Iowa Hawkeyes", "Arkansas Razorbacks", "Memphis Tigers", "Georgia Bulldogs", "Georgetown Hoyas", "Wake Forest Demon Deacons", "UCLA Bruins", "Oklahoma Sooners", "Virginia Tech Hokies", "Ohio St. Buckeyes", "Kansas Jayhawks", "North Carolina Tar Heels", "Xavier Musketeers", "Vanderbilt Commodores")
 ```
+
+```{r}
+matches_2025 |> 
+  group_by(team) |> 
+  summarise(
+    total_on_goal = sum(so_g),
+    total_goals = sum(goals)
+  ) |> 
+  mutate(percent = total_goals/total_on_goal) |> 
+  filter(team %in% top25) |>
+  arrange(desc(percent)) 
+```
+
 
 What stands out to you here? Describe that below. Would you narrow down the results to certain teams based on the data? If so, do that in the code and explain why you did it below. Finally, what's the most interesting result to you that could be a story?
 
-**Answer** YOUR ANSWER HERE
+**Answer** The first thing I would do here to find a story is narrow down to top 25 teams. Obviously a lot of these games are cupcakes, but we can still see how the top teams compare with each other in terms of scoring goals. Not scoring doesn't necessarily mean a bad team, it could be the signal of a stylistic decision in the team's play. 
+
+So I filtered for the most recent top 25 teams as of the Sept. 2 poll. 
+
+The results were interesting, especially the bottom end of it and that gets me to my story. South Carolina is ranked in the top 10 despite scoring on just 19.7% of its shots on goal and finishing off just 12 goals total. Nor has South Carolina played an easy schedule. So how did this work? 
+
+The Gamecocks have allowed just two goals all season. Granted, one of them was to Georgetown which is one of only two ranked teams South Carolina has played and South Carolina lost that game. South Carolina shut out Ohio State. Is this lucky given how few goals South Carolina has scored/will that regress to a mean? Or is South Carolina just THAT good defensively that it truly doesn't matter if they don't score many goals. 
+
+That said, South Carolina has the fourth most shots on goal among top 25 teams. So is South Carolina already very good defensively and just been actually UNCLUCKY on offense? Is South Carolina actually underperforming? Could this be even better than the No. 10 team? 
+
