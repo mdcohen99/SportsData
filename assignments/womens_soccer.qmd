@@ -83,7 +83,8 @@ matches_2025 |>
 ```{r}
 matches_2025 |>
   group_by(team) |>
-  summarize(total_corners_for = sum(corners), total_corners_against = sum(defensive_corners), difference = ((sum(corners)-sum(defensive_corners)))) |> filter(team == "Maryland Terrapins, Terps")
+  summarize(total_corners_for = sum(corners), total_corners_against = sum(defensive_corners), difference = ((sum(corners)-sum(defensive_corners)))) |> 
+  filter(team == "Maryland Terrapins, Terps")
 
 
                                                                                                           
