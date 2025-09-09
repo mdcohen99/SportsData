@@ -140,6 +140,8 @@ players |>
 
 **ANSWER** Who do you get as the first result, and what was his trueshooting percentage?
 
+Julian Reese is the top result with a trueshooting percentage of 60.76%. 
+
 
 So is 100 minutes our level? Here's the truth -- there's not really an answer here. We're picking a cutoff. If you can cite a reason for it and defend it, then it probably works.
 
@@ -178,7 +180,21 @@ matches_2025 |>
 Now it's your turn: do the same for the 2024 data. Load it from GitHub, then adapt the above code but add an additional filter to restrict the results to Maryland's first six games (the 6th game was on Sept. 1, 2024). You need to put the date value in quotes in this format: 'yyyy-mm-dd'
 
 ```{r}
-
+matches_2024 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv")
 ```
 
+```{r}
+matches_2024 |>
+  filter(team == 'Maryland Terrapins, Terps', date < '2024-09-01') |>
+  group_by(team) |>
+  summarise(
+    total_attempts = sum(sh_att),
+    total_on_goal = sum(so_g),
+    percent = (total_on_goal/total_attempts)*100
+  )
+```
 **ANSWER** How do the two years compare?
+
+Maryland has seen significant increases in each category from the 2024 to 2025 season. Maryland has 40 more attempts in this time frame, more than double the number of shots on goal, and a roughly five-to-six percent better clip of shots on target this year. 
+
+Shooting stats alone don't necessarily mean that Maryland is a better team, but it certainly confirms that Maryland has been far improved in terms of its number of opportunities. Offense can't exist without opportunities. So it's all a bit of baby steps toward a better team. 
