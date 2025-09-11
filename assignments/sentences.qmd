@@ -1,0 +1,55 @@
+---
+title: "sentences"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+matches_2024 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv")
+```
+Question: Do shots on goal actually matter? Is a team good because they take a lot of shots on goal? 
+
+Let's figure that out: 
+
+First, let's get two summaries: total shots on goal for each team and the number of games each team won...
+
+```{r}
+matches_2024 |> 
+  group_by(team) |> 
+  summarize(total_SoG = sum(so_g), total_wins = sum(outcome == "Win")) |> 
+  arrange(desc(total_wins))
+```
+
+Next, we need to see if those two numbers are correlated for each team. We can plot these and see what that looks like. 
+
+```{r}
+matches_2024 |> 
+  group_by(team) |> 
+  summarize(total_SoG = sum(so_g), total_wins = sum(outcome == "Win")) |> 
+  ggplot(aes(x = total_SoG, y = total_wins)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Do Shots on Goal Matter?",
+       x = "Total Shots on Goal",
+       y = "Total Wins") +
+  theme_minimal()
+```
+
+Looks like a pretty solid positive correlation! So let's get a real number to confirm that. 
+
+```{r}
+matches_2024 |> 
+  group_by(team) |> 
+  summarize(total_SoG = sum(so_g), total_wins = sum(outcome == "Win")) |> 
+  summarize(correlation = cor(total_SoG, total_wins, method="pearson"))
+```
+
+So this appears to be a very strong correlation. Let's look at what a data-driven paragraph could look like here... 
+
+The best womens' soccer teams in the country for the 2024 season tend to take quite a high volume of shots on goal. According to game-by-game data for each Division I team, nearly 77% of the 30 winningest teams in the country had more than 150 shots on goal over the course of the season — which is among the top half of the sport. Of five teams to surpass 200 shots on goal, all of them won 14 or more games. Three of those five teams were in the top 10 for total wins. While a shot on goal isn't necessarily a quality shot, the volume of shots proved to create enough opportunities to lead to more victories. 
+
+
