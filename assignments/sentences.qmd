@@ -4,6 +4,8 @@ format: html
 editor: visual
 ---
 
+**NOTE on AI: I played around with the Github Copilot extension in RStudio while completing this assignment. All the work and words are my own, turns out Copilot is very, very bad at suggesting what to write as it tries to auto fill my sentences while I type. But it was pretty interesting as I wrote code. I looked back at some of the notebooks from 405 while I was doing the correlation stuff to remember how do it, but as I wrote my little narrative in here, Copilot was successfully able to guess and auto fill the ggplot and correlation code that I was going to run. It didn't quite give it in the correct syntax nor always the exact final product of what I wanted, but it was very good at predicting what I was going to generally write. It's interesting at a minimum, but I don't think necessarily fully useful — especially if you don't know how to use R and are using Copilot as a way to coast by. It will lead you astray.**
+
 ```{r}
 library(tidyverse)
 ```
