@@ -10,8 +10,11 @@ library(tidyverse)
 
 We'll want to start with 2025 match data, which is located in [this GitHub repository](https://github.com/dwillis/NCAAWomensSoccerData). We can load the match data directly from GitHub using `read_csv`:
 
+###First portion of notebook 
 ```{r}
-matches_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2025.csv") |> mutate(goal_dif = team_score - opponent_score) 
+matches_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2025.csv") |> mutate(goal_dif = team_score - opponent_score, total_goals = goals + defensive_goals)
+
+matches_2024 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv") |> mutate(goal_dif = team_score - opponent_score, total_goals = goals + defensive_goals)
 ```
 
 Let's take a look at this data to see what it contains, using `head` and `glimpse`:
@@ -141,3 +144,22 @@ I don't think I've ever properly taken advantage of the filter function and I al
 I think I am also finding more and more comfort in R with the many different ways you can achieve the result you want. Compared to myself at this time last year where an assignment like this would freak me out and take me forever to do because I was trying to find the perfect solution, I could think of multiple ways to go about answering some of these questions as I worked through the notebook.
 
 In terms of the actual data analysis aspect of it, there are a lot of good basic stats we can work with here because we are easily able to work with game-by-game numbers as well as grouping them together for bigger picture, season-long stats. That allows us to make more direct comparisons from team to team or from game to game for a certain team. We can discover trends in the data with granular information like this as well as look for improvement or regression in a certain team, stat or performance.
+
+###NEW STUFF FROM SEPT 18
+
+###T TEST FROM CLASS
+```{r}
+t.test(matches_2024$total_goals, matches_2025$total_goals)
+```
+While the result of this test does show us that there is a statistically significant difference between 2024 and 2025's average total for scoring because the p value is less than 0.05, that doesn't tell the whole story here. We can reject the null hypothesis that there is not a significant difference in scoring between the two seasons, but because the 2025 season has far fewer games played and has yet to reach conference play, the increase in scoring in 2025 may not simply mean that teams are actually scoring more. This is a case where the statistical tests on their own don't provide all the context a human can add. We must know to balance both. As discussed in class, when the 2024 data was filtered for the same stretch of the season as thus far in 2025, the p value was very large and showed it was much more likely any difference in scoring this year is more likely due to random chance. 
+
+###What about for Maryland? 
+```{r}
+maryland_2024 <- matches_2024 |> filter(team == "Maryland Terrapins, Terps")
+maryland_2025 <- matches_2025 |> filter(team == "Maryland Terrapins, Terps")
+```
+
+```{r}
+t.test(maryland_2024$total_goals, maryland_2025$total_goals)
+```
+With Maryland's specific data, however, we do see an increase in scoring and with a large p value above 0.05. That means we must accept the null hypothesis which states there is not a significant difference in scoring. There is a small sample size this year compared to last year as with the data mentioned in the nationwide set, but our t test shows Maryland's increase in scoring is not actually a significant difference. Per the stats, it may be more due to random chance. With our context as reporters, we can say Maryland may have inflated scoring numbers because it hasn't gotten into a stretch of playing better teams yet. As I am writing this sitting at the checkout booth in Knight Hall, Maryland is playing the mighty Indiana Hoosiers just across the street here on campus and has yet to score a goal as of 8:42 p.m. on Thursday. And Indiana certainly is not a good team either. So how bad were the teams Maryland was actually able to to score against? 
