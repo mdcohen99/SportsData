@@ -7,7 +7,7 @@ Working with volleyball match stats, you'll investigate two key questions: Do te
 You'll need to read the directions carefully, replace "_____" with the proper library, variable name or value as appropriate, and answer the questions at the end.
 
 ```{r}
-library(_______)
+library(tidyverse)
 ```
 
 ```{r}
@@ -19,7 +19,7 @@ First, let's get a sense of what we're working with by creating team season tota
 ```{r}
 team_totals <- teams |> 
   mutate(block_totals = block_solos + (block_assists * 0.5)) |> 
-  group_by(_____) |> 
+  group_by(team) |> 
   summarise(kills_avg = mean(kills),
             aces_avg = mean(aces),
             digs_avg = mean(digs),
@@ -28,7 +28,7 @@ team_totals <- teams |>
             errors_avg = mean(errors),
             score_diff_avg = mean(team_score - opponent_score),
             serve_err_avg = mean(s_err),
-            hit_pct_avg = mean(_____),
+            hit_pct_avg = mean(hit_pct),
             def_hit_pct_avg = mean(defensive_hit_pct),
             total_attacks_avg = mean(total_attacks)
   )
@@ -59,7 +59,7 @@ We'll test whether teams actually hit significantly different from this 25% targ
 
 ```{r}
 # Test for all Division I teams
-all_teams_test <- t.test(team_totals$hit_pct_avg, mu = _____)
+all_teams_test <- t.test(team_totals$hit_pct_avg, mu = 0.25)
 all_teams_test
 
 # Focus on Big Ten
@@ -68,7 +68,7 @@ big10 <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Northwestern", "Wiscons
            "Rutgers", "Maryland", "Southern California", "UCLA", "Washington", "Oregon")
 
 big10_totals <- team_totals |> filter(team %in% big10)
-big10_test <- t.test(big10_totals$_____, mu = 0.25)
+big10_test <- t.test(big10_totals$hit_pct_avg, mu = 0.25)
 big10_test
 ```
 
@@ -95,9 +95,19 @@ ggplot(comparison_data, aes(x = group, y = hit_pct_avg, fill = group)) +
 ### Questions:
 1. Are Big Ten teams performing significantly different from the 25% benchmark compared to all D-I teams? What does this suggest about competitive levels?
 
+At both an NCAA wide level and filtered for the Big Ten, teams are largely falling short of hitting the 25% mark for hitting percentage. This is visualized well in the box plot, which slows medians below 25% for both groups, and in the case of the NCAA-wide data, the upper quartile is also below 25%. The Big Ten's upper quartile is above 25%, bt still the bulk of the league is below that mark. 
+
+The one concern in the Big Ten data, however, is that the p value is greater than 0.05. So we fail to reject the null hypothesis that Big Ten teams are hitting around 25%, and that the results being a bit below that here may be a bit due to random chance. At the NCAA-wide level, the p value is indeed below 0.05, which gives us confidence to reject the null hypothesis and state that the hitting percentages are significantly different than 25%, and, in this case, below that mark. 
+
+We know that the Big Ten historically is the best and deepest volleyball conference. So we're already starting with a baseline of higher quality players and thus more likelihood they can approach a 25% hitting percentage. If at an NCAA-wide level we're seeing the averages be below 25%, we can see here that the Big Ten is indeed a better performing league statistically, backing up its national reputation. Because we fail to reject null hypothesis for the Big Ten data whereas the raw data is largely below a 25% hitting percentage, we can state that Big Ten teams are possibly under performing relative what the null hypothesis might suggest. And even if the Big Ten is underperforming, what may be a poor performance for the league still outpaces the NCAA-wide averages. 
+
 2. How does the sample size difference between these two groups affect your confidence in the results?
 
+The sample size may be the biggest reason why the p value is below 0.05 for the NCAA-wide data and above for the Big Ten. Why? There are 18 teams in the Big Ten compared to 361 teams in the NCAA-wide data (including the 18 Big Ten teams). Given the much larger sample size nationally, we are more likely to have reliably and less variable data. The smaller sample size in the Big Ten means that random chance can have a larger effect on the results. That's why in reality the Big Ten may be under performing the results we may expect based on our failure to reject the null hypothesis. 
+
 3. If you were writing a story about volleyball performance standards, how would you describe these findings to readers who aren't familiar with statistical testing?
+
+Most NCAA coaches believe that if their teams can successfully hit, or score, on 25% of their attack attempts, then they will be in a good position to win the match. But data shows few teams can actually reach that mark. More than 75% of the 361 Division I volleyball teams fail to reach a 25% hitting percentage on average. Even the Big Ten, which is regarded as the best volleyball conference is largely below the 25% mark, with 11 out of 18 teams hitting below 25% on average. Data analysis anticipates that Big Ten teams should be reaching the 25% threshold, but the actual results show under performance. 
 
 ## Exercise 2: Game-Level Performance Analysis
 
@@ -110,7 +120,7 @@ ggplot(comparison_data, aes(x = group, y = hit_pct_avg, fill = group)) +
 paired_data <- teams |>
   filter(!is.na(hit_pct) & !is.na(defensive_hit_pct)) |>
   select(team, opponent, date, hit_pct, defensive_hit_pct) |>
-  mutate(difference = _____ - _____)
+  mutate(difference = hit_pct - defensive_hit_pct)
 
 # Summary statistics
 cat("Mean team hit %:", round(mean(paired_data$hit_pct), 4), "\n")
@@ -151,16 +161,23 @@ Now for our statistical test:
 
 ```{r}
 # Paired t-test
-paired_test <- t.test(paired_data$hit_pct, paired_data$defensive_hit_pct, paired = _____)
+paired_test <- t.test(paired_data$hit_pct, paired_data$defensive_hit_pct, paired = TRUE)
 paired_test
 ```
 
 ### Questions:
 1. What does the statistical test tell us about whether teams consistently outperform or underperform against their opponents' typical defensive standards?
 
+Because the p value is greater than 0.05, we fail to reject the null hypothesis that there is no differences between a team's hitting percentage and their opponent's. This means that generally speaking, teams are performing about to what we would expect. The distribution shows this as well with almost symmetrical averages for performances. But the scatter plot shows a negative correlation between a team's hitting percentage and their opponent's defense. But because the mean difference between a team's hitting percentage and the percentage allowed is so small, we can cannot state there is a significant difference either way. 
+
 2. Looking at the visualizations, what patterns do you notice? Are there outliers that might represent particularly dominant offensive performances or defensive breakdowns?
+
+The difference between hitting percentage and hitting percentage allowed forms a virtually normal distribution. Assuming that every game in this dataset is against another team in this dataset, we know that the count of wins and losses will be about equal. So seeing a normal distrubution of the difference does make sense. Thus we see about an equal number of times where a team's hitting percentage is above the opponent's defensive percentage allowed and vice versa. But the scatterplot shows a few more outliers — especially in the teams that are hitting a very high percentage while the opponent is allowing a negative hitting percentage. These are likely teams with dominant offenses going against teams with poor defenses. We can assume the better offense won that match. But the vast majority of the data shows matches with both a positive hitting percentage and a positive defensive percentage allowed. Most of the data is centered around the intersection of a 20% hitting percentage and a 20% defensive hitting percentage allowed. That largely tracks with our above analysis of NCAA expected hitting percentages being below 25% and closer to 20%. 
 
 3. If defensive hitting percentage is supposed to measure defensive quality, what do these results suggest about using it as a predictor of game outcomes?
 
+I would say that these results show defensive hitting percentage isn't a good metric to predict outcomes because we fail to reject the null hypothesis that there is no difference between a team's hitting percentage and their opponent's defensive hitting percentage allowed. The average difference between the two numbers is so incredibly small, thus making it unreliable to use as a predictive tool. The normal distribution of the differences also emphasizes that. The data centers around a difference of 0 between hitting percentage and defensive hitting percentage allowed, which the bulk of the data evenly distributed between -0.3 and 0.3. That isn't anywhere near of a pattern to predict games on. 
+
 4. From a strategic perspective, what questions would you want to explore next based on these findings? What additional data might help explain the patterns you're seeing?
 
+I'm interested in pursuing the differences of some other stats here because, in my opinion, I'm not sure the differences in hitting percentages tells us much as a predictive measure. I'm intrigued by which holds more weight on a team's success between kills or errors. Is it more worthwhile to limit errors or to have a higher number of kills? In other words, is a more successful strategy to focus on limiting mistakes, or focus on being on the front foot attacking. We could perform similar calculations comparing those two columns. A similar discussion could be had about aces vs service errors. Is it more valuable to be great serving, or limit mistakes when serving? 
