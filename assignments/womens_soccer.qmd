@@ -223,9 +223,15 @@ summary(defensive_model)
 
 ### How does Maryland rank in terms of shots allowed 
 ```{r}
+#what do shots allowed averages look like
 newcorrelations_2025 |> group_by(team) |> 
   summarize(avg_shots_allowed = mean(defensive_sh_att)) |> 
-  arrange(avg_shots_allowed) |> 
+  arrange(avg_shots_allowed) 
+
+#how does Maryland fit in? 
+newcorrelations_2025 |> group_by(team) |> 
+  summarize(avg_shots_allowed = mean(defensive_sh_att)) |> 
+  arrange(avg_shots_allowed) |>
   filter(team == "Maryland Terrapins, Terps")
 
 #lets test the model for Maryland's 2-1 win over purdue 
