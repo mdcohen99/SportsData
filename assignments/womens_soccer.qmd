@@ -165,3 +165,74 @@ t.test(maryland_2024$total_goals, maryland_2025$total_goals)
 With Maryland's specific data, however, we do see an increase in scoring and with a large p value above 0.05. That means we must accept the null hypothesis which states there is not a significant difference in scoring. There is a small sample size this year compared to last year as with the data mentioned in the nationwide set, but our t test shows Maryland's increase in scoring is not actually a significant difference. Per the stats, it may be more due to random chance. With our context as reporters, we can say Maryland may have inflated scoring numbers because it hasn't gotten into a stretch of playing better teams yet. As I am writing this sitting at the checkout booth in Knight Hall, Maryland is playing the mighty Indiana Hoosiers just across the street here on campus and has yet to score a goal as of 8:42 p.m. on Thursday. And Indiana certainly is not a good team either. So how bad were the teams Maryland was actually able to to score against? 
 
 **UPDATE: So it's 9:06 now and maryland somehow won that game? lol, everyone sucks**
+
+
+## Correlations & Regression
+
+```{r}
+correlations <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2024.csv")
+```
+
+```{r}
+newcorrelations <- correlations |> 
+  mutate(
+    differential = goals - defensive_goals
+    )
+```
+
+```{r}
+newcorrelations |> summarise(correlation = cor(differential, fouls, method="pearson"))
+
+newcorrelations |> summarise(correlation = cor(differential, yellow_cards, method="pearson"))
+```
+
+```{r}
+fit <- lm(differential ~ fouls, data = newcorrelations)
+summary(fit)
+
+fit
+```
+
+```{r}
+newcorrelations |> 
+  summarise(correlation = cor(differential, so_g, method="pearson"))
+```
+```{r}
+net <- lm(differential ~ so_g, data = newcorrelations)
+summary(net)
+```
+### 2025 version 
+
+```{r}
+correlations_2025 <- read_csv("https://raw.githubusercontent.com/dwillis/NCAAWomensSoccerData/main/data/ncaa_womens_soccer_matchstats_2025.csv")
+
+newcorrelations_2025 <- correlations_2025 |> 
+  mutate(
+    differential = goals - defensive_goals
+    )
+```
+
+```{r}
+newcorrelations_2025 |> summarise(correlation = cor(differential, defensive_sh_att, method="pearson"))
+```
+
+```{r}
+defensive_model <- lm(differential ~ defensive_sh_att, data = newcorrelations_2025)
+summary(defensive_model)
+```
+
+### How does Maryland rank in terms of shots allowed 
+```{r}
+newcorrelations_2025 |> group_by(team) |> 
+  summarize(avg_shots_allowed = mean(defensive_sh_att)) |> 
+  arrange(avg_shots_allowed) |> 
+  filter(team == "Maryland Terrapins, Terps")
+
+#lets test the model for Maryland's 2-1 win over purdue 
+intercept_co <- 2.647310
+defensive_sh_co <- -0.209785
+
+(defensive_sh_co*20) + intercept_co
+```
+
+Game data from the 2025 season shows that the number of shots a team allows does not appear to have any noticeable impact on its goal differential. Maryland's performance against Purdue demonstrates that. On average, Maryland allows 12.8 shot attempts per game. That's 207th nationally. That's definitely not good. It's also not the worst! Against Purdue, Maryland's defense allowed 20 shot attempts. On the surface, that would seem to lead toward the belief that Maryland wasn't good defensively, or certainly worse than usual. And maybe it wasn't. Our model predicts Maryland should have lost by about 1.55 goals given the number of shots it allowed. But Maryland won the game 2-1. That's more than a two goal swing from what the model would have predicted. So we can determine shot attempts allowed don't really matter. The strongest impact appears to be more from a team's offensive output, especially in terms of shots on goal. Based on these two stats, it seems more valuable to be more productive on offense than defense. Maryland has lost games where its allowed fewer shot attempts than it did against Purdue. Maryland allowed 15 shot attempts against James Madison, and lost 1-0. So it may be okay for Maryland's opponents to pepper the net. Just so long as Maryland has enough offense to produce on its own end. That much has been a struggle. 
