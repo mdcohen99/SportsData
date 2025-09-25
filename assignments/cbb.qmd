@@ -1,0 +1,233 @@
+### Multiple Regression
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+logs <- read_csv("https://dwillis.github.io/sports-data-files/cbblogs1525.csv")
+```
+
+```{r}
+logs <- logs |> mutate(
+  Differential = TeamScore - OpponentScore, 
+  NetRebounds = TeamTotalRebounds - OpponentTotalRebounds,
+  TurnoverMargin = TeamTurnovers - OpponentTurnovers)
+```
+
+```{r}
+rebounds <- lm(Differential ~ NetRebounds, data=logs)
+summary(rebounds)
+```
+
+```{r}
+model1 <- lm(Differential ~ NetRebounds + TurnoverMargin, data=logs)
+summary(model1)
+```
+
+```{r}
+#install.packages("Hmisc")
+library(Hmisc)
+```
+
+```{r}
+simplelogs <- logs |> select_if(is.numeric) |> select(-Game) |> select(Differential, NetRebounds, TurnoverMargin, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
+```
+
+```{r}
+cormatrix <- rcorr(as.matrix(simplelogs))
+
+cormatrix$r
+```
+
+```{r}
+model2 <- lm(Differential ~ NetRebounds + TurnoverMargin + TeamFGPCT + OpponentFGPCT, data=logs)
+summary(model2)
+```
+
+```{r}
+logs |> 
+  filter(Team == "Michigan" & Season == '2020-2021' | Team == "Wisconsin" & Season == '2019-2020' | Team == "Michigan State" & Season == '2018-2019' | Team == "Michigan State" & Season == '2017-2018' | Team == 'Illinois' & Season == '2021-2022' | Team == 'Purdue' & Season == '2022-2023' | Team == 'Purdue' & Season == '2023-2024' | Team == "Michigan State" & Season == '2024-2025') |> 
+  summarise(
+    meanNetRebounds = mean(NetRebounds),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanTeamFGPCT = mean(TeamFGPCT),
+    meanOpponentFGPCT = mean(OpponentFGPCT)
+  )
+```
+
+```{r}
+# (netrebounds estimate * meanNetRebounds) + (turnover margin estimate * meanTurnoverMargin) + (TeamFGPCT estimate * meanTeamFGPCT) + (OpponentFGPCT estimate * meanOpponentFGPCT) + Intercept
+(0.660276*9.432099) + (-1.315355*1.711934) + (91.472656*0.4745391) + (-91.705986*0.4000823) + 0.230468
+```
+
+```{r}
+logs |> 
+  filter(
+    Team == "Maryland" & Season == '2024-2025'
+    ) |> 
+  summarise(
+    meanNetRebounds = mean(NetRebounds),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanTeamFGPCT = mean(TeamFGPCT),
+    meanOpponentFGPCT = mean(OpponentFGPCT)
+  )
+```
+
+```{r}
+(0.660276*2.472222) + (-1.315355*-3.444444) + (91.472656*0.4687778) + (-91.705986*0.4150278) + 0.230468
+```
+
+```{r}
+logs |> 
+     filter(
+         Team == "Maryland" & Season == '2024-2025'
+     ) |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
+```
+
+
+### building my own model 
+
+What am I building? 
+
+So during most of the time frame included in the data here, Indiana sucked! Let's find out why. Anecdotal, those teams were AWFUL at shooting at 3s and that was frequently what was mentioned for why they stunk. Is that actually why they stunk? Let's see a few stats in a model to test that. 
+
+I expect that Indiana's poor 3-point shooting is going to matter a bit in relation to its point differential, but I don't think it's going to be a super correlation either. The 3-point shooting was the hot button talking point for all those bad teams, but as we have seen above, rebounding plays a huge role and Indiana was incredibly inconsistent at that. I expect some other stats that are going to be part of strong model describing Indiana are going to be opponent shooting percentage as well as turnovers. I picked those based off vibes, as fans loved to complain that Indiana let its opponents turn into prime Steph Curry every game and that Indiana never was clean with the ball. 
+
+```{r}
+hoosiers <- logs |> 
+  filter(
+    Team == "Indiana"
+    )
+```
+
+
+#Just 3-point shooting
+```{r}
+hoosier_model <- lm(Differential ~ Team3PPCT, data=hoosiers)
+summary(hoosier_model)
+```
+11% explained is a bit lower than I expected, but also still a decent chunk. 
+
+###Adding in rebounding
+```{r}
+hoosier_model1 <- lm(Differential ~ Team3PPCT + NetRebounds, data=hoosiers)
+summary(hoosier_model1)
+```
+Wow that was a big jump. 
+
+###Adding in opponent shooting percentage
+
+```{r}
+hoosier_model3 <- lm(Differential ~ Team3PPCT + NetRebounds + OpponentFGPCT, data=hoosiers)
+summary(hoosier_model3)
+```
+Getting better! 
+
+###Adding in turnovers
+```{r}
+hoosier_model4 <- lm(Differential ~ Team3PPCT + NetRebounds + OpponentFGPCT + TurnoverMargin, data=hoosiers)
+summary(hoosier_model4)
+```
+
+Lets try one more than fans complained about: Blaming the refs. Classic! Gonna track this with difference in free throw attempts, a classic thing people liked to complain about on Twitter. 
+
+###Blame the refs! 
+```{r}
+hoosiers <- hoosiers |> mutate(
+  FTAMargin = TeamFTA - OpponentFTA
+)
+
+```
+
+#making a model
+```{r}
+hoosier_model5 <- lm(Differential ~ Team3PPCT + NetRebounds + OpponentFGPCT + TurnoverMargin + FTAMargin, data=hoosiers)
+summary(hoosier_model5)
+```
+That had another small jump! But wasn't that important probably. 
+
+Okay so what's the takeaway here? 
+
+My perception of what fans were complaining about did indeed serve as a real predictor of games. Before I added in the complaining about the refs calculation, I had explained just under 83% of the dataframe by plugging team 3-point percentage, net rebounds, opponent field goal percentage and turnover margin into the model in relation to point differential. 
+
+Let's see how well the model's predictions match up with reality. 
+
+#testing how the model fared
+```{r}
+hoosiers |> summarise(
+    meanNetRebounds = mean(NetRebounds),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanTeam = mean(Team3PPCT),
+    meanOpponentFGPCT = mean(OpponentFGPCT),
+    meanFTAMargin = mean(FTAMargin)
+  )
+```
+
+
+```{r}
+# (netrebounds estimate * meanNetRebounds) + (turnover margin estimate * meanTurnoverMargin) + (Team3PPCT estimate * meanTeam3PPCT) + (OpponentFGPCT estimate * meanOpponentFGPCT) (FTAMargin estimate * meanFTAMargin) + Intercept
+
+(0.95545 *2.623288) + (-1.51775*0.7226027) + (44.92823*0.3455274) + (-96.29416*0.4255719	) + (0.12244 * 1.568493) + 28.17976 
+```
+
+Okay yeah Indiana sucks. On average, Indiana won its games by four points during this window. And, again, that includes all the non conference snoozer games. I can't believe I paid four years of tuition to watch Archie Miller and Mike Woodson. Christ sake. Thank goodness Indiana has a good optometry program, I'm gonna need it. 
+
+How does the model's prediction match up with reality? 
+
+```{r}
+hoosiers |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
+```
+Yep, almost exactly right from the model. Indiana averaged a four point margin of victory against its opponents. Again, including its cupcake games. Let's see how that changes if we just did it for Big Ten games. For the sake of this, I did not include Washington, UCLA, USC or Oregon as Big Ten teams given the time frame of the data
+
+#alright lets do this all again with the data filtered for conference games
+```{r}
+hoosiers <- hoosiers |> mutate(
+  BigTenGame = case_when(
+    Opponent %in% c("Michigan", "Michigan State", "Ohio State", "Penn State", "Rutgers", "Maryland", "Illinois", "Iowa", "Minnesota", "Nebraska", "Northwestern", "Purdue", "Wisconsin") ~ TRUE,
+    TRUE ~ FALSE
+  ))
+```
+
+```{r}
+b1g_games <- hoosiers |> filter(BigTenGame == TRUE)
+```
+
+```{r}
+b1g_model <- lm(Differential ~ Team3PPCT + NetRebounds + OpponentFGPCT + TurnoverMargin + FTAMargin, data=b1g_games)
+summary(b1g_model)
+```
+
+```{r}
+b1g_games |> summarise(
+    meanNetRebounds = mean(NetRebounds),
+    meanTurnoverMargin = mean(TurnoverMargin),
+    meanTeam = mean(Team3PPCT),
+    meanOpponentFGPCT = mean(OpponentFGPCT),
+    meanFTAMargin = mean(FTAMargin)
+  )
+```
+```{r}
+# (netrebounds estimate * meanNetRebounds) + (turnover margin estimate * meanTurnoverMargin) + (Team3PPCT estimate * meanTeam3PPCT) + (OpponentFGPCT estimate * meanOpponentFGPCT) + (FTAMargin estimate * meanFTAMargin) + Intercept
+
+(0.84298*0.6648045) + (1.31119*0.8659218) + (38.48776 *0.3397095) + (-81.99043*0.4389274) + (0.10734 * -0.4916201) +  23.06049 
+```
+
+```{r}
+b1g_games |> summarise(avg_score = mean(TeamScore), avg_opp = mean(OpponentScore))
+```
+
+So the model would predict a small Indiana win in Big Ten games whereas the score averages show a very small Indiana loss on average. Honestly, that's really funny for a team that seemed to go .500 in league play every year. But that also checks out! Both the model and average scores basically show every Big Ten game was a complete toss up. 
+
+And it does mean that the fans may have actually been complaining about things that did matter. The R squared value on the model for Big Ten games was actually lower than the larger data set. Maybe that has to do with a smaller sample size. Maybe there is more volatility in Big Ten games that isn't explained by these couple of factors. The Big Ten always seems to be a bit of a rock fight so there could be a better explainer. But the R squared value still covered nearly 3/4 of the data, so while not AS good as the previous model, it's still pretty good. 
+
+In this Big Ten only model, I might look at some more defensive stats if I were to do it again since Big Ten games tend to be lower scoring. 
+
+
+
+
+
+
+
+
+
