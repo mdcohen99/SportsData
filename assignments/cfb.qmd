@@ -1,0 +1,120 @@
+###CFB Notebook
+
+```{r}
+#install.packages("cfbfastR")
+library(cfbfastR)
+library(tidyverse)
+```
+
+```{r}
+logs <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs1124.csv")
+```
+
+```{r}
+logs <- logs |>  
+  mutate(differential = TeamScore - OpponentScore)
+```
+
+
+
+###Penalty Regression
+
+
+###NOTE: I was a bit confused because the prompt mentions looking at both the number of penalties and the penalty yards. I wasn't sure which to do, so I did both. 
+```{r}
+penalties <- lm(differential ~ PenaltyYds, data = logs)
+summary(penalties)
+```
+
+```{r}
+penalties1 <- lm(differential ~ Penalties, data = logs)
+summary(penalties1)
+```
+
+Penalty Yards analysis: We have a very low p value here (i.e. less than 0.05) so we can take that the results here are significant. So there probably is not a lot of random chance here. But the R squared value is also very small. So while we may have significant statistics here, they don't actually tell us much in terms of as a predictive measure. We can use the low R squared value to state that less than 1% of the point differential in a game can be explained by penalty yards. So while there isn't random chance here, it also doesn't mean much. 
+
+Quantity of penalties analysis: Similar to the penalty yards version of this, we again have a very low P value and a very low R squared value. I was intrigued what the difference might be here because number of penalties doesn't necessarily equate to a number of penalty yards. If you committed 10 penalties but all were five yard losses, that's a whole lot different than committing 10 pass interference penalties. But the actual model says there really isn't much difference between the penalty yards approach or the number of penalties. Both are statistically significant but dont' tell us much about the actual point differential. 
+
+###Multiple Regression
+```{r}
+logs <- logs |> mutate(YardsMargin = OffensiveYards - DefYards, PlaysMargin = OffensivePlays - DefPlays, TurnoverMargin = TotalTurnovers - DefTotalTurnovers, TDMargin = ((PassingTD + RushingTD) - (DefPassingTD + DefRushingTD)))
+```
+
+```{r}
+cfb_model1 <- lm(differential ~ YardsMargin + PlaysMargin + TurnoverMargin + TDMargin, data=logs)
+summary(cfb_model1)
+```
+
+I got the R squared model up to 93% here by doing a little manipulating to the chart to see how margins impacted the score differential. We see a very small p value here as well as a small difference between the lower and upper quartile residuals. 
+
+I played with a lot of numbers here, initially going pretty intensely into rushing stats because coaches love to talk about how important it is to run the ball. Turns out it doesn't really matter if you can run the ball. It just matters if you can MOVE the ball. It turns out to be far more important simply to run more plays than your opponent. I had seen no real difference in the model's output when I isolated different rushing or passing stats from overall yardage averages or totals. So I just plugged in the overall total yards margin. That had a larger difference than just looking at passing or rushing yards individually. If you outgain your opponent, you are likely to win. But that wasn't alone enough to explain anything because you can outgain your opponent and lose, in fact that happens a lot. It turns out that a better way to look at all these stats is the margin between offense and defense. I also included margin of plays run and turnover margin, but neither of those had as big an impact on the model as the yards margin. The plays margin had the smallest R squared value. 
+
+I debated whether to include touchdown margin. Obviously, if you score more touchdowns than your opponent, you are probably going to have a positive point differential, or vice versa. I ended up choosing to include it because, on its own, the TD margin column I made had an R squared value of over 90%. Is that just explaining what differential already tells us? Kinda? Obviously there are other types of points that are not included here like field goals or safeties, but touchdowns are the highest value of points that can be earned on one play. So maybe the takeaway here is that settling for field goals isn't going to help you necessarily. It may be worth it to take the risk for a touchdown since that has such a large impact on the point differential. 
+
+###Close games
+
+```{r}
+close_games <- logs |> filter(abs(differential) <= 8)
+```
+
+I picked 8 as the margin for a close game since that is the limit of a one possession game. 
+
+
+```{r}
+penalties2 <- lm(differential ~ Penalties, data = close_games)
+summary(penalties2)
+```
+
+```{r}
+cfb_model2 <- lm(differential ~ YardsMargin + PlaysMargin + TurnoverMargin + TDMargin, data=close_games)
+summary(cfb_model2)
+```
+
+Okay so our originaly models are basically irrelavant when you filter the data down to close games. The penalty model isn't even statistically significant and while the multiple regression model still has a low p value, its R squared value dropped by about 50%. So clearly these stats aren't helping us. Let's try some other things. 
+
+```{r}
+#cfb_model3 <- lm(differential ~ DefPassingTD, data=close_games)
+#summary(cfb_model3)
+```
+
+I spent a while on that and I ended up stopping. I couldn't find many stats, if any, that had an R squared value of greater than 1% when the data was filtered for close games. 
+
+So here's my takeaway: close games have far more chance involved. There are so many things in a close game that stats can't account for. Does being at home matter? You'd assume so, but these stats can't tell us that necessarily. I tried to at least estimate that here. 
+
+```{r}
+close_games |>
+  group_by(HomeAway) |> 
+  summarise(
+    total_games = n(),
+    wins = sum(Outcome == "W", na.rm = TRUE),
+    losses = sum(Outcome == "L", na.rm = TRUE),
+    win_pct = (wins / total_games) * 100)
+```
+
+So it kinda mattered to be at home? But not really that much? 
+
+Close games can be impacted by injuries or weather. Close games can be implicated by simply who has the ball last. There are so many other factors here. 
+
+Our models seem good at getting a more general picture. But when we get this specific, the stats don't seem to tell as complete of a story. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
