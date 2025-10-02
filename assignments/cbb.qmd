@@ -224,6 +224,84 @@ And it does mean that the fans may have actually been complaining about things t
 In this Big Ten only model, I might look at some more defensive stats if I were to do it again since Big Ten games tend to be lower scoring. 
 
 
+###RESIDUALS
+
+```{r}
+residualmodel <- logs |> mutate(differential = TeamScore - OpponentScore, FGPctMargin = TeamFGPCT - OpponentFGPCT)
+```
+
+
+```{r}
+residualmodel |> select(differential, TeamFull, Opponent) |> arrange(differential) |> head(10)
+```
+
+
+```{r}
+fit <- lm(differential ~ FGPctMargin, data = residualmodel)
+summary(fit)
+```
+
+```{r}
+residualmodel <- residualmodel |> filter(!is.na(FGPctMargin))
+```
+
+
+```{r}
+residualmodel <- residualmodel |> mutate(predicted = predict(fit), residuals = residuals(fit))
+```
+
+
+```{r}
+residualmodel |> filter(Team == 'Maryland') |> arrange(desc(residuals)) |> select(Date, Team, Opponent, W_L, differential, FGPctMargin, predicted, residuals)
+```
+
+##fouls
+```{r}
+fouls <- logs |> 
+  mutate(
+    differential = TeamScore - OpponentScore, 
+    TotalFouls = TeamPersonalFouls+OpponentPersonalFouls
+  )
+
+pfit <- lm(differential ~ TotalFouls, data = fouls)
+summary(pfit)
+```
+
+
+```{r}
+fouls <- fouls |> filter(!is.na(TotalFouls))
+fouls$predicted <- predict(pfit)
+fouls$residuals <- residuals(pfit)
+```
+
+
+```{r}
+fouls |> arrange(desc(residuals)) |> select(Team, Opponent, W_L, TeamScore, OpponentScore, TotalFouls, residuals) |> filter(!is.na(Opponent)) 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

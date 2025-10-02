@@ -6,6 +6,7 @@ We'll use this notebook to explore some NCAA women's soccer data and [our questi
 
 ```{r}
 library(tidyverse)
+library(Hmisc)
 ```
 
 We'll want to start with 2025 match data, which is located in [this GitHub repository](https://github.com/dwillis/NCAAWomensSoccerData). We can load the match data directly from GitHub using `read_csv`:
@@ -149,7 +150,7 @@ In terms of the actual data analysis aspect of it, there are a lot of good basic
 
 ###T TEST FROM CLASS
 ```{r}
-t.test(matches_2024$total_goals, matches_2025$total_goals)
+#t.test(matches_2024$total_goals, matches_2025$total_goals)
 ```
 While the result of this test does show us that there is a statistically significant difference between 2024 and 2025's average total for scoring because the p value is less than 0.05, that doesn't tell the whole story here. We can reject the null hypothesis that there is not a significant difference in scoring between the two seasons, but because the 2025 season has far fewer games played and has yet to reach conference play, the increase in scoring in 2025 may not simply mean that teams are actually scoring more. This is a case where the statistical tests on their own don't provide all the context a human can add. We must know to balance both. As discussed in class, when the 2024 data was filtered for the same stretch of the season as thus far in 2025, the p value was very large and showed it was much more likely any difference in scoring this year is more likely due to random chance. 
 
@@ -160,7 +161,7 @@ maryland_2025 <- matches_2025 |> filter(team == "Maryland Terrapins, Terps")
 ```
 
 ```{r}
-t.test(maryland_2024$total_goals, maryland_2025$total_goals)
+#t.test(maryland_2024$total_goals, maryland_2025$total_goals)
 ```
 With Maryland's specific data, however, we do see an increase in scoring and with a large p value above 0.05. That means we must accept the null hypothesis which states there is not a significant difference in scoring. There is a small sample size this year compared to last year as with the data mentioned in the nationwide set, but our t test shows Maryland's increase in scoring is not actually a significant difference. Per the stats, it may be more due to random chance. With our context as reporters, we can say Maryland may have inflated scoring numbers because it hasn't gotten into a stretch of playing better teams yet. As I am writing this sitting at the checkout booth in Knight Hall, Maryland is playing the mighty Indiana Hoosiers just across the street here on campus and has yet to score a goal as of 8:42 p.m. on Thursday. And Indiana certainly is not a good team either. So how bad were the teams Maryland was actually able to to score against? 
 
@@ -242,3 +243,66 @@ defensive_sh_co <- -0.209785
 ```
 
 Game data from the 2025 season shows that the number of shots a team allows does not appear to have any noticeable impact on its goal differential. Maryland's performance against Purdue demonstrates that. On average, Maryland allows 12.8 shot attempts per game. That's 207th nationally. That's definitely not good. It's also not the worst! Against Purdue, Maryland's defense allowed 20 shot attempts. On the surface, that would seem to lead toward the belief that Maryland wasn't good defensively, or certainly worse than usual. And maybe it wasn't. Our model predicts Maryland should have lost by about 1.55 goals given the number of shots it allowed. But Maryland won the game 2-1. That's more than a two goal swing from what the model would have predicted. So we can determine shot attempts allowed don't really matter. The strongest impact appears to be more from a team's offensive output, especially in terms of shots on goal. Based on these two stats, it seems more valuable to be more productive on offense than defense. Maryland has lost games where its allowed fewer shot attempts than it did against Purdue. Maryland allowed 15 shot attempts against James Madison, and lost 1-0. So it may be okay for Maryland's opponents to pepper the net. Just so long as Maryland has enough offense to produce on its own end. That much has been a struggle. 
+
+
+
+##RESIDUALS
+
+```{r}
+matches_2025 <- matches_2025 |> 
+  mutate(
+    net_sog = so_g - defensive_so_g,
+    net_corners = corners - defensive_corners,
+    net_assists = assists - defensive_assists,
+  )
+```
+
+```{r}
+matrix <- matches_2025 |> select(goal_dif, net_sog, net_corners, net_assists)
+
+cormatrix <- rcorr(as.matrix(matrix))
+
+cormatrix$r
+```
+
+```{r}
+wsoc_model <- lm(goal_dif ~ net_sog + net_corners + net_assists, data=matches_2025)
+summary(wsoc_model)
+```
+
+This is a pretty good model overall. We have a high R squared value. But our correlation matrix shows a very high, maybe too high, correlation between net assists and goal differential. That may, in part, be cannibalizing each other because every assist is because of a goal, though not every goal has an assist. But we do have small residuals and a low p value so, as a whole, this seems usable despite the caveat. I picked these values because we knew from previous work that shots on goal matter. I tried to find other stats that weren't super on top of each other, but still has some relationship to scoring more goals. 
+
+
+```{r}
+matches_2025 <- matches_2025 |> mutate(predicted = predict(wsoc_model), residuals = residuals(wsoc_model))
+```
+
+```{r}
+matches_2025 |> arrange(desc(residuals)) |> select(team, opponent, goal_dif, predicted, residuals) |> head(10)
+```
+
+
+```{r}
+matches_2025 |> arrange(residuals) |> select(team, opponent, goal_dif, predicted, residuals) |> head(10)
+```
+
+Similar to our analysis of college basketball data, most of these large residuals/goal differentials are in games involving small/no name teams. And that generally makes sense because there will be a larger gap in talent. We do see more well known schools in this data frame than we saw in the college basketball data, and that may in part be due to the stretch of the season we are in now with still the bulk of the games played being non-conference games, and thus we may not have a ton of small school vs small school games yet. 
+
+
+```{r}
+matches_2025 |> filter(team == "Maryland Terrapins, Terps") |> select(team, opponent, goal_dif, predicted, residuals) |> arrange(desc(residuals))
+```
+
+Maryland's best performance relative to our model was its 2-1 win over Purdue. Here, the model predicted Maryland would lose by 1, but Maryland won by 1. So that's a two goal swing. The story here is simply how? What DID Maryland do that allowed it to overcome the model, and significantly outperform it? What can we see in our data that shows an element of chance in Maryland's games. Maryland has frequently performed pretty close to our model's expected outputs, so what is it about the outliers performances that we can take away?
+
+
+If I were to pursue this further, I'd like to use more advanced stats to work toward a more efficient and predictive model. Obviously that is with data that isn't included in this data set, but I am fascinated by our conversations in class and in readings about some of the other metrics that could exist like AI software tracking what actually is a good shot or using the value of a player's possession of the ball into a model like this. I think some of those more advanced stats do more work to avoid having metrics in our model that speak for each other, as can be hard to avoid some of these data sets. 
+
+
+
+
+
+
+
+
+
