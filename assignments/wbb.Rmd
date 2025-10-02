@@ -1,0 +1,76 @@
+---
+title: "wbb z scores"
+author: "Matt Cohen"
+date: "2025-10-02"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+wbb_logs <- read_csv("https://dwillis.github.io/sports-data-files/wbbstats1525.csv")
+```
+
+```{r}
+wbb_logs <- wbb_logs |> 
+  mutate(avg_ppg = (ForPoints/Games), 
+         avg_opppg = (OppPoints/Games),
+         avg_dif = ((ForPoints - OppPoints)/Games),
+         avg_turnovers = (Turnovers/Games), 
+         avg_rebounds = (TotalRebounds/Games),
+         avg_dif = (ForPoints - OppPoints)/Games
+  )
+
+
+teamzscore <- wbb_logs |> 
+  mutate(
+    ppgZscore = as.numeric(scale(avg_ppg, center = TRUE, scale = TRUE)),
+    opp_ppgZscore = as.numeric(scale(avg_opppg, center = TRUE, scale = TRUE)) * -1,
+    fg_pctZscore = as.numeric(scale(FieldGoalPCT, center = TRUE, scale = TRUE)),
+    turnoversZscore = as.numeric(scale(avg_turnovers, center = TRUE, scale = TRUE)),
+    reboundsZscore = as.numeric(scale(avg_rebounds, center = TRUE, scale = TRUE)),
+    difZscore = as.numeric(scale(avg_dif, center = TRUE, scale = TRUE)),
+    TotalZscore = ppgZscore + opp_ppgZscore + fg_pctZscore + turnoversZscore + reboundsZscore + difZscore
+  ) 
+
+teamzscore |> filter(Season != 2021) |> arrange(desc(TotalZscore)) |> select(Season, Games, School, TotalZscore)
+```
+To no surprise, there's a lot of UConn, South Carolina and Baylor here. Wonder why that is? LOL. The first major thing I had to do was remove the 2021 season because that really skewed the results for teams that barely played any games that year but were good in those games. As opposed to some other sports where we did these calculations and got a lot of random small schools at the top of the z score calculation, here were see all the big name programs at the top. And I think that in part has to do with how dominant some of the top programs in womens basketball can be. Especially some of those UConn teams that went undefeated. Few sports have seen eras of dominance from top teams quite like women's basketball. Especially because, for so long, so much of the talent was concentrated at only a couple schools. It's why so many of the teams near the top of this Z score list are also from pre-NIL seasons (i.e. before talent began to really spread out). 
+
+One maybe controversial thing I did here was include margin of victory in the model because I wanted the Z score to include how dominant a team was. Whereas without it we would have which teams were good at offense and which teams were good at defense, but just having points scored and points allowed alone doesn't mean a team is dominant, at least it doesn't fully tell that story. I think including all those metrics help, and we don't have to worry about metrics cannibalizing each other as much here. I think clearly that worked because we got all the blue bloods of the sport in this list. 
+
+There is one Maryland team in the list here, the 2017 group. Assuming this is referring to the season that ended in 2017, this Maryland team made the Sweet 16 and was a top 10 team all year. Based on these Z scores, Maryland probably underperformed that season.The data here shows that Maryland was the second best team in 2017 and the 10th overall team based on these metrics in this time period. Baylor also under-performed that year relative to its Z score, not making it out of its own regional. 
+
+
+```{r}
+teamzscore |> filter(School == "Maryland") |> arrange(desc(TotalZscore)) |> select(Season, School, ppgZscore, opp_ppgZscore, fg_pctZscore, turnoversZscore, reboundsZscore, difZscore, TotalZscore)
+```
+
+A couple of things come out as interesting here when looking at the Maryland data. As we know, the 2017 Maryland team was atop the list. I am really intrigued about the 2015 Maryland team being outside the top 3, but also be Maryland's only Final Four team in this group. So what made that year good enough to go to the Final Four but not good enough to be a top 3 team? Even though Maryland's turnovers per game that year were below average compared to the rest of the NCAA, it still was one of Maryland's better marks across this whole data set. While Maryland doesn't appaer to have been particularly elite at any one thing that year, especially compared to its other teams, it seemed to be a pretty solid overall group based on these metrics. 
+
+For the most part, these Z scores do pretty much line up with which Maryland teams had good records and which didn't. But it also speaks to how consistent Maryland has been as a program that every team in this data set had a positive overall Z score. That isn't easy to do, not even to have any below average years. A lot of fan bases would love to have a program like that, even if it hasn't resulted in much national hardware. 
+
+For example, and maybe I'm risking losing points here, but let's look at Pitt! 
+
+```{r}
+teamzscore |> filter(School == "Pittsburgh") |> arrange(desc(TotalZscore)) |> select(Season, School, ppgZscore, opp_ppgZscore, fg_pctZscore, turnoversZscore, reboundsZscore, difZscore, TotalZscore)
+```
+
+Yeah not same. So when Maryland fans complain about how the program has fallen off in recent years with the rise of Iowa and Ohio State, plus the additions of UCLA and USC to the league, they should remember that it could always be worse! 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

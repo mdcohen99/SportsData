@@ -279,13 +279,61 @@ fouls$residuals <- residuals(pfit)
 fouls |> arrange(desc(residuals)) |> select(Team, Opponent, W_L, TeamScore, OpponentScore, TotalFouls, residuals) |> filter(!is.na(Opponent)) 
 ```
 
+### Z-Scores
+
+```{r}
+gamelogs <- read_csv("logs25.csv")
+```
+
+```{r}
+teamquality <- gamelogs |> 
+  select(Conference, Team, TeamFGPCT, TeamTotalRebounds, OpponentFGPCT, OpponentTotalRebounds)
+```
 
 
+```{r}
+teamtotals <- teamquality |> 
+  group_by(Conference, Team) |> 
+  summarise(
+    FGAvg = mean(TeamFGPCT), 
+    ReboundAvg = mean(TeamTotalRebounds), 
+    OppFGAvg = mean(OpponentFGPCT),
+    OffRebAvg = mean(OpponentTotalRebounds)
+    ) 
+```
 
 
+```{r}
+teamzscore <- teamtotals |> 
+  mutate(
+    FGzscore = as.numeric(scale(FGAvg, center = TRUE, scale = TRUE)),
+    RebZscore = as.numeric(scale(ReboundAvg, center = TRUE, scale = TRUE)),
+    OppZscore = as.numeric(scale(OppFGAvg, center = TRUE, scale = TRUE)) * -1,
+    OppRebZScore = as.numeric(scale(OffRebAvg, center = TRUE, scale = TRUE)) * -1,
+    TotalZscore = FGzscore + RebZscore + OppZscore + OppRebZScore
+  )  
+```
+
+```{r}
+teamzscore |> arrange(desc(TotalZscore))
+```
 
 
+```{r}
+teamzscore |> 
+  filter(Conference == "Big Ten MBB") |> 
+  arrange(desc(TotalZscore)) |>
+  select(Team, TotalZscore)
+```
 
+
+```{r}
+powerfive_plus_one <- c("SEC MBB", "Big Ten MBB", "Pac-12 MBB", "Big 12 MBB", "ACC MBB", "Big East MBB")
+teamzscore |> 
+  filter(Conference %in% powerfive_plus_one) |> 
+  arrange(desc(TotalZscore)) |>
+  select(Team, TotalZscore)
+```
 
 
 

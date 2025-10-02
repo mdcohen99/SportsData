@@ -298,9 +298,37 @@ Maryland's best performance relative to our model was its 2-1 win over Purdue. H
 
 If I were to pursue this further, I'd like to use more advanced stats to work toward a more efficient and predictive model. Obviously that is with data that isn't included in this data set, but I am fascinated by our conversations in class and in readings about some of the other metrics that could exist like AI software tracking what actually is a good shot or using the value of a player's possession of the ball into a model like this. I think some of those more advanced stats do more work to avoid having metrics in our model that speak for each other, as can be hard to avoid some of these data sets. 
 
+### Z-scores
 
+```{r}
+teamquality <- matches_2025 |> 
+  mutate(sog_pct = so_g/sh_att, def_sog_pct = defensive_so_g/defensive_sh_att) |> 
+  filter(!is.na(sog_pct), !is.na(def_sog_pct)) |> 
+  group_by(team) |> 
+  summarise(
+    avg_goals = mean(goals),
+    avg_def_goals = mean(defensive_goals),
+    avg_sog_pct = mean(sog_pct),
+    avg_def_sog_pct = mean(def_sog_pct),
+    avg_assists = mean(assists),
+    avg_def_assists = mean(defensive_assists)
+  )
 
+teamzscore <- teamquality |> 
+  mutate(
+    goalsZscore = as.numeric(scale(avg_goals, center = TRUE, scale = TRUE)),
+    defgoalsZscore = as.numeric(scale(avg_def_goals, center = TRUE, scale = TRUE)) * -1,
+    sogpctZscore = as.numeric(scale(avg_sog_pct, center = TRUE, scale = TRUE)),
+    defsogpctZscore = as.numeric(scale(avg_def_sog_pct, center = TRUE, scale = TRUE)) * -1,
+    assistsZscore = as.numeric(scale(avg_assists, center = TRUE, scale = TRUE)),
+    defassistsZscore = as.numeric(scale(avg_def_assists, center = TRUE, scale = TRUE)) * -1,
+    TotalZscore = goalsZscore + defgoalsZscore + sogpctZscore + defsogpctZscore + assistsZscore + defassistsZscore
+  ) 
 
+teamzscore |> arrange(desc(TotalZscore)) |> select(team, TotalZscore) 
+```
+
+  
 
 
 
