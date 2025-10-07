@@ -1,0 +1,151 @@
+class_year,rank,first_name,last_name,position,height,weight,high_school,state,stars,commitment
+2024,1,Cooper,Flagg,PF,6-9,195,Montverde Academy,FL,5,Duke
+2024,2,Ace,Bailey,SF,6-8,195,McEachern,GA,5,Rutgers
+2024,3,Dylan,Harper,CG,6-6,210,Don Bosco Prep,NJ,5,Rutgers
+2024,4,Khaman,Maluach,C,7-1,250,NBA Academy Africa,SUDA,5,Duke
+2024,5,VJ,Edgecombe,SG,6-5,180,Long Island Lutheran,NY,5,Baylor
+2024,6,Tre,Johnson,SG,6-6,190,Link Academy,TX,5,Texas
+2024,7,Jalil,Bethea,SG,6-4,170,Archbishop Wood,PA,5,Miami
+2024,8,Ian,Jackson,SG,6-5,185,Our Saviour Lutheran School,NY,5,North Carolina
+2024,9,Jayden,Quaintance,C,6-9,230,Word Of God Christian Academy,NC,5,Arizona State
+2024,10,Liam,McNeeley,SF,6-7,210,Montverde Academy,FL,5,UConn
+2024,11,Drake,Powell,SF,6-6,195,Northwood,NC,5,North Carolina
+2024,12,Derik,Queen,C,6-10,240,Montverde Academy,MD,5,Maryland
+2024,13,Isaiah,Evans,SF,6-6,170,North Mecklenburg,NC,5,Duke
+2024,14,Flory,Bidunga,C,6-8,215,Kokomo,IN,5,Kansas
+2024,15,Donnie,Freeman,PF,6-9,190,IMG Academy,FL,5,Syracuse
+2024,16,Egor,Demin,CG,6-8,190,Russia,RUSS,5,BYU
+2024,17,Derrion,Reid,PF,6-7,180,Prolific Prep,CA,5,Alabama
+2024,18,Kon,Knueppel,SF,6-5,205,Wisconsin Lutheran,WI,5,Duke
+2024,19,Asa,Newell,PF,6-9,205,Montverde Academy,FL,5,Georgia
+2024,20,Will,Riley,SF,6-8,180,The Phelps School,PA,5,Illinois
+2024,21,Patrick,Ngongba II,C,6-11,235,Paul VI Catholic,VA,4,Duke
+2024,22,Boogie,Fland,CG,6-2,170,Archbishop Stepinac,NY,4,Arkansas
+2024,23,Rob,Wright,PG,6-0,165,Montverde Academy,FL,4,Baylor
+2024,24,Joson,Sanon,SG,6-5,188,Vermont Academy,VT,4,Arizona State
+2024,25,Karter,Knox,SF,6-5,225,Overtime Elite,GA,4,Arkansas
+2024,26,Annor,Boateng,SF,6-6,210,Little Rock Central,AR,4,Missouri
+2024,27,Billy,Richmond,SF,6-5,200,Camden,NJ,4,Arkansas
+2024,28,Carter,Bryant,PF,6-8,225,Centennial,CA,4,Arizona
+2024,29,Tahaad,Pettiford,PG,6-1,170,Hudson Catholic,NJ,4,Auburn
+2024,30,Bryson,Tucker,SF,6-6,180,Bishop O'Connell,VA,4,Indiana
+2024,31,Morez,Johnson Jr.,C,6-9,235,Thornton Township,IL,4,Illinois
+2024,32,Aiden,Sherrell,C,6-10,215,Prolific Prep,CA,4,Alabama
+2024,33,Ahmad,Nowell,CG,6-0,180,Imhotep Institute,PA,4,UConn
+2024,34,Labaron,Philon,PG,6-4,177,Link Academy,MO,4,Alabama
+2024,35,Trent,Perry,PG,6-4,175,Harvard Westlake,CA,4,UCLA
+2024,36,Kasparas,Jakucionis,SG,6-5,200,Lithuania,LITH,4,Illinois
+2024,37,Jase,Richardson,CG,6-3,180,Columbus,FL,4,Michigan State
+2024,38,Khani,Rooths,PF,6-8,205,IMG Academy,FL,4,Louisville
+2024,39,Jackson,McAndrew,PF,6-9,210,Wayzata,MN,4,Creighton
+2024,40,Darren,Harris,SF,6-6,195,Paul VI Catholic,VA,4,Duke
+2024,41,Kanon,Catchings,PF,6-8,185,Overtime Elite,GA,4,BYU
+2024,42,Bryson,Tiller,PF,6-10,240,Overtime Elite,GA,4,Kansas
+2024,43,Moustapha,Thiam,C,7-1,204,DME Academy,FL,4,UCF
+2024,44,Oswin,Erhunmwunse,C,6-10,216,Putnam Science Academy,CT,4,Providence
+2024,45,Naas,Cunningham,SF,6-7,180,SoCal Academy,CA,4,Alabama
+2024,46,Thomas,Sorber,C,6-9,250,Archbishop Ryan,PA,4,Georgetown
+2024,47,Somto,Cyril,C,6-10,240,Overtime Elite,GA,4,Georgia
+2024,48,Sir,Mohammed,CG,6-7,205,Myers Park,NC,4,Notre Dame
+2024,49,John,Mobley Jr.,CG,6-2,185,Wasatch Academy,UT,4,Ohio State
+2024,50,Rakease,Passmore,SF,6-5,180,Combine Academy,NC,4,Kansas
+2024,51,Cam,Scott,SG,6-5,165,Lexington,SC,4,South Carolina
+2024,52,Tomislav,Ivisic,C,7-0,230,Croatia,CROA,4,Illinois
+2024,53,Tyler,Betsey,PF,6-8,185,St. Thomas More,CT,4,Cincinnati
+2024,54,Zoom,Diallo,PG,6-4,190,Prolific Prep,CA,4,Washington
+2024,55,David,Castillo,CG,6-1,180,Sunrise Christian Academy,KS,4,Kansas State
+2024,56,Mercy,Miller,SG,6-4,180,Notre Dame,CA,4,Houston
+2024,57,Larry,Johnson,SG,6-4,175,SoCal Academy,CA,4,Creighton
+2024,58,Daniel,Jacobsen,C,7-3,235,Brewster Academy,NH,4,Purdue
+2024,59,Elijah,Moore,SG,6-4,170,Our Saviour Lutheran School,NY,4,Syracuse
+2024,60,Julius,Halaifonua,C,7-0,290,NBA Global Academy,NEW,4,Georgetown
+2024,61,Jamari,Phillips,SG,6-3,190,Dream City Christian,AZ,4,Oregon
+2024,62,Jahki,Howard,SF,6-6,185,Overtime Elite,GA,4,Auburn
+2024,63,Kur,Teng,SG,6-4,185,Bradford Christian Academy,MA,4,Michigan State
+2024,64,Samet,Yigitoglu,C,7-1,-,Turkey,TURK,4,SMU
+2024,65,Jeremiah,Fears,CG,6-3,175,Compass Prep,AZ,4,Oklahoma
+2024,66,Austin,Swartz,SG,6-4,180,Cannon School,NC,4,Miami
+2024,67,Jaeden,Mustaf,CG,6-4,205,Overtime Elite,GA,4,Georgia Tech
+2024,68,Kayvaun,Mulready,SG,6-4,210,Worcester Academy,MA,4,Georgetown
+2024,69,Isaiah,Elohim,SF,6-5,190,Sierra Canyon,CA,4,USC
+2024,70,Peyton,Marshall,C,7-0,300,Overtime Elite,GA,4,Missouri
+2024,71,Justin,Pippen,CG,6-3,180,Sierra Canyon,CA,4,Michigan
+2024,72,John,Bol,C,7-1,190,Overtime Elite,MO,4,Ole Miss
+2024,73,Jason,Asemota,SF,6-8,190,Hillcrest Prep,AZ,4,Baylor
+2024,74,Josiah,Moseley,PF,6-6,205,Stony Point,TX,4,Villanova
+2024,75,Gicarri,Harris,CG,6-4,180,Grayson,GA,4,Purdue
+2024,76,Damarius,Owens,SF,6-8,190,Western Reserve Academy,OH,4,Marquette
+2024,77,Eric,Freeny,SG,6-3,180,Centennial,CA,4,UCLA
+2024,78,Paul,McNeil,SG,6-6,185,Richmond,NC,4,NC State
+2024,79,Jaiden,Glover,SF,6-5,190,The Patrick School,NJ,4,St. John's
+2024,80,Marcus,Allen,PF,6-6,190,Norland,FL,4,Missouri
+2024,81,Robert,Miller,PF,6-10,225,Pasadena Memorial,TX,4,LSU
+2024,82,Nicolas,Codie,PF,6-9,200,Newman Smith,TX,4,Texas
+2024,83,Matthew,Hodge,PF,6-8,200,St Rose,NJ,4,Villanova
+2024,84,Curtis,Givens III,PG,6-2,170,Montverde Academy,FL,4,LSU
+2024,85,Vyctorius,Miller,SG,6-5,170,Compass Prep,AZ,4,LSU
+2024,86,Cooper,Koch,PF,6-8,205,Metamora,IL,4,Iowa
+2024,87,Jalen,Shelley,SF,6-8,190,Link Academy,TX,4,USC
+2024,88,Travis,Perry,PG,6-2,170,Lyon County,KY,4,Kentucky
+2024,89,Tyler,McKinley,C,6-8,220,Winton Woods,OH,4,Cincinnati
+2024,90,Ryan,Jones Jr.,C,6-8,225,The Rock School,FL,4,Virginia Tech
+2024,92,Isaiah,Abraham,PF,6-7,195,Paul VI Catholic,VA,4,UConn
+2024,93,Andre,Mills,SG,6-4,185,Brimmer And May School,MA,4,Texas A&M
+2024,94,Daquan,Davis,PG,6-1,165,Overtime Elite,GA,4,Florida State
+2024,95,Royce,Parham,PF,6-8,200,Western Reserve Academy,OH,4,Marquette
+2024,96,Miles,Goodman,C,6-10,225,SoCal Academy,WA,4,Penn State
+2024,97,Nojus,Indrusaitis,SG,6-5,185,Brewster Academy,IL,4,Iowa State
+2024,98,Bishop,Boswell,CG,6-4,195,Myers Park,NC,4,Tennessee
+2024,99,Chase,McCarty,SF,6-5,200,IMG Academy,FL,4,Houston
+2024,100,Amier,Ali,SF,6-8,175,Canyon International Academy,AZ,4,Arizona State
+2024,101,Juke,Harris,SG,6-6,185,Salisbury,NC,4,Wake Forest
+2024,102,Oscar,Goodman,SF,6-7,230,NBA Global Academy,NEW,4,Michigan
+2024,103,Darrion,Sutton,SF,6-8,175,Overtime Elite,GA,4,Georgia Tech
+2024,104,Sammie,Yeanay,PF,6-8,230,Compass Prep,AZ,4,Grand Canyon
+2024,105,Pharaoh,Compton,PF,6-6,215,Arbor View,NV,4,San Diego State
+2024,106,Andrew,Crawford,CG,6-6,175,ThunderRidge,CO,4,Colorado
+2024,107,Jacob,Cofie,PF,6-9,225,Eastside Catholic,WA,4,Virginia
+2024,108,Jase,Butler,CG,6-4,180,The Branson School,CA,4,Washington
+2024,109,Cole,Certa,SG,6-4,165,IMG Academy,FL,4,Notre Dame
+2024,110,Isaac,Asuma,PG,6-3,190,Cherry Secondary,MN,4,Minnesota
+2024,111,Micah,Robinson,SF,6-6,200,Oak Hill Academy,VA,4,TCU
+2024,112,Robert,Hinton,SG,6-4,175,Harvard Westlake,CA,4,Harvard
+2024,113,Jaxon,Johnson,PF,6-8,195,Alta,UT,4,Utah
+2024,114,Christian,Anderson,PG,5-11,155,Oak Hill Academy,VA,4,Texas Tech
+2024,115,CJ,Brown,PG,6-2,175,Kell,GA,4,USF
+2024,116,Trent,Burns,C,7-3,210,Good Vision Academy,TX,4,Missouri
+2024,117,Emmanuel,Stephen,C,7-0,215,Dream City Christian,AZ,4,Arizona
+2024,118,Dallas,Thomas,PF,6-7,170,Parkview Magnet,AR,3,Clemson
+2024,119,Lathan,Sommerville,C,6-9,240,Richwoods,IL,3,Rutgers
+2024,120,Daniel,Freitag,PG,6-2,195,Breck School,MN,3,Wisconsin
+2024,121,Trent,Noah,SF,6-6,200,Harlan County,KY,3,Kentucky
+2024,122,Jack,Robison,SF,6-6,190,Lakeville North,MN,3,Wisconsin
+2024,123,James,Brown,C,6-9,210,Link Academy,MO,3,North Carolina
+2024,124,Brooks,Bahr,CG,6-4,180,Keller,TX,3,BYU
+2024,125,George,Turkson Jr.,PF,6-7,205,Bradford Christian Academy,MA,3,Texas A&M
+2024,126,Isaiah,Brown,SG,6-5,185,Orlando Christian Prep,FL,3,Florida
+2024,127,Brody,Kozlowski,PF,6-7,190,Corner Canyon,UT,3,BYU
+2024,128,David,Punch,PF,6-7,205,Harker Heights,TX,3,TCU
+2024,129,Mikey,Lewis,CG,6-3,170,Prolific Prep,CA,3,Saint Mary's
+2024,130,Tyrone,Riley,SF,6-5,180,St. Pius X-St. Matthias Academy,CA,3,San Francisco
+2024,131,Jared,Harris,SG,6-2,160,Silsbee,TX,3,Memphis
+2024,132,Isaac,Davis,PF,6-6,220,Hillcrest,ID,3,Utah State
+2024,133,Zion,Sensley,SF,6-8,170,Archbishop Riordan,CA,3,UC Santa Barbara
+2024,134,Jason,Jakstys,PF,6-10,205,Yorkville,IL,3,Illinois
+2024,135,Khaman,Maker,C,7-0,215,Trinity International Schools,NV,3,St. John's
+2024,136,Kuol,Atak,PF,6-9,185,Haltom,TX,3,Oklahoma
+2024,137,Godswill,Erheriene,C,6-9,225,Long Island Lutheran,NY,3,Seton Hall
+2024,138,Nick,Janowski,SG,6-3,200,Pewaukee,WI,3,Nebraska
+2024,139,Colin,White,SF,6-6,180,Ottawa-glandorf,OH,3,Ohio State
+2024,140,Malachi,Palmer,SG,6-5,185,Mt. Zion Prep,MD,3,Maryland
+2024,141,K.J.,Windham,CG,6-3,175,Ben Davis,IN,3,Northwestern
+2024,142,Garrett,Sundra,PF,6-10,215,Paul VI Catholic,VA,3,Notre Dame
+2024,143,Trey,Parker,SG,6-2,170,Overtime Elite,GA,3,NC State
+2024,144,Brandin,Cummings,CG,6-3,160,Lincoln Park Performing Arts Cs,PA,3,Pittsburgh
+2024,145,Luke,Bamgboye,C,6-10,190,Compass Prep,AZ,3,VCU
+2024,146,Jesse,McCulloch,C,6-9,190,Lutheran East,OH,3,Michigan State
+2024,147,Ace,Buckner,CG,6-1,165,La Lumiere School,IN,3,Clemson
+2024,148,Isaiah,Johnson-Arigu,SF,6-7,200,Totino-Grace,MN,3,Miami
+2024,149,Sebastian,Rancik,PF,6-9,210,JSerra Catholic,CA,3,Colorado
+2024,150,Raleigh,Burgess,C,6-10,205,Sycamore,OH,3,Purdue
+2024,151,Taj,DeGourville,SF,6-4,185,Red Rock Academy,NV,3,San Diego State
