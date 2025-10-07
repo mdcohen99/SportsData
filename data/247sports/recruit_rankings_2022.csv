@@ -1,0 +1,151 @@
+class_year,rank,first_name,last_name,position,height,weight,high_school,state,stars,commitment
+2022,1,Nick,Smith,CG,6-4,185,North Little Rock,AR,5,Arkansas
+2022,2,Dereck,Lively II,C,7-1,220,Westtown School,PA,5,Duke
+2022,3,Dariq,Whitehead,SF,6-6,190,Montverde Academy,NJ,5,Duke
+2022,4,Kyle,Filipowski,C,6-11,230,Wilbraham & Monson Academy,MA,5,Duke
+2022,5,Cason,Wallace,CG,6-4,185,Richardson,TX,5,Kentucky
+2022,6,GG,Jackson,PF,6-9,210,Ridge View,SC,5,South Carolina
+2022,7,Kel'el,Ware,C,7-0,210,North Little Rock,AR,5,Oregon
+2022,8,Dillon,Mitchell,SF,6-7,200,Montverde Academy,FL,5,Texas
+2022,9,Keyonte,George,SG,6-4,185,IMG Academy,TX,5,Baylor
+2022,10,Amari,Bailey,CG,6-5,190,Sierra Canyon,CA,5,UCLA
+2022,11,Cam,Whitmore,SF,6-6,200,Archbishop Spalding,MD,5,Villanova
+2022,12,Jarace,Walker,PF,6-8,220,IMG Academy,FL,5,Houston
+2022,13,Mark,Mitchell,PF,6-8,205,Sunrise Christian Academy,KS,5,Duke
+2022,14,Brandon,Miller,SF,6-8,200,Cane Ridge,TN,5,Alabama
+2022,15,Anthony,Black,PG,6-7,185,Duncanville,TX,5,Arkansas
+2022,16,Chris,Livingston,SF,6-6,200,Oak Hill Academy,VA,5,Kentucky
+2022,17,Adem,Bona,C,6-9,225,Prolific Prep,CA,5,UCLA
+2022,18,Arterio,Morris,PG,6-3,190,Kimball,TX,5,Texas
+2022,19,Julian,Phillips,SF,6-8,200,Link Academy,MO,5,Tennessee
+2022,20,Jordan,Walsh,SF,6-7,190,Link Academy,TX,5,Arkansas
+2022,21,Gradey,Dick,SF,6-7,195,Sunrise Christian Academy,KS,5,Kansas
+2022,22,JJ,Starling,CG,6-4,180,La Lumiere School,NY,5,Notre Dame
+2022,23,Tyrese,Proctor,PG,6-4,170,NBA Global Academy,AUST,5,Duke
+2022,24,Yohan,Traore,C,6-10,225,Dream City Christian,AZ,5,Auburn
+2022,25,Kylan,Boswell,PG,6-1,180,Compass Prep,AZ,5,Arizona
+2022,26,Jalen,Hood-Schifino,CG,6-5,210,Montverde Academy,FL,4,Indiana
+2022,27,Jaden,Bradley,PG,6-3,185,IMG Academy,FL,4,Alabama
+2022,28,Vincent,Iwuchukwu,C,7-0,220,SoCal Academy,CA,4,USC
+2022,29,Leonard,Miller,SF,6-9,195,Fort Erie International Academy,ON,4,Professional
+2022,30,Seth,Trimble,PG,6-3,185,Menomonee Falls,WI,4,North Carolina
+2022,31,Terrance,Arceneaux,SF,6-7,190,Beaumont United,TX,4,Houston
+2022,32,Ernest,Udeh Jr.,C,6-10,230,Dr. Phillips,FL,4,Kansas
+2022,33,Collin,Chandler,CG,6-4,170,Farmington,UT,4,Kentucky
+2022,34,Skyy,Clark,PG,6-3,200,Montverde Academy,FL,4,Illinois
+2022,35,Tre,White,SF,6-6,190,Prolific Prep,CA,4,USC
+2022,36,Henri,Veesaar,C,6-10,200,Estonia,ESTO,4,Arizona
+2022,37,MJ,Rice,SF,6-5,225,Prolific Prep,CA,4,Kansas
+2022,38,Malik,Reneau,PF,6-8,210,Montverde Academy,FL,4,Indiana
+2022,39,Ugonna,Onyenso,C,7-0,233,Putnam Science Academy,CT,4,Kentucky
+2022,40,Tarris,Reed Jr.,C,6-10,260,Link Academy,MO,4,Michigan
+2022,41,Tyrell,Ward,SF,6-7,185,DeMatha Catholic,MD,4,LSU
+2022,42,Dylan,Andrews,PG,6-3,180,Compass Prep,AZ,4,UCLA
+2022,43,Rylan,Griffen,SG,6-5,180,Richardson,TX,4,Alabama
+2022,44,Chance,Westry,SF,6-6,190,Compass Prep,AZ,4,Auburn
+2022,45,Jett,Howard,SF,6-7,220,IMG Academy,FL,4,Michigan
+2022,46,Freddie,Dilione,CG,6-4,185,Word Of God Christian Academy,NC,4,Tennessee
+2022,47,Zuby,Ejiofor,PF,6-8,215,Garland,TX,4,Kansas
+2022,48,Isaiah,Miranda,C,7-0,200,SoCal Academy,CA,4,NC State
+2022,49,Baba,Miller,C,6-11,204,Spain,SPAI,4,Florida State
+2022,50,Roddy,Gayle Jr.,SG,6-4,195,Wasatch Academy,UT,4,Ohio State
+2022,51,Jayden,Epps,CG,6-2,195,Combine Academy,NC,4,Illinois
+2022,52,Isaac,McKneely,CG,6-4,170,Poca,WV,4,Virginia
+2022,53,Dior,Johnson,PG,6-3,180,SoCal Academy,CA,4,Pittsburgh
+2022,54,Bruce,Thornton,PG,6-1,205,Milton,GA,4,Ohio State
+2022,55,Ty,Rodgers,PF,6-6,200,Thornton Township,IL,4,Illinois
+2022,56,Riley,Kugel,SG,6-5,185,Dr. Phillips,FL,4,Florida
+2022,57,Miles,Byrd,SG,6-6,165,Lincoln,CA,4,San Diego State
+2022,58,Elijah,Fisher,SF,6-6,195,Crestwood Prep,ON,4,Texas Tech
+2022,59,Kijani,Wright,PF,6-9,235,Sierra Canyon,CA,4,USC
+2022,60,Leon,Bond,SF,6-5,180,Wauwatosa East,WI,4,Virginia
+2022,61,Jaxon,Kohler,PF,6-10,250,SoCal Academy,UT,4,Michigan State
+2022,62,Mark,Armstrong,CG,6-2,160,St. Peter's Prep,NJ,4,Villanova
+2022,63,Judah,Mintz,CG,6-3,165,Oak Hill Academy,VA,4,Syracuse
+2022,64,London,Johnson,CG,6-4,165,Norcross,GA,4,Professional
+2022,65,Amaree,Abram,PG,6-3,180,SoCal Academy,CA,4,Ole Miss
+2022,66,Milos,Uzan,PG,6-4,185,Dream City Christian,AZ,4,Oklahoma
+2022,67,Pop,Isaacs,PG,6-2,180,Coronado,NV,4,Texas Tech
+2022,68,Jalen,Washington,C,6-9,210,West Side,IN,4,North Carolina
+2022,69,Tafara,Gapare,PF,6-10,205,South Kent School,NEW,4,UMass
+2022,70,Aidan,Shaw,SF,6-8,190,Blue Valley,KS,4,Missouri
+2022,71,Austin,Nunez,PG,6-2,170,Wagner HS,TX,4,Arizona State
+2022,72,Chris,Bell,SF,6-7,185,Wasatch Academy,UT,4,Syracuse
+2022,73,Donovan,Clingan,C,7-1,255,Bristol Central,CT,4,UConn
+2022,74,Felix,Okpara,C,6-11,210,Link Academy,MO,4,Ohio State
+2022,75,Joseph,Hunter Jr.,SG,6-5,185,San Joaquin Memorial,CA,4,Fresno State
+2022,76,Kam,Craft,SG,6-5,180,The Skill Factory,GA,4,Xavier
+2022,77,Jalen,Reed,PF,6-10,220,SoCal Academy,CA,4,LSU
+2022,78,Jaden,Schutt,SG,6-5,180,Yorkville Christian,IL,4,Duke
+2022,79,Kamari,Lands,SF,6-8,195,Hillcrest Prep,AZ,4,Louisville
+2022,80,Derrian,Ford,CG,6-3,190,Magnolia,AR,4,Arkansas
+2022,81,Isaac,Traudt,PF,6-10,215,Grand Island,NE,4,Virginia
+2022,82,Jevon,Porter,PF,6-10,210,Father Tolton,MO,4,Pepperdine
+2022,83,Chandler,Jackson,CG,6-4,205,Christian Brothers,TN,4,Florida State
+2022,84,Taylor,Hendricks,PF,6-9,205,Calvary Christian Academy,FL,4,UCF
+2022,85,DJ,Jefferson,SF,6-5,190,Minnesota Preparatory Academy,MN,4,Tennessee
+2022,86,Brice,Sensabaugh,SF,6-6,240,Lake Highland Prep,FL,4,Ohio State
+2022,87,Tre,Holloman,PG,6-3,175,Cretin Derham Hall,MN,4,Michigan State
+2022,88,Josh,Ojianwuna,C,6-10,230,NBA Global Academy,AUST,4,Baylor
+2022,89,Kaleb,Banks,PF,6-8,215,Fayette County,GA,4,Indiana
+2022,90,Tyler,Nickel,PF,6-8,210,East Rockingham,VA,4,North Carolina
+2022,91,Otega,Oweh,SG,6-6,210,Blair Academy,NJ,4,Oklahoma
+2022,92,Zion,Cruz,SG,6-5,175,Donda Academy,CA,4,DePaul
+2022,93,Braden,Huff,PF,6-9,205,Glenbard West,IL,4,Gonzaga
+2022,94,Zach,Keller,PF,6-9,220,ThunderRidge,CO,4,Wake Forest
+2022,95,Dylan,Anderson,C,7-0,215,Perry,AZ,4,Arizona
+2022,96,Sencire,Harris,SG,6-3,160,St. Vincent-St. Mary,OH,4,Illinois
+2022,97,BJ,Edwards,PG,6-3,170,Knoxville Catholic,TN,4,Tennessee
+2022,98,Lee,Dort,C,6-9,240,Greenhill School,TX,4,Vanderbilt
+2022,99,Noah,Clowney,PF,6-9,205,Dorman,SC,4,Alabama
+2022,100,Kimani,Hamilton,SF,6-8,215,Clinton,MS,4,Mississippi State
+2022,101,Desmond,Claude,PG,6-5,190,Putnam Science Academy,CT,4,Xavier
+2022,102,Devin,Ree,SF,6-8,185,Oak Hill Academy,MS,4,Louisville
+2022,103,Denver,Anglin,CG,6-2,165,Gill St Bernards,NJ,4,Georgetown
+2022,104,Rodney,Rice,CG,6-4,185,DeMatha Catholic,MD,4,Virginia Tech
+2022,105,Daniel,Skillings,SG,6-5,180,Roman Catholic,PA,4,Cincinnati
+2022,106,Filip,Borovicanin,SF,6-8,180,Serbia,SERB,4,Arizona
+2022,107,Jaylen,Thompson,SF,6-7,180,SoCal Academy,CA,4,Stanford
+2022,108,KyeRon,Lindsay,PF,6-8,205,Guyer,TX,4,Georgia
+2022,109,Ven-Allen,Lubin,PF,6-8,220,Orlando Christian Prep,FL,4,Notre Dame
+2022,110,TJ,Caldwell,SG,6-4,170,Faith Family Academy of Oak Cliff,TX,4,Ole Miss
+2022,111,Lamar,Washington,SG,6-4,210,Compass Prep,OR,4,Texas Tech
+2022,112,Noah,Shelby,PG,6-2,175,Greenhill School,TX,4,Vanderbilt
+2022,113,Dug,McDaniel,PG,5-11,167,Paul VI Catholic,VA,4,Michigan
+2022,114,Donald,Hand,CG,6-5,180,Landstown,VA,4,Boston College
+2022,115,Mike,Sharavjamts,SF,6-7,180,Andrews Osborne Academy,OH,4,Dayton
+2022,116,Donovan,Dent,PG,6-2,170,Centennial,CA,4,New Mexico
+2022,117,Adrame,Diongue,C,7-0,185,Compass Prep,SENE,4,Washington State
+2022,118,Malique,Ewin,C,6-10,220,Berkmar,GA,4,Ole Miss
+2022,119,De'Ante,Green,PF,6-9,215,Asheville Christian Academy,NC,4,Florida State
+2022,120,CJ,Gunn,SG,6-5,175,Lawrence North,IN,4,Indiana
+2022,121,Cameron,Corhen,C,6-9,205,Sunrise Christian Academy,TX,4,Florida State
+2022,122,Fletcher,Loyer,SG,6-3,170,Homestead,IN,4,Purdue
+2022,123,Pharrel,Payne,PF,6-9,230,Park Senior,MN,4,Minnesota
+2022,124,Quion,Williams,SF,6-4,185,Jonesboro,AR,4,Oklahoma State
+2022,125,Tre,Donaldson,PG,6-1,190,Florida State University School,FL,4,Auburn
+2022,126,PJ,Haggerty,CG,6-3,170,Crosby,TX,4,TCU
+2022,127,Christian,Watson,SF,6-6,195,St. John's College,DC,4,Miami
+2022,128,Koren,Johnson,CG,6-1,175,Garfield,WA,4,Washington
+2022,129,Gregg,Glenn,PF,6-7,215,Calvary Christian Academy,FL,4,Michigan
+2022,130,Evan,Mahaffey,SF,6-5,175,Archbishop Moeller,OH,4,Penn State
+2022,131,Davin,Cosby,SG,6-5,180,Word Of God Christian Academy,NC,4,Alabama
+2022,132,Rowan,Brumbaugh,PG,6-4,180,Northfield Mount Hermon,MA,4,Texas
+2022,133,Alphonzo,Billups,SG,6-7,180,Varina,VA,4,VCU
+2022,134,AJ,Casey,PF,6-8,180,Whitney Young,IL,4,Miami
+2022,135,Chase,Ross,SG,6-4,185,Cushing Academy,TX,4,Marquette
+2022,136,Brendan,Hausen,SG,6-4,180,Amarillo,TX,4,Villanova
+2022,137,Bobi,Klintman,PF,6-9,200,Sunrise Christian Academy,SWED,4,Wake Forest
+2022,138,Adou,Thiero,CG,6-5,180,Quaker Valley,PA,4,Kentucky
+2022,139,Prince,Aligbe,PF,6-6,215,Minnehaha Academy,MN,3,Boston College
+2022,140,Barry,Dunning Jr.,SF,6-6,205,McGill Toolen,AL,3,Arkansas
+2022,141,Camden,Heide,SF,6-5,180,Wayzata,MN,3,Purdue
+2022,142,Jayden,Pierre,PG,6-1,165,Long Island Lutheran,NJ,3,Providence
+2022,143,Aidan,Mahaney,SG,6-2,150,Campolindo,CA,3,Saint Mary's
+2022,144,Favour,Aire,C,6-11,215,Bishop McNamara,MD,3,Miami
+2022,145,AJ,Storr,SG,6-5,180,IMG Academy,FL,3,St. John's
+2022,146,Ryan,Agarwal,SF,6-6,175,Coppell,TX,3,Stanford
+2022,147,Ryan,Dunn,SF,6-6,190,Perkiomen School,NY,3,Virginia
+2022,148,Daniel,Hankins-Sanford,PF,6-8,230,Chambers,NC,3,South Carolina
+2022,149,Colin,Smith,PF,6-8,200,Compass Prep,TX,3,Vanderbilt
+2022,150,Jorge,Diaz,PF,6-11,195,IMG Academy,FL,3,Pittsburgh
