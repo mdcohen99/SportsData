@@ -35,7 +35,7 @@ teamzscore <- wbb_logs |>
     TotalZscore = ppgZscore + opp_ppgZscore + fg_pctZscore + turnoversZscore + reboundsZscore + difZscore
   ) 
 
-teamzscore |> filter(Season != 2021) |> arrange(desc(TotalZscore)) |> select(Season, Games, School, TotalZscore)
+teamzscore |> filter(Season != 2021, Season > 2022) |> arrange(desc(TotalZscore)) |> select(Season, Games, School, TotalZscore)
 ```
 To no surprise, there's a lot of UConn, South Carolina and Baylor here. Wonder why that is? LOL. The first major thing I had to do was remove the 2021 season because that really skewed the results for teams that barely played any games that year but were good in those games. As opposed to some other sports where we did these calculations and got a lot of random small schools at the top of the z score calculation, here were see all the big name programs at the top. And I think that in part has to do with how dominant some of the top programs in womens basketball can be. Especially some of those UConn teams that went undefeated. Few sports have seen eras of dominance from top teams quite like women's basketball. Especially because, for so long, so much of the talent was concentrated at only a couple schools. It's why so many of the teams near the top of this Z score list are also from pre-NIL seasons (i.e. before talent began to really spread out). 
 
@@ -64,11 +64,15 @@ Yeah not same. So when Maryland fans complain about how the program has fallen o
 
 
 
+### Story top on data
 
+In NCAA womens basketball, the top of the sport has long been an exclusive group. The same handful of schools have interchanged dynasties the NCAA first adopted the sport in 1982. Long tenured and successful coaches have been incredibly difficult to knock off. Just 12 schools appeared among the top 30 most dominant statistical teams since the 2015 season. 
 
+Unsurprisingly, a ranking of the most overpowering womens basketball teams since 2015 frequently includes UConn, Baylor and South Carolina. Those are the only three schools to make up the nine most dominant teams in that time span. All three schools had big name coaches who built their programs on loading up on the top recruits in the country. All three have at least three national titles and account for seven of the NCAA Tournaments won since 2015. 
 
+But dynasties, no matter how dominant, do not last forever. The story starts to change in recent years. Since 2022, several new schools begin to emerge among the nation's most successful teams. LSU — under former Baylor coach Kim Mulkey — UCLA, Iowa, Texas, USC and Oklahoma begin to appear more frequently over the last three years. Though other than Mulkey at LSU, none of those programs have broken through to win a championship. 
 
-
+It's unclear when a new face may truly break in as a stable power alongside the established dynasties, but data shows the sport is far less centralized at the top since the adoption of NIL policies than before. 
 
 
 
