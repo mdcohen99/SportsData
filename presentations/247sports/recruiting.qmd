@@ -1,0 +1,46 @@
+---
+title: "247Sports recruiting"
+format: html
+editor: visual
+---
+
+###Introduction 
+
+This R file will be analyzing correlations recruiting rankings and team performance. All the data used here was pulled from 247Sports top 150 basketball recruit rankings. I got the data by building a web scraper using Python and GitHub Copilot. I ran the scraper through the terminal in VS Code and exported it all as a CSV file locally on my computer. 
+
+All of the documentation including transcripts with GitHub Copilot, a README file with information on using the scarper, the script of the scraper itself and all the various CSV files can be found uploaded onto my GitHub repository. That can be accessed here: https://github.com/mdcohen99/SportsData/tree/main/presentations/247sports (THIS WILL NEED TO BE DOWNLOADED TO LOAD IN DATA WITHOUT ERROR). 
+
+I scraped every 247Sports basketball top 150 rankings from 2019 through 2024. This allows us to analyze data both over a large enough sample size as well as give us years pre- and post-NIL. I stopped at 2024 since, as of early October, the the 2025 high school class is yet to play in a game. 
+
+The central question we want to answer here is: Does getting the top recruits actually equal team success?
+
+We're going to answer that by loading in all the recruiting data and joining it with our existing college basketball logs dataset. Then, we can run correlation tests and build charts to see how it all lines up. Does all the effort that goes into gettig the top recruits pay off? 
+
+We will use team success in terms of record and NCAA Tournament performance to determine if a team was successful. We can also judge a player's value to their team.  
+
+###Loading libraries and data
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(janitor)
+```
+
+```{r}
+#recruiting data sets
+recruits_2019 <- read_csv("recruit_rankings_2019.csv") |> clean_names()
+recruits_2020 <- read_csv("recruit_rankings_2020.csv") |> clean_names()
+recruits_2021 <- read_csv("recruit_rankings_2021.csv") |> clean_names()
+recruits_2022 <- read_csv("recruit_rankings_2022.csv") |> clean_names()
+recruits_2023 <- read_csv("recruit_rankings_2023.csv") |> clean_names()
+recruits_2024 <- read_csv("recruit_rankings_2024.csv") |> clean_names()
+
+#CBB logs data set
+cbb_logs <- read_csv("https://dwillis.github.io/sports-data-files/cbblogs1525.csv")
+```
+
+
+
+
+
+
