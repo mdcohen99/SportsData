@@ -1,0 +1,151 @@
+class_year,rank,first_name,last_name,position,height,weight,high_school,state,stars,commitment
+2020,1,Cade,Cunningham,PG,6-6,215,Montverde Academy,TX,5,Oklahoma State
+2020,2,Jalen,Green,CG,6-5,170,Prolific Prep,CA,5,Professional
+2020,3,Evan,Mobley,C,6-11,205,Rancho Christian,CA,5,USC
+2020,4,Jonathan,Kuminga,SF,6-8,205,The Patrick School,CONG,5,Professional
+2020,5,Ziaire,Williams,SF,6-7,175,Sierra Canyon,CA,5,Stanford
+2020,6,Brandon,Boston Jr.,SG,6-6,175,Sierra Canyon,CA,5,Kentucky
+2020,7,Caleb,Love,PG,6-3,170,Christian Brothers College,MO,5,North Carolina
+2020,8,Josh,Christopher,SG,6-5,215,Mayfair,CA,5,Arizona State
+2020,9,Scottie,Barnes,PF,6-8,210,Montverde Academy,FL,5,Florida State
+2020,10,Terrence,Clarke,SG,6-7,185,Brewster Academy,MA,5,Kentucky
+2020,11,Greg,Brown III,PF,6-9,195,Vandegrift,TX,5,Texas
+2020,12,Moussa,Cisse,C,6-10,220,Lausanne Collegiate School,TN,5,Memphis
+2020,13,Jalen,Suggs,CG,6-5,200,Minnehaha Academy,MN,5,Gonzaga
+2020,14,Jalen,Johnson,SF,6-8,215,Nicolet,WI,5,Duke
+2020,15,Daishen,Nix,PG,6-5,205,Trinity International Schools,NV,5,Professional
+2020,16,Jaden,Springer,CG,6-4,204,IMG Academy,FL,5,Tennessee
+2020,17,Keon,Johnson,SG,6-5,186,The Webb School,TN,5,Tennessee
+2020,18,Mark,Williams,C,7-0,225,IMG Academy,FL,5,Duke
+2020,19,Makur,Maker,C,6-11,235,Hillcrest Prep,AZ,5,Howard
+2020,20,Bryce,Thompson,CG,6-5,175,Booker T. Washington,OK,5,Kansas
+2020,21,Josh,Primo,CG,6-6,180,Royal Crown,OH,5,Alabama
+2020,22,Day'Ron,Sharpe,C,6-10,246,Montverde Academy,FL,5,North Carolina
+2020,23,DJ,Steward,CG,6-3,165,Whitney Young,IL,5,Duke
+2020,24,Jeremy,Roach,PG,6-2,180,Paul VI Catholic,VA,5,Duke
+2020,25,Cameron,Thomas,SG,6-3,180,Oak Hill Academy,VA,5,LSU
+2020,26,Khristian,Lander,PG,6-2,165,Francis Joseph Reitz Sch,IN,5,Indiana
+2020,27,Sharife,Cooper,PG,6-0,160,McEachern,GA,5,Auburn
+2020,28,Walker,Kessler,C,7-0,245,Woodward Academy,GA,5,North Carolina
+2020,29,Karim,Mane,CG,6-4,195,Vanier College,QC,5,Professional
+2020,30,Isaiah,Todd,PF,6-10,195,Word Of God Christian Academy,NC,5,Professional
+2020,31,Marcus,Bagley,SF,6-7,220,Sheldon,CA,4,Arizona State
+2020,32,Dawson,Garcia,PF,6-11,220,Prior Lake,MN,4,Marquette
+2020,33,Josh,Hall,SF,6-9,190,Moravian Prep,NC,4,Professional
+2020,34,Isaiah,Jackson,C,6-9,200,Waterford Mott,MI,4,Kentucky
+2020,35,Adam,Miller,SG,6-3,170,Morgan Park HS,IL,4,Illinois
+2020,36,Earl,Timberlake,SG,6-6,215,DeMatha Catholic,MD,4,Miami
+2020,37,Devin,Askew,PG,6-3,195,Mater Dei,CA,4,Kentucky
+2020,38,Nimari,Burnett,CG,6-4,190,Prolific Prep,CA,4,Texas Tech
+2020,39,KK,Robinson,PG,6-0,175,Oak Hill Academy,AR,4,Arkansas
+2020,40,Moses,Moody,SG,6-6,205,Montverde Academy,AR,4,Arkansas
+2020,41,Jabri,Abdur-Rahim,SF,6-5,185,Blair Academy,NJ,4,Virginia
+2020,42,Mac,Etienne,C,6-10,220,Brewster Academy,NH,4,UCLA
+2020,43,Mady,Sissoko,C,6-9,230,Wasatch Academy,UT,4,Michigan State
+2020,44,Lance,Ware,PF,6-9,215,Camden,NJ,4,Kentucky
+2020,45,Henry,Coleman,PF,6-8,240,Trinity Episcopal School,VA,4,Duke
+2020,46,Dalen,Terry,SF,6-6,190,Hillcrest Prep,AZ,4,Arizona
+2020,47,Matthew,Murrell,SG,6-4,190,IMG Academy,FL,4,Ole Miss
+2020,48,Franck,Kepnang,C,6-11,247,Westtown School,PA,4,Oregon
+2020,49,Samson,Ruzhentsev,SF,6-7,210,Hamilton Heights Christian Academy,TN,4,Florida
+2020,50,Dwon,Odom,PG,6-1,180,St. Francis,GA,4,Xavier
+2020,51,Andre,Jackson,SF,6-6,195,Albany,NY,4,UConn
+2020,52,Hunter,Dickinson,C,7-2,255,DeMatha Catholic,MD,4,Michigan
+2020,53,Bennedict,Mathurin,SF,6-6,190,NBA Academy Latin America,MEXI,4,Arizona
+2020,54,Jaemyn,Brakefield,PF,6-8,210,Huntington Expression Prep,WV,4,Duke
+2020,55,JT,Thor,PF,6-9,190,Norcross,GA,4,Auburn
+2020,56,Trey,Patterson,PF,6-7,195,Rutgers Preparatory School,NJ,4,Villanova
+2020,57,Kai,Sotto,C,7-1,200,The Skill Factory,GA,4,
+2020,58,Azuolas,Tubelis,PF,6-9,240,Lithuania,LITH,4,Arizona
+2020,59,MarJon,Beauchamp,SF,6-6,175,Dream City Christian,AZ,4,Professional
+2020,60,R.J.,Davis,CG,5-11,164,Archbishop Stepinac,NY,4,North Carolina
+2020,61,Andre,Curbelo,PG,6-0,170,Long Island Lutheran,PUER,4,Illinois
+2020,62,Clifford,Omoruyi,C,6-10,230,Roselle Catholic,NJ,4,Rutgers
+2020,63,Alex,Fudge,SF,6-8,175,Riverside,FL,4,LSU
+2020,64,Matthew-Alexander,Moncrieffe,PF,6-7,195,Orangeville Prep,ON,4,Oklahoma State
+2020,65,Deivon,Smith,PG,5-11,160,Grayson,GA,4,Mississippi State
+2020,66,Micah,Peavy,SF,6-7,172,Duncanville,TX,4,Texas Tech
+2020,67,Ian,Martinez,SG,6-3,170,JSerra Catholic,CA,4,Utah
+2020,68,Kenyon,Martin,PF,6-6,195,IMG Academy,FL,4,Professional
+2020,69,Kerr,Kriisa,PG,6-2,170,Estonia,ESTO,4,Arizona
+2020,70,Jordan,Nesbitt,SF,6-6,180,St Louis Christian Academy,MO,4,Memphis
+2020,71,Puff,Johnson,SF,6-7,185,Hillcrest Prep,AZ,4,North Carolina
+2020,72,Reece,Beekman,PG,6-2,160,Scotlandville Magnet,LA,4,Virginia
+2020,73,Rati,Andronikashvili,PG,6-4,190,Georgia,GEOR,4,Creighton
+2020,74,PJ,Hall,C,6-9,220,Dorman,SC,4,Clemson
+2020,75,Chibuzo,Agbo,SF,6-7,215,St. Augustine,CA,4,Texas Tech
+2020,76,Cam,Hayes,PG,6-3,175,Greensboro Day School,NC,4,NC State
+2020,77,Reese,Dixon-Waters,SG,6-5,195,St. Bernard,CA,4,USC
+2020,78,James,Graham,SF,6-8,205,Nicolet,WI,4,Maryland
+2020,79,Julian,Strawther,SF,6-7,210,Liberty,NV,4,Gonzaga
+2020,80,Isaiah,Cottrell,PF,6-9,215,Huntington Expression Prep,WV,4,West Virginia
+2020,81,Osasere,Ighodaro,PF,6-9,205,Desert Vista,AZ,4,Marquette
+2020,82,Jaxson,Robinson,SF,6-5,175,Ada,OK,4,Texas A&M
+2020,83,Jaylen,Clark,SG,6-5,200,Etiwanda,CA,4,UCLA
+2020,84,Jalen,Terry,PG,6-1,160,Beecher,MI,4,Oregon
+2020,85,Carter,Whitt,PG,6-3,170,Brewster Academy,NH,4,Wake Forest
+2020,86,Mwani,Wilkinson,SF,6-6,195,Bishop Gorman,NV,4,LSU
+2020,87,JJ,Traynor,PF,6-8,195,Bardstown,KY,4,Louisville
+2020,88,Cam'Ron,Fletcher,SF,6-6,180,Vashon,MO,4,Kentucky
+2020,89,Dominick,Harris,CG,6-4,170,Rancho Christian,CA,4,Gonzaga
+2020,90,Olivier-Maxence,Prosper,PF,6-8,205,NBA Academy Latin America,MEXI,4,Clemson
+2020,91,Alex,Tchikou,PF,6-11,200,Dream City Christian,AZ,4,Alabama
+2020,92,Kadary,Richmond,SF,6-5,175,Brewster Academy,NH,4,Syracuse
+2020,93,Matt,Cross,SF,6-6,225,Brewster Academy,MA,4,Miami
+2020,94,Tramon,Mark,PG,6-4,180,Dickinson,TX,4,Houston
+2020,95,Max,Murrell,PF,6-9,195,Millard North,NE,4,Stanford
+2020,96,Corey,Walker,PF,6-8,219,Hargrave Military Academy,VA,4,Tennessee
+2020,97,Eric,Gaines,CG,6-3,170,Lithonia,GA,4,LSU
+2020,98,Hassan,Diarra,PG,6-2,180,Putnam Science Academy,CT,4,Texas A&M
+2020,99,Jaden,Ivey,SG,6-2,165,La Lumiere School,IN,4,Purdue
+2020,100,Meechie,Johnson,PG,6-1,185,Garfield Heights,OH,4,Ohio State
+2020,101,A.J.,Hoggard,CG,6-3,185,Huntington Expression Prep,PA,4,Michigan State
+2020,102,Jaylin,Williams,C,6-9,230,Northside,AR,4,Arkansas
+2020,103,Xavier,Foster,C,7-0,225,Oskaloosa,IA,4,Iowa State
+2020,104,Adama,Sanogo,C,6-9,250,The Patrick School,MALI,4,UConn
+2020,105,Terrance,Williams II,PF,6-6,215,Gonzaga,DC,4,Michigan
+2020,106,Dain,Dainja,C,6-9,260,Park Center,MN,4,Baylor
+2020,107,Ryan,Kalkbrenner,C,6-11,210,Trinity Catholic,MO,4,Creighton
+2020,108,Kerwin,Walton,SG,6-5,195,Hopkins,MN,4,North Carolina
+2020,109,Ben,Gregg,PF,6-8,210,Clackamas,OR,4,Gonzaga
+2020,110,Nique,Clifford,SG,6-5,170,The Vanguard School,CO,4,Colorado
+2020,111,K.D.,Johnson,PG,6-1,170,Hargrave Military Academy,VA,4,Georgia
+2020,112,Michael,O'Connell,PG,6-2,175,Blair Academy,NJ,4,Stanford
+2020,113,Keon,Ambrose-Hylton,PF,6-8,200,Andrews Osborne Academy,OH,4,Alabama
+2020,114,Zeb,Jackson,SG,6-2,160,Montverde Academy,OH,4,Michigan
+2020,115,Ben,Carlson,PF,6-9,220,East Ridge,MN,4,Wisconsin
+2020,116,Jabe,Mullins,SG,6-5,195,Mount Si,WA,4,Saint Mary's
+2020,117,Pavlo,Dziuba,PF,6-8,235,Ukraine,UKRA,4,Arizona State
+2020,118,Daniel,Batcho,C,6-10,220,France,FRAN,4,Arizona
+2020,119,John,Hugley IV,C,6-9,240,Brush,OH,4,Pittsburgh
+2020,120,Justin,Lewis,PF,6-7,225,Baltimore Polytechnic Institute,MD,4,Marquette
+2020,121,David,Jones,SF,6-6,195,Teays Valley Christian School,WV,4,DePaul
+2020,122,Jamal,Mashburn Jr.,CG,6-0,160,Brewster Academy,FL,4,Minnesota
+2020,123,LJ,Cryer,PG,6-1,180,Morton Ranch,TX,4,Baylor
+2020,124,William,Jeffress,PF,6-7,205,McDowell,PA,4,Pittsburgh
+2020,125,Shakeel,Moore,PG,6-1,185,Moravian Prep,NC,4,NC State
+2020,126,Pelle,Larsson,CG,6-5,200,Sweden,SWED,4,Utah
+2020,127,Javonte,Brown-Ferguson,C,6-11,230,Thornlea Secondary School,ON,4,UConn
+2020,128,Caleb,Murphy,CG,6-2,170,Grayson,GA,4,USF
+2020,129,Colby,Jones,SG,6-6,195,Mountain Brook,AL,4,Xavier
+2020,130,Jordan,Geronimo,SF,6-6,195,St. Paul's School,NH,4,Indiana
+2020,131,Joe,Bamisile,SG,6-5,195,Monacan,VA,4,Virginia Tech
+2020,132,Josh,O'Garro,SF,6-5,175,Santa Clarita Christian School,CAYM,4,Oklahoma
+2020,133,Maxwell,Lewis,SF,6-7,180,Hillcrest Prep,AZ,4,Pepperdine
+2020,134,Woody,Newton,PF,6-8,190,Mt. Zion Prep,MD,4,Syracuse
+2020,135,Eugene,Brown III,SG,6-6,185,Southwest DeKalb,GA,4,Ohio State
+2020,136,Marcus,Dockery,CG,6-1,175,Brewster Academy,NH,4,Maryland
+2020,137,Ethan,Morton,CG,6-4,195,Butler Area,PA,4,Purdue
+2020,138,Rondel,Walker,CG,6-2,160,Putnam City West,OK,4,Oklahoma State
+2020,139,Keon,Edwards,SF,6-7,185,Hillcrest Prep,AZ,4,DePaul
+2020,140,Chris,Moore,PF,6-7,220,West Memphis,AR,4,Auburn
+2020,141,Andrej,Jakimovski,SF,6-7,205,Macedonia,MACE,4,Washington State
+2020,142,Tibet,Görener,SF,6-8,195,Orange Lutheran,IS,4,Arizona
+2020,143,Josh,Taylor,PF,6-8,195,Norcross,GA,4,Georgia
+2020,144,Justice,Ajogbor,C,6-9,230,Christ School,NC,4,Harvard
+2020,145,Steven,Crowl,C,6-9,210,Eastview Senior,MN,4,Wisconsin
+2020,146,Malachi,Wideman,SF,6-4.5,197,Venice,FL,4,Tennessee
+2020,147,Brandon,Angel,PF,6-7,200,Torrey Pines,CA,4,Stanford
+2020,148,Ty,Berry,CG,6-2,170,Sunrise Christian Academy,KS,4,Northwestern
+2020,149,Tari,Eason,PF,6-8,210,Garfield,WA,4,Cincinnati
+2020,150,Jamari,Sibley,PF,6-8,200,Oak Hill Academy,VA,4,Georgetown

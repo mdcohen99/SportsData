@@ -1,0 +1,151 @@
+class_year,rank,first_name,last_name,position,height,weight,high_school,state,stars,commitment
+2021,1,Chet,Holmgren,C,7-0,190,Minnehaha Academy,MN,5,Gonzaga
+2021,2,Paolo,Banchero,PF,6-9,235,O Dea,WA,5,Duke
+2021,3,Shaedon,Sharpe,SG,6-5,185,Dream City Christian,AZ,5,Kentucky
+2021,4,Jaden,Hardy,CG,6-4,190,Coronado,NV,5,Professional
+2021,5,Jalen,Duren,C,6-10,230,Montverde Academy,FL,5,Memphis
+2021,6,Emoni,Bates,SF,6-8,200,Ypsi Prep Academy,MI,5,Memphis
+2021,7,Jabari,Smith,PF,6-10,210,Sandy Creek,GA,5,Auburn
+2021,8,Patrick,Baldwin Jr.,SF,6-9,190,Hamilton,WI,5,Milwaukee
+2021,9,Peyton,Watson,SF,6-8,190,Long Beach Poly,CA,5,UCLA
+2021,10,Hunter,Sallis,CG,6-5,175,Millard North,NE,5,Gonzaga
+2021,11,Kennedy,Chandler,PG,6-1,165,Sunrise Christian Academy,KS,5,Tennessee
+2021,12,AJ,Griffin,SF,6-7,200,Archbishop Stepinac,NY,5,Duke
+2021,13,Scoot,Henderson,PG,6-3,180,Kell,GA,5,Professional
+2021,14,Daimion,Collins,PF,6-9,210,Atlanta,TX,5,Kentucky
+2021,15,Caleb,Houstan,PF,6-8,205,Montverde Academy,FL,5,Michigan
+2021,16,Moussa,Diabate,PF,6-10,215,IMG Academy,FL,5,Michigan
+2021,17,JD,Davison,PG,6-3,175,Calhoun Sch,AL,5,Alabama
+2021,18,Kendall,Brown,SF,6-8,205,Sunrise Christian Academy,KS,5,Baylor
+2021,19,Harrison,Ingram,SF,6-7,210,St. Mark's,TX,5,Stanford
+2021,20,TyTy,Washington,PG,6-3,185,Compass Prep,AZ,5,Kentucky
+2021,21,Michael,Foster,PF,6-9,220,Hillcrest Prep,AZ,5,Professional
+2021,22,Max,Christie,SG,6-6,195,Rolling Meadows,IL,5,Michigan State
+2021,23,Trevor,Keels,SG,6-5,210,Paul VI Catholic,VA,5,Duke
+2021,24,Brandon,Huntley-Hatfield,PF,6-9,230,Scotland Campus,PA,5,Tennessee
+2021,25,Aminu,Mohammed,SG,6-5,190,Greenwood Laboratory School,DC,5,Georgetown
+2021,26,Nate,Bittle,C,6-11,200,Prolific Prep,CA,5,Oregon
+2021,27,Matthew,Cleveland,SF,6-6,190,Pace Academy,GA,5,Florida State
+2021,28,Bryce,McGowens,SG,6-6,175,Legacy Early College,SC,5,Nebraska
+2021,29,Enoch,Boakye,C,6-10,240,George Harris Prep,ON,5,Arizona State
+2021,30,Tamar,Bates,SG,6-4,175,IMG Academy,FL,4,Indiana
+2021,31,Kowacie,Reeves,SG,6-6,170,Westside,GA,4,Florida
+2021,32,Efton,Reid,C,6-11,225,IMG Academy,FL,4,LSU
+2021,33,Charles,Bediako,C,6-11,215,IMG Academy,FL,4,Alabama
+2021,34,Jalen,Warley,CG,6-4,175,Westtown School,PA,4,Florida State
+2021,35,Malaki,Branham,SG,6-4,175,St. Vincent-St. Mary,OH,4,Ohio State
+2021,36,Jaylon,Tyson,SF,6-6,185,John Paul II,TX,4,Texas
+2021,37,Manny,Obaseki,SG,6-4,175,John Paul II,TX,4,Texas A&M
+2021,38,Langston,Love,SG,6-4,190,Montverde Academy,TX,4,Baylor
+2021,39,Josh,Minott,SF,6-8,175,St Andrew's School,FL,4,Memphis
+2021,40,Tyrese,Hunter,PG,6-1,175,St Catherines,WI,4,Iowa State
+2021,41,Benny,Williams,SF,6-8,180,IMG Academy,FL,4,Syracuse
+2021,42,Mouhamed,Gueye,PF,6-11,205,Prolific Prep,CA,4,Washington State
+2021,43,Jordan,Longino,SG,6-5,195,Germantown Academy,PA,4,Villanova
+2021,44,Bryce,Hopkins,PF,6-7,220,Fenwick,IL,4,Kentucky
+2021,45,Kobe,Bufkin,CG,6-4,175,Grand Rapids Christian,MI,4,Michigan
+2021,46,Nolan,Hickman,PG,6-2,185,Wasatch Academy,UT,4,Gonzaga
+2021,47,Jonas,Aidoo,C,6-11,215,Liberty Heights Athletic Institute,NC,4,Tennessee
+2021,48,Julian,Reese,PF,6-9,230,St. Frances Academy,MD,4,Maryland
+2021,49,Arthur,Kaluma,PF,6-8,205,Dream City Christian,AZ,4,Creighton
+2021,50,Trey,Kaufman,PF,6-8,210,Silver Creek,IN,4,Purdue
+2021,51,Jeremy,Sochan,PF,6-8,215,Orange Academy,GERM,4,Baylor
+2021,52,Kaden,Perry,C,6-8,210,Battle Ground,WA,4,Gonzaga
+2021,53,Frankie,Collins,PG,6-1,180,Coronado,NV,4,Michigan
+2021,54,DaRon,Holmes,PF,6-8,195,Montverde Academy,FL,4,Dayton
+2021,55,Jordan,Hawkins,SG,6-5,170,DeMatha Catholic,MD,4,UConn
+2021,56,Dominick,Barlow,PF,6-9,205,Bridgton Academy,NJ,4,Professional
+2021,57,Jahmai,Mashack,SF,6-5,190,Etiwanda,CA,4,Tennessee
+2021,58,Samson,Johnson,C,6-10,205,St. Patrick,NJ,4,UConn
+2021,59,Lawson,Lovering,C,7-0,220,Cheyenne Central,WY,4,Colorado
+2021,60,Ernest,Ross,PF,6-9,210,Santa Fe,FL,4,NC State
+2021,61,Daeshun,Ruffin,PG,5-9,160,Callaway,MS,4,Ole Miss
+2021,62,Rahsool,Diggins,PG,6-1,160,Archbishop Wood,PA,4,UConn
+2021,63,Dontrez,Styles,SF,6-7,205,Kinston,NC,4,North Carolina
+2021,64,Pierre,Brooks,SF,6-6,205,Douglass Academy,MI,4,Michigan State
+2021,65,Will,McClendon,SG,6-3,190,Bishop Gorman,NV,4,UCLA
+2021,66,Jaden,Akins,PG,6-3,160,Ypsi Prep Academy,MI,4,Michigan State
+2021,67,Caleb,Furst,PF,6-8,215,Blackhawk Christian School,IN,4,Purdue
+2021,68,Logan,Duncomb,C,6-9,235,Archbishop Moeller,OH,4,Indiana
+2021,69,Ryan,Nembhard,PG,6-1,165,Montverde Academy,FL,4,Creighton
+2021,70,Justice,Williams,SG,6-3,170,Montverde Academy,PA,4,LSU
+2021,71,John,Butler,C,7-1,190,Christ Church Episcopal School,SC,4,Florida State
+2021,72,Brandin,Podziemski,SG,6-5,195,St. John's Northwestern Academies,WI,4,Illinois
+2021,73,Zach,Clemence,PF,6-9,210,Sunrise Christian Academy,TX,4,Kansas
+2021,74,Taine,Murray,SG,6-5,190,New Zealand,NEW,4,Virginia
+2021,75,Isael,Silva,PG,6-3,185,Prolific Prep,CA,4,Stanford
+2021,76,Mason,Miller,PF,6-9,180,Houston,TN,4,Creighton
+2021,77,Fanbo,Zeng,PF,6-9,190,Windermere Prep,FL,4,Professional
+2021,78,Wesley,Cardet Jr.,SF,6-6,175,West Oaks Academy,FL,4,Samford
+2021,79,Terquavion,Smith,SG,6-3,180,Farmville Central,NC,4,NC State
+2021,80,Zion,Harmon,PG,5-10,160,Marshall County,KY,4,Western Kentucky
+2021,81,Malik,Thomas,CG,6-3,190,Damien,CA,4,USC
+2021,82,Dallan,Coleman,SG,6-6,210,West Nassau County,FL,4,Georgia Tech
+2021,83,Jakai,Robinson,SF,6-4,200,Rock Creek Christian Academy,MD,4,Miami
+2021,84,David,Joplin,PF,6-7,215,Brookfield Central,WI,4,Marquette
+2021,85,KJ,Adams,PF,6-7,200,Westlake,TX,4,Kansas
+2021,86,Emarion,Ellis,CG,6-5,175,Assumption,IA,4,Marquette
+2021,87,Devin,Carter,CG,6-4,175,Brewster Academy,NH,4,South Carolina
+2021,88,Roosevelt,Wheeler,C,6-10,220,John Marshall,VA,4,Louisville
+2021,89,Trey,Alexander,SG,6-4,185,Heritage Hall,OK,4,Creighton
+2021,90,D'Marco,Dunn,SG,6-4,180,Westover,NC,4,North Carolina
+2021,91,Ike,Cornish,SF,6-6,185,Legacy Early College,MD,4,Maryland
+2021,92,Brandon,Murray,SG,6-5,200,IMG Academy,FL,4,LSU
+2021,93,CJ,Noland,SG,6-3,215,Waxahachie,TX,4,Oklahoma
+2021,94,Bobby,Pettiford,PG,6-1,175,South Granville Of Business And Global Commun,NC,4,Kansas
+2021,95,K.J.,Simpson,CG,6-2,175,Chaminade,CA,4,Colorado
+2021,96,Jusaun,Holt,SF,6-6,200,St Francis Day School,GA,4,Alabama
+2021,97,Jackson,Grant,C,6-9,205,Olympia,WA,4,Washington
+2021,98,Mike,James,SF,6-6,195,Oak Ridge,FL,4,Louisville
+2021,99,Cameron,Hildreth,SG,6-4,180,England,ENGL,4,Wake Forest
+2021,100,Corey,Floyd Jr.,SG,6-4,190,Roselle Catholic,NJ,4,UConn
+2021,101,Tucker,DeVries,SF,6-6,190,Waukee,IA,4,Drake
+2021,102,Shane,Nowell,SG,6-5,190,Eastside Catholic,WA,4,Arizona
+2021,103,Miles,Kelly,SG,6-5,175,Hargrave Military Academy,VA,4,Georgia Tech
+2021,104,Marsalis,Roberson,SG,6-5,180,Bishop O'Dowd,CA,4,California
+2021,105,Brandon,Weston,SF,6-5,195,Hillcrest Prep,AZ,4,Seton Hall
+2021,106,Quincy,Allen,SF,6-7,190,Maret School,DC,4,Colorado
+2021,107,Kam,Jones,SG,6-4,180,Evangelical Christian,TN,4,Marquette
+2021,108,Jerrell,Colbert,C,6-9,210,Houston,TN,4,LSU
+2021,109,Kyle,Cuffe Jr.,SG,6-2,180,Blair Academy,NJ,4,Kansas
+2021,110,Ahamad,Bynum,SG,6-1,175,Simeon,IL,4,DePaul
+2021,111,Cesare,Edwards,C,6-10,205,Hartsville,SC,4,Xavier
+2021,112,Ryan,Mutombo,C,6-11,235,Lovett School,GA,4,Georgetown
+2021,113,Isaiah,Barnes,SF,6-6,180,Simeon,IL,4,Michigan
+2021,114,Chucky,Hepburn,PG,6-1,185,Bellevue West,NE,4,Wisconsin
+2021,115,Stevie,Mitchell,PG,6-2,175,Wilson,PA,4,Marquette
+2021,116,Wade,Taylor,PG,5-10,180,Lancaster,TX,4,Texas A&M
+2021,117,Blake,Wesley,SG,6-4,170,Riley,IN,4,Notre Dame
+2021,118,Alex,Karaban,PF,6-7,190,IMG Academy,FL,4,UConn
+2021,119,Nnanna,Njoku,C,6-9,245,Sanford School,DE,4,Villanova
+2021,120,Elijah,Tucker,PF,6-7,190,Cherokee,GA,4,Xavier
+2021,121,Chance,Moore,SG,6-5,195,McEachern,GA,4,Arkansas
+2021,122,Gianni,Thompson,PF,6-8,205,Brimmer And May School,MA,4,Boston College
+2021,123,Wooga,Poplar,SG,6-4,180,Math Civics And Sciences Cs,PA,4,Miami
+2021,124,RJ,Melendez,SF,6-7,190,Central Pointe Christian,FL,4,Illinois
+2021,125,Justyn,Fernandez,SF,6-5,200,IMG Academy,FL,4,George Mason
+2021,126,Ramon,Walker Jr.,SF,6-5,195,Shadow Creek,TX,4,Houston
+2021,127,Sam,Onu,C,6-11,255,The Phelps School,PA,4,Memphis
+2021,128,Breon,Pass,PG,6-0,175,Reidsville,NC,4,NC State
+2021,129,Bensley,Joseph,PG,6-1,165,Putnam Science Academy,CT,4,Miami
+2021,130,Casey,Simmons,SG,6-5,170,Milton Academy,MA,4,Northwestern
+2021,131,Adama,Bal,CG,6-6,180,INSEP Paris,FR,4,Arizona
+2021,132,Javon,Ruffin,SG,6-5,195,Isidore Newman,LA,3,Colorado
+2021,133,Shane,Dezonie,SG,6-4,190,Brewster Academy,PA,3,Vanderbilt
+2021,134,Glenn,Taylor Jr.,SF,6-6,190,Compass Prep,AZ,3,Oregon State
+2021,135,Kok,Yat,PF,6-8,185,Norcross,GA,3,Professional
+2021,136,Mike,"Mitchell, Jr.",PG,6-2,175,Archbishop Mitty,CA,3,Pepperdine
+2021,137,Sean,Pedulla,CG,6-1,175,Memorial,OK,3,Virginia Tech
+2021,138,Jordan,Riley,SG,6-4,195,Brentwood,NY,3,Georgetown
+2021,139,Jacobi,Wright,CG,6-2,170,Legacy Early College,SC,3,South Carolina
+2021,140,Tyler,Powell,SF,6-5,210,Ribet Academy,CA,3,Seton Hall
+2021,141,Stefan,Todorovic,SF,6-8,190,Prolific Prep,CA,3,SMU
+2021,142,Rafael,Castro,PF,6-9,200,Dover,NJ,3,Providence
+2021,143,Luke,Goode,SF,6-7,200,Homestead,IN,3,Illinois
+2021,144,Ja'Vier,Francis,C,6-8,200,Montverde Academy,FL,3,Houston
+2021,145,Brooks,Barnhizer,SF,6-6,200,Jefferson,IN,3,Northwestern
+2021,146,Jayden,Nunn,PG,6-4,190,Dream City Christian,MI,3,VCU
+2021,147,Josh,Beadle,CG,6-3,168,Cardinal Newman School,SC,3,Clemson
+2021,148,Payton,Sandfort,PF,6-8,210,Waukee,IA,3,Iowa
+2021,149,Markus,Ilver,PF,6-8,195,Western Reserve Academy,OH,3,Wisconsin
+2021,150,Darius,Johnson,PG,6-0,180,Episcopal,VA,3,UCF

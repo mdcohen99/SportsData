@@ -1,0 +1,151 @@
+class_year,rank,first_name,last_name,position,height,weight,high_school,state,stars,commitment
+2019,1,Anthony,Edwards,SG,6-5,215,Holy Spirit Preparatory School,GA,5,Georgia
+2019,2,James,Wiseman,C,7-0,210,East,TN,5,Memphis
+2019,3,Cole,Anthony,CG,6-3,185,Oak Hill Academy,VA,5,North Carolina
+2019,4,Isaiah,Stewart,C,6-9,245,La Lumiere School,IN,5,Washington
+2019,5,RJ,Hampton,CG,6-5,185,Little Elm,TX,5,Professional
+2019,6,Vernon,Carey,C,6-10,275,University School,FL,5,Duke
+2019,7,Scottie,Lewis,SF,6-5,185,Ranney School,NJ,5,Florida
+2019,8,Nico,Mannion,PG,6-3,180,Pinnacle,AZ,5,Arizona
+2019,9,Precious,Achiuwa,SF,6-9,215,Montverde Academy,FL,5,Memphis
+2019,10,Tyrese,Maxey,CG,6-3,185,South Garland,TX,5,Kentucky
+2019,11,Kahlil,Whitney,SF,6-6,190,Roselle Catholic,NJ,5,Kentucky
+2019,12,Tre,Mann,PG,6-3,170,The Villages Charter,FL,5,Florida
+2019,13,Jaden,McDaniels,PF,6-9,185,Federal Way,WA,5,Washington
+2019,14,Keion,Brooks,SF,6-7,185,La Lumiere School,IN,5,Kentucky
+2019,15,N'Faly,Dante,C,6-11,230,Sunrise Christian Academy,KS,5,Oregon
+2019,16,Samuell,Williamson,SF,6-6,180,Rockwall,TX,5,Louisville
+2019,17,Matthew,Hurt,PF,6-9,215,John Marshall Senior,MN,5,Duke
+2019,18,Josh,Green,SF,6-6,190,IMG Academy,FL,5,Arizona
+2019,19,Jeremiah,Robinson-Earl,PF,6-8,235,IMG Academy,FL,5,Villanova
+2019,20,Trendon,Watford,PF,6-9,230,Mountain Brook,AL,5,LSU
+2019,21,Bryan,Antoine,SG,6-4.5,168,Ranney School,NJ,5,Villanova
+2019,22,Akok,Akok,PF,6-10,195,Putnam Science Academy,CT,5,UConn
+2019,23,Oscar,Tshiebwe,C,6-9,250,Kennedy Catholic,PA,5,West Virginia
+2019,24,Isaiah,Mobley,PF,6-9,220,Rancho Christian,CA,5,USC
+2019,25,C.J.,Walker,PF,6-8,200,Oak Ridge,FL,4,Oregon
+2019,26,LaMelo,Ball,PG,6-6,180,SPIRE Academy,CA,4,Professional
+2019,27,Onyeka,Okongwu,C,6-8,235,Chino Hills,CA,4,USC
+2019,28,Trayce,Jackson-Davis,C,6-9,230,Center Grove,IN,4,Indiana
+2019,29,Josiah-Jordan,James,CG,6-6,200,Porter-Gaud School,SC,4,Tennessee
+2019,30,Patrick,Williams,SF,6-6,215,West Charlotte,NC,4,Florida State
+2019,31,Johnny,Juzang,SF,6-6,200,Harvard Westlake,CA,4,Kentucky
+2019,32,DJ,Carton,PG,6-1,190,Bettendorf,IA,4,Ohio State
+2019,33,Boogie,Ellis,CG,6-2,165,Mission Bay,CA,4,Memphis
+2019,34,Armando,Bacot,C,6-10,240,IMG Academy,FL,4,North Carolina
+2019,35,Cassius,Stanley,SG,6-5,180,Sierra Canyon,CA,4,Duke
+2019,36,Will,Baker,C,7-0,235,Westlake,TX,4,Texas
+2019,37,Isaac,Okoro,SF,6-5,200,McEachern,GA,4,Auburn
+2019,38,Wendell,Moore,SF,6-5,210,Cox Mill,NC,4,Duke
+2019,39,Rocket,Watts,CG,6-2,175,SPIRE Academy,OH,4,Michigan State
+2019,40,Zeke,Nnaji,PF,6-11,215,Hopkins,MN,4,Arizona
+2019,41,Anton,Watson,SF,6-8,210,Gonzaga Prep School,WA,4,Gonzaga
+2019,42,Jahmi'us,Ramsey,CG,6-4,195,Duncanville,TX,4,Texas Tech
+2019,43,Franz,Wagner,SF,6-7,190,Germany,GERM,4,Michigan
+2019,44,Jalen,Lecque,CG,6-4,190,Brewster Academy,NH,4,NC State
+2019,45,Martynas,Arlauskas,SF,6-6,185,Lithuania,LITH,4,Gonzaga
+2019,46,Jalen,Wilson,SF,6-8,215,Guyer,TX,4,Kansas
+2019,47,Pavel,Zakharov,C,6-10,235,Montverde Academy,FL,4,Gonzaga
+2019,48,Omar,Payne,C,6-9,215,Montverde Academy,FL,4,Florida
+2019,49,Kai,Jones,C,6-10,205,Brewster Academy,NH,4,Texas
+2019,50,Casey,Morsell,SG,6-2,175,St. John's College,DC,4,Virginia
+2019,51,Lester,Quinones,SG,6-5,180,IMG Academy,FL,4,Memphis
+2019,52,De'Vion,Harmon,PG,6-0,192,Guyer,TX,4,Oklahoma
+2019,53,James,Bouknight,SG,6-4,180,MacDuffie School,MA,4,UConn
+2019,54,Kofi,Cockburn,C,6-10,290,Oak Hill Academy,VA,4,Illinois
+2019,55,Tristan,Enaruna,SF,6-9,205,Wasatch Academy,NETH,4,Kansas
+2019,56,Addison,Patterson,SG,6-6,180,Bella Vista Prep,ON,4,Oregon
+2019,57,Drew,Timme,C,6-10,235,Pearce,TX,4,Gonzaga
+2019,58,Justin,Moore,SG,6-4,200,DeMatha Catholic,MD,4,Villanova
+2019,59,Robbie,Beran,PF,6-9,210,Collegiate School,VA,4,Northwestern
+2019,60,EJ,Liddell,PF,6-6,220,Belleville West,IL,4,Ohio State
+2019,61,Santiago,Aldama,PF,6-10,205,Spain,SPAI,4,Loyola Maryland
+2019,62,Aidan,Igiehon,C,6-10,235,Lawrence Woodmere Academy,NY,4,Louisville
+2019,63,Alonzo,Gaffney,SF,6-9,190,Brewster Academy,OH,4,Ohio State
+2019,64,Nah'shon,Hyland,PG,6-3,165,St. Georges Tech,DE,4,VCU
+2019,65,Max,Agbonkpolo,SF,6-8,180,Santa Margarita Catholic,CA,4,USC
+2019,66,Oumar,Ballo,C,6-10,245,NBA Academy Latin America,MALI,4,Gonzaga
+2019,67,Anthony,Harris,CG,6-3,180,Paul VI Catholic,VA,4,North Carolina
+2019,68,David,Johnson,CG,6-5,170,Trinity,KY,4,Louisville
+2019,69,Harlond,Beverly,CG,6-4,170,Montverde Academy,FL,4,Miami
+2019,70,Zach,Harvey,SG,6-4,170,Prolific Prep,KS,4,Cincinnati
+2019,71,Donovan,Williams,SG,6-5,180,Elkins,TX,4,Texas
+2019,72,Quincy,Guerrier,SF,6-7,190,Thetford Academy,QC,4,Syracuse
+2019,73,Romeo,Weems,PF,6-7,215,New Haven,MI,4,DePaul
+2019,74,Cole,Bajema,SF,6-7,175,Lynden Christian School,WA,4,Michigan
+2019,75,Eric,Dixon,PF,6-7,250,Abington,PA,4,Villanova
+2019,76,Malik,Hall,PF,6-7,190,Sunrise Christian Academy,KS,4,Michigan State
+2019,77,Terry,Armstrong,SG,6-6,185,Bella Vista Prep,AZ,4,Professional
+2019,78,Tyrell,Terry,PG,6-1,160,De La Salle,MN,4,Stanford
+2019,79,Santiago,Vescovi,PG,6-2,175,NBA Global Academy,URUG,4,Tennessee
+2019,80,Kadin,Shedrick,C,6-11,200,Holly Springs,NC,4,Virginia
+2019,81,DJ,Jeffries,PF,6-7,218,Olive Branch,MS,4,Memphis
+2019,82,KyKy,Tandy,CG,6-1,190,University Heights Academy,KY,4,Xavier
+2019,83,Marcus,Watson,SG,6-6,205,Buford,GA,4,Oklahoma State
+2019,84,Jalen,Bridges,SF,6-7,180,Fairmont,WV,4,West Virginia
+2019,85,P.J.,Fuller,SG,6-4,170,Findlay Prep,WA,4,TCU
+2019,86,Greg,Gantt,SF,6-7,195,Trinity Christian School,NC,4,Providence
+2019,87,Christian,Brown,SF,6-6,205,Oak Hill Academy,VA,4,Georgia
+2019,88,Isaiah,Wong,CG,6-2,165,Monsignor Bonner,NJ,4,Miami
+2019,89,Cashius,McNeilly,SG,6-4,180,Thornlea Secondary School,ON,4,Texas A&M
+2019,90,RaeQuan,Battle,SG,6-4,175,Marysville Pilchuck,WA,4,Washington
+2019,91,Makhi,Mitchell,C,6-9,225,Jackson-Reed,DC,4,Maryland
+2019,92,Rylan,Jones,PG,6-1,165,Olympus,UT,4,Utah
+2019,93,Balsa,Koprivica,C,7-0,240,Montverde Academy,FL,4,Florida State
+2019,94,Isaac,Johnson,C,6-11,220,American Fork,UT,4,Oregon
+2019,95,Symir,Torrence,CG,6-3,170,Vermont Academy,NY,4,Marquette
+2019,96,Christian,Koloko,C,7-0,195,Sierra Canyon,CA,4,Arizona
+2019,97,Dereon,Seabron,CG,6-6,192,Massanutten Military Academy,VA,4,NC State
+2019,98,Jaykwon,Walton,SF,6-6,195,Carver,AL,4,Georgia
+2019,99,Dontaie,Allen,SF,6-6,185,Pendleton County,KY,4,Kentucky
+2019,100,Jaime,Jaquez,SF,6-7,210,Adolfo Camarillo,CA,4,UCLA
+2019,101,Damion,Baugh,CG,6-4,185,Tennessee Preparatory Academy,TN,4,Memphis
+2019,102,Dajuan,Harris,PG,6-2,160,Rock Bridge,MO,4,Kansas
+2019,103,Brock,Ravet,CG,6-1,174,Kittitas,WA,4,Gonzaga
+2019,104,Jordan,Rawls,PG,6-2,165,Hamilton Heights Christian Academy,TN,4,Western Kentucky
+2019,105,Chandler,Lawson,PF,6-8,205,Wooddale,TN,4,Oregon
+2019,106,Isaiah,Ihnen,PF,6-9,190,Germany,GERM,4,Minnesota
+2019,107,Tre,Mitchell,C,6-9,235,Woodstock Academy,PA,4,UMass
+2019,108,Zach,Freemantle,C,6-9,215,Bergen Catholic,NJ,4,Xavier
+2019,109,Raymond,Hawkins,C,6-9,225,Findlay Prep,CA,4,Alabama
+2019,110,Jaylin,Williams,PF,6-8,225,Brantley County,GA,4,Auburn
+2019,111,Jaelen,House,PG,6-2,160,Shadow Mountain,AZ,4,Arizona State
+2019,112,Avery,Anderson III,CG,6-2,170,Northwest,TX,4,Oklahoma State
+2019,113,Francisco,Farabello,PG,6-1,165,NBA Global Academy,AUST,4,TCU
+2019,114,Tray,Jackson,PF,6-8,200,Sunrise Christian Academy,MI,4,Missouri
+2019,115,Tre,Williams,SG,6-4,180,Wasatch Academy,UT,4,Minnesota
+2019,116,Keeshawn,Barthelemy,PG,6-2,170,Thornlea Secondary School,ON,4,Colorado
+2019,117,Tyrell,Jones,CG,6-1,170,West Oaks Academy,FL,4,Auburn
+2019,118,Dahmir,Bishop,SG,6-4,175,Imhotep Institute,PA,4,Xavier
+2019,119,Chris,Harris Jr.,SG,6-3,195,South Garland,TX,4,Oklahoma State
+2019,120,Austin,Crowley,SG,6-6,185,Sunrise Christian Academy,KS,4,Ole Miss
+2019,121,Juwan,Gary,SF,6-6,200,Gray Academy,SC,4,Alabama
+2019,122,Tyrese,Samuel,PF,6-8,210,Orangeville Prep,ON,4,Seton Hall
+2019,123,Dylan,Disu,PF,6-8,185,Hendrickson,TX,4,Vanderbilt
+2019,124,Qudus,Wahab,C,6-10,230,Flint Hill School,VA,4,Georgetown
+2019,125,Patrick,McCaffery,SF,6-8,175,Iowa City West,IA,4,Iowa
+2019,126,Victor,Iwuakor,C,6-8,210,Sulphur Springs,TX,4,Oklahoma
+2019,127,Terrence,Shannon Jr.,SF,6-6,185,IMG Academy,FL,4,Texas Tech
+2019,128,Toumani,Camara,SF,6-6,190,Chaminade-Madonna,BELG,4,Georgia
+2019,129,D.J.,Thorpe,C,6-8,230,Lake Travis,TX,4,California
+2019,130,Samari,Curtis,SG,6-4,180,Xenia,OH,4,Nebraska
+2019,131,Diante,Smith,SF,6-6,195,Choctawhatchee,FL,4,TCU
+2019,132,Elias,King,SF,6-7,204,Lincoln Academy,GA,4,Mississippi State
+2019,133,Jalen,Gaffney,CG,6-2,170,Westtown School,NJ,4,UConn
+2019,134,Jesse,Edwards,C,6-11,205,IMG Academy,NETH,4,Syracuse
+2019,135,Kevin,McCullar,SF,6-6,180,Wagner,TX,4,Texas Tech
+2019,136,Joel,Brown,PG,6-2,180,Brewster Academy,CANA,4,California
+2019,137,Khalif,Battle,SG,6-5,180,Trenton Catholic School,NJ,4,Butler
+2019,138,Jalen,Hill,SF,6-7,180,Clark,NV,4,Oklahoma
+2019,139,Armaan,Franklin,SG,6-4,185,Cathedral,IN,4,Indiana
+2019,140,Jae'Lyn,Withers,PF,6-8,215,Cleveland Heights,OH,4,Louisville
+2019,141,Chris,Ledlum,SF,6-6,215,St Peters Boys,NY,4,Harvard
+2019,142,Tyson,Etienne,CG,6-1,175,Putnam Science Academy,CT,4,Wichita State
+2019,143,Chase,Hunter,CG,6-3,180,Westlake,GA,4,Clemson
+2019,144,Ford,Cooper,PG,6-3,175,United Faith Christian Academy,NC,4,Missouri State
+2019,145,Christian,Braun,SF,6-5,175,Blue Valley Northwest,KS,3,Kansas
+2019,146,Dieonte,Miles,C,6-10,210,Walton-verona,KY,3,Xavier
+2019,147,Antwan,January,C,6-11,240,Santa Monica,CA,3,New Mexico
+2019,148,Carl,Lewis,C,6-9,250,Hillcrest Prep,AZ,3,New Mexico State
+2019,149,Naheem,McLeod,C,7-3,230,Plymouth-Whitemarsh,PA,3,Florida State
+2019,150,Caleb,Mills,CG,6-3,170,Asheville Christian Academy,NC,3,Houston
