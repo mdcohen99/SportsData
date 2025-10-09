@@ -1,8 +1,8 @@
-# 247Sports 2019 Recruit Rankings scraper
+# 247Sports Recruit Rankings scraper
 
-This folder contains a Playwright-based scraper and output CSV for the 2019 high school basketball recruit rankings from 247Sports.
+This folder contains a Playwright-based scraper and output CSV for high school basketball recruit rankings from 247Sports.
 
-Files
+Files include:
 
 - `recruit_scrape_2019_playwright.py` — Playwright scraper that renders the page, parses the DOM with BeautifulSoup, and writes `recruit_rankings_2019.csv`.
 - `recruit_rankings_2019.csv` — Scraped dataset (2019 class year) with columns: `class_year, rank, first_name, last_name, position, height, weight, high_school, state, stars, commitment`.
@@ -33,6 +33,3 @@ Notes
 - Respect 247Sports' Terms of Service and robots.txt before running the scraper at scale. This script is intended for personal/educational use.
 - If you want the CSV saved into a different directory, update the `df.to_csv(...)` path in the script or run from the target directory.
 
-Contact
-
-If you want me to add CLI options, logging, or a smaller sample HTML for testing, tell me and I will add them.
