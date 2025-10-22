@@ -181,3 +181,89 @@ I would say that these results show defensive hitting percentage isn't a good me
 4. From a strategic perspective, what questions would you want to explore next based on these findings? What additional data might help explain the patterns you're seeing?
 
 I'm interested in pursuing the differences of some other stats here because, in my opinion, I'm not sure the differences in hitting percentages tells us much as a predictive measure. I'm intrigued by which holds more weight on a team's success between kills or errors. Is it more worthwhile to limit errors or to have a higher number of kills? In other words, is a more successful strategy to focus on limiting mistakes, or focus on being on the front foot attacking. We could perform similar calculations comparing those two columns. A similar discussion could be had about aces vs service errors. Is it more valuable to be great serving, or limit mistakes when serving? 
+
+###Dumbbell plots
+
+```{r}
+big10 <- c("Nebraska", "Iowa", "Minnesota", "Illinois", "Northwestern", "Wisconsin", "Indiana", "Purdue", "Ohio St.", "Michigan", "Michigan St.", "Penn St.", "Rutgers", "Maryland", "Southern California", "UCLA", "Washington", "Oregon")
+
+errors <- teams |>
+  filter(team %in% big10) |> 
+  group_by(team) |> 
+  summarise(
+    total_errors = sum(errors), 
+    opp_errors = sum(defensive_errors))
+```
+
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=errors, 
+    aes(y=team, x=total_errors, xend=opp_errors)
+  )
+```
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=errors, 
+    aes(y=team, x=opp_errors, xend=total_errors),
+    colour = "grey",
+    colour_x = "green",
+    colour_xend = "red")
+```
+
+
+
+```{r}
+ggplot() + 
+  geom_dumbbell(
+    data=errors, 
+    aes(y=team, x=opp_errors, xend=total_errors),
+    linewidth = 1,
+    color = "grey",
+    colour_x = "green",
+    colour_xend = "red") + 
+  theme_minimal()
+```
+
+```{r}
+ggplot() + 
+  geom_lollipop(
+    data=errors, 
+    aes(y=reorder(team, opp_errors), x=opp_errors), 
+    horizontal = TRUE
+    ) + theme_minimal() + 
+  labs(title = "Nebraska, Penn State force more errors", y="team")
+```
+
+```{r}
+md <- errors |> filter(team == "Maryland")
+
+ggplot() + 
+  geom_lollipop(
+    data=errors, 
+    aes(y=reorder(team, opp_errors), x=opp_errors), 
+    horizontal = TRUE
+    ) + 
+  geom_lollipop(
+    data=md,
+    aes(y=team, x=opp_errors),
+    horizontal = TRUE,
+    color = "red"
+  ) + 
+  theme_minimal() + 
+  labs(title = "Maryland near the bottom of Big Ten teams", y="team")
+```
+
+
+
+
+
+
+
+
+
+
+
