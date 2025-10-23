@@ -12,11 +12,9 @@ library(tidyverse)
 teams <- read_csv("https://dwillis.github.io/sports-data-files/wlax_team_stats_2025.csv")
 ```
 
-
 ```{r}
 ggplot() + geom_point(data=teams, aes(x=assists, y=overall_wins))
 ```
-
 
 ```{r}
 ggplot() + 
@@ -37,24 +35,3 @@ ggplot() +
   geom_smooth(data=teams, aes(x=assists, y=overall_wins), method="lm") +
   geom_point(data=umd, aes(x=assists, y=overall_wins), color="red")
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
