@@ -41,6 +41,7 @@ recruits_2024 <- read_csv("recruit_rankings_2024.csv") |> clean_names()
 #CBB logs data set
 cbb_logs <- read_csv("https://dwillis.github.io/sports-data-files/cbblogs1525.csv")
 ```
+
 ###Describing the data
 
 How many rows and columns are in each data set?
@@ -55,7 +56,7 @@ glimpse(recruits_2024)
 glimpse(cbb_logs)
 ```
 
-Lets get some basic summary on the recruiting data. We'll have to bind the data sets together and then we can figure things out like which schools were most successful and a distribution of recruit type. 
+Lets get some basic summary on the recruiting data. We'll have to bind the data sets together and then we can figure things out like which schools were most successful and a distribution of recruit type.
 
 (I got an error about in binding the rows originally because the column types were different somehow, so we're fixing that here with some ChatGPT help)
 
@@ -68,7 +69,6 @@ recruits_2023$weight <- as.numeric(recruits_2023$weight)
 recruits_2024$weight <- as.numeric(recruits_2024$weight)
 ```
 
-
 ```{r}
 joined_recruiting <- bind_rows(
   recruits_2019,
@@ -78,7 +78,6 @@ joined_recruiting <- bind_rows(
   recruits_2023,
   recruits_2024)
 ```
-
 
 ```{r}
 #schools with the most total recruits landed 
@@ -104,7 +103,7 @@ joined_recruiting |>
   filter(total_recruits >= 5)
 ```
 
-Now lets make a bar chart. We're going to look to look at total recruits for a school first, and then we're going to to make a grouped bar chart based how many of each rating of player a school got. 
+Now lets make a bar chart. We're going to look to look at total recruits for a school first, and then we're going to to make a grouped bar chart based how many of each rating of player a school got.
 
 ```{r}
 joined_recruiting |> 
@@ -177,18 +176,16 @@ cbb_logs |>
     title = element_text(size = 12, family = "montserrat")
   )
   
-```  
+```
 
-
-The biggest issue I'm likely going to have here is joining the game log data with the recruiting data so that we can do a correlation. We can't bind the rows so we'll have to do some sort of join. What column should that be based on? Seems a little bit unclear. But we'll need to do that to run any sort of correlation test between the game data and the recruiting data. 
+The biggest issue I'm likely going to have here is joining the game log data with the recruiting data so that we can do a correlation. We can't bind the rows so we'll have to do some sort of join. What column should that be based on? Seems a little bit unclear. But we'll need to do that to run any sort of correlation test between the game data and the recruiting data.
 
 I'm really happy with the vast amount of data I have here. There is a ton I can do with this, especially with regard to creating visualizations.
 
+###Next steps: Is there correlation?
 
+Next, we're going to join the recruiting data with the game log data. To determine whether recruiting at a high level does line up with winning, we need to run some correlation tests and build a scatterplot. That way we can see how teams perform relative to national recruiting averages.
 
+```{r}
 
-
-
-
-
-
+```
