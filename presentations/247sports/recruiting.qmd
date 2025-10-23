@@ -187,5 +187,63 @@ I'm really happy with the vast amount of data I have here. There is a ton I can 
 Next, we're going to join the recruiting data with the game log data. To determine whether recruiting at a high level does line up with winning, we need to run some correlation tests and build a scatterplot. That way we can see how teams perform relative to national recruiting averages.
 
 ```{r}
-
+grouped_logs <- cbb_logs |> 
+  group_by(Team) |> 
+  summarize(total_wins = sum(W_L == "W"),
+            total_losses = sum(W_L == "L"),
+            win_pct = (total_wins / (total_wins + total_losses)), 
+            total_pts = sum(TeamScore),
+            total_opp_pts = sum(OpponentScore),
+            avg_fgpct = mean(TeamFGPCT),
+            avg_opp_fgpct = mean(OpponentFGPCT),
+            total_rebounds = sum(TeamTotalRebounds),
+            total_turnovers = sum(TeamTurnovers),
+            total_assists = sum(TeamAssists)
+          )
 ```
+
+
+```{r}
+#this took an insanely long time because of figuring out all the various very very very tiny discrepancies between names of schools between the two data sets. 
+
+name_fixes <- c(
+  "Connecticut" = "UConn",
+  "Mississippi" = "Ole Miss",
+  "Southern California" = "USC",
+  "Brigham Young" = "BYU",
+  "Louisiana State" = "LSU",
+  "Virginia Commonwealth" = "VCU",
+  "Massachusetts" = "UMass",
+  "South Florida" = "USF",
+  "Southern Methodist" = "SMU",
+  "St. John's (NY)" = "St. John's",
+  "Miami (FL)" = "Miami",
+  "Loyola (MD)" = "Loyola Maryland",
+  "Saint Mary's (CA)" = "Saint Mary's",
+  "Nevada-Las Vegas" = "UNLV"
+)
+
+# used GPT for some syntax here
+grouped_logs <- grouped_logs |>
+  mutate(Team = ifelse(Team %in% names(name_fixes),
+                       name_fixes[Team],
+                       Team))
+```
+
+```{r}
+joined_logs <- joined_recruiting |> 
+  left_join(grouped_logs, by = c("commitment" = "Team")) 
+```
+
+NOTE: The joined data frame here had NA values for all the various statistics for the recruits who decided either to play professionally or if there was no input for their college choice. Of course, there are no stats to join with if the player did not play in college. So we'll have to filter those out, or at least ignore them. We are strictly focused on college performance here. So it is pretty fundamental that you did actually have to play at a college. 
+
+
+
+
+
+
+
+
+
+
+
