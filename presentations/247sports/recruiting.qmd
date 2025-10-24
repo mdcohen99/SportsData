@@ -21,7 +21,6 @@ We will use team success in terms of record and NCAA Tournament performance to d
 ###Loading libraries and data
 
 ```{r}
-library(tidyverse)
 library(lubridate)
 library(janitor)
 library(showtext)
@@ -30,6 +29,11 @@ showtext_auto()
 library(ggrepel)
 library(Hmisc)
 library(corrplot)
+library(tidyverse)
+library(conflicted)
+conflict_prefer("summarize", "dplyr")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("select", "dplyr")
 ```
 
 ```{r}
