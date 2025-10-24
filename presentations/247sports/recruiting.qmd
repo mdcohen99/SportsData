@@ -30,6 +30,7 @@ library(ggrepel)
 library(Hmisc)
 library(corrplot)
 library(tidyverse)
+#R kept yelling at me about the group_by being off because of a conflict, so i fed the errors into GPT and apparently the Hmisc library caused an issue, and this is the best fix for it according to Claude 
 library(conflicted)
 conflict_prefer("summarize", "dplyr")
 conflict_prefer("filter", "dplyr")
