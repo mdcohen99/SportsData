@@ -1,0 +1,125 @@
+---
+title: "247Sports recruiting presentation"
+author: "Matt Cohen"
+---
+
+###Introduction
+
+This R file will be analyzing correlations recruiting rankings and team performance. All the data used here was pulled from 247Sports top 150 basketball recruit rankings. I got the data by building a web scraper using Python and GitHub Copilot. I ran the scraper through the terminal in VS Code and exported it all as a CSV file locally on my computer.
+
+All of the documentation including transcripts with GitHub Copilot, a README file with information on using the scarper, the script of the scraper itself and all the various CSV files can be found uploaded onto my GitHub repository. That can be accessed here: <https://github.com/mdcohen99/SportsData/tree/main/presentations/247sports> (THIS WILL NEED TO BE DOWNLOADED TO LOAD IN DATA WITHOUT ERROR).
+
+I scraped every 247Sports basketball top 150 rankings from 2019 through 2024. This allows us to analyze data both over a large enough sample size as well as give us years pre- and post-NIL. I stopped at 2024 since, as of early October, the the 2025 high school class is yet to play in a game.
+
+The central question we want to answer here is: Does getting the top recruits actually equal team success?
+
+We're going to answer that by loading in all the recruiting data and joining it with our existing college basketball logs data set. Then, we can run correlation tests and build charts to see how it all lines up. Does all the effort that goes into getting the top recruits pay off?
+
+We will use team success in terms of record and NCAA Tournament performance to determine if a team was successful. We can also judge a player's value to their team.
+
+```{r}
+#loading in libraries 
+
+library(lubridate)
+library(janitor)
+library(showtext)
+font_add_google("Montserrat", "montserrat")
+showtext_auto()
+library(ggrepel)
+library(Hmisc)
+library(corrplot)
+library(tidyverse)
+library(conflicted)
+conflict_prefer("summarize", "dplyr")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("select", "dplyr")
+```
+
+First step is loading in the recruiting data. The web scraper I built took one year at a time, following the structure of the 247Sports website which had different URLs for each year's recruiting class. Here, we had to load in those data, edit how some columns were formatted and then join it all together into one big data frame so we can look at all the recruits at once.
+
+The one issue, somewhat, in this comes as the rank column will just be several recurring counts to 150. And that's okay! The actual ranking does matter, but this is going to be an analysis more focused on being a 3, 4 or 5 star recruit. That is generally seen in the college basketball world as a bigger marker of a player's skill than whether were ranked 55th or 75th.
+
+```{r}
+#loading recruiting data and combining sets 
+
+#recruiting data sets
+recruits_2019 <- read_csv("recruit_rankings_2019.csv") |> clean_names()
+recruits_2020 <- read_csv("recruit_rankings_2020.csv") |> clean_names()
+recruits_2021 <- read_csv("recruit_rankings_2021.csv") |> clean_names()
+recruits_2022 <- read_csv("recruit_rankings_2022.csv") |> clean_names()
+recruits_2023 <- read_csv("recruit_rankings_2023.csv") |> clean_names()
+recruits_2024 <- read_csv("recruit_rankings_2024.csv") |> clean_names()
+
+#data corrections for joining 
+recruits_2019$weight <- as.numeric(recruits_2019$weight)
+recruits_2020$weight <- as.numeric(recruits_2020$weight)
+recruits_2021$weight <- as.numeric(recruits_2021$weight)
+recruits_2022$weight <- as.numeric(recruits_2022$weight)
+recruits_2023$weight <- as.numeric(recruits_2023$weight)
+recruits_2024$weight <- as.numeric(recruits_2024$weight)
+
+#joining all the recruiting datasets
+joined_recruiting <- bind_rows(
+  recruits_2019,
+  recruits_2020,
+  recruits_2021,
+  recruits_2022,
+  recruits_2023,
+  recruits_2024)
+```
+```{r}
+#loading in basketball game log data
+cbb_logs <- read_csv("https://dwillis.github.io/sports-data-files/cbblogs1525.csv")
+``` 
+
+In loading in the basketball logs data, we care far more about summary statistics than individual game performance. We are comparing players relative to the team overall, not just in one game. So the next step is to group the teams into their various summary categories and pick which stats we might want summaries of.
+
+I decided to include total wins, total losses, point differential and win percentage as the main stats we are looking at. We want to ultimately see if recruiting at a high level led to more wins. 
+
+```{r}
+#creating summary tables and cleaning from basketball game log data
+
+grouped_logs <- cbb_logs |> 
+  group_by(Team) |> 
+  summarize(total_wins = sum(W_L == "W"),
+            total_losses = sum(W_L == "L"),
+            point_diff = sum(TeamScore) - sum(OpponentScore),
+            win_pct = (total_wins / (total_wins + total_losses)), 
+            total_pts = sum(TeamScore),
+            total_opp_pts = sum(OpponentScore),
+            avg_fgpct = mean(TeamFGPCT),
+            avg_opp_fgpct = mean(OpponentFGPCT),
+            total_rebounds = sum(TeamTotalRebounds),
+            total_turnovers = sum(TeamTurnovers),
+            total_assists = sum(TeamAssists)
+          )
+
+name_fixes <- c(
+  "Connecticut" = "UConn",
+  "Mississippi" = "Ole Miss",
+  "Southern California" = "USC",
+  "Brigham Young" = "BYU",
+  "Louisiana State" = "LSU",
+  "Virginia Commonwealth" = "VCU",
+  "Massachusetts" = "UMass",
+  "South Florida" = "USF",
+  "Southern Methodist" = "SMU",
+  "St. John's (NY)" = "St. John's",
+  "Miami (FL)" = "Miami",
+  "Loyola (MD)" = "Loyola Maryland",
+  "Saint Mary's (CA)" = "Saint Mary's",
+  "Nevada-Las Vegas" = "UNLV"
+)
+
+
+grouped_logs <- grouped_logs |>
+  mutate(Team = ifelse(Team %in% names(name_fixes),
+                       name_fixes[Team],
+                       Team))
+```
+
+
+
+
+
+

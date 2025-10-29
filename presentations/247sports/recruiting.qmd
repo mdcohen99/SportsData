@@ -14,7 +14,7 @@ I scraped every 247Sports basketball top 150 rankings from 2019 through 2024. Th
 
 The central question we want to answer here is: Does getting the top recruits actually equal team success?
 
-We're going to answer that by loading in all the recruiting data and joining it with our existing college basketball logs dataset. Then, we can run correlation tests and build charts to see how it all lines up. Does all the effort that goes into gettig the top recruits pay off?
+We're going to answer that by loading in all the recruiting data and joining it with our existing college basketball logs dataset. Then, we can run correlation tests and build charts to see how it all lines up. Does all the effort that goes into getting the top recruits pay off?
 
 We will use team success in terms of record and NCAA Tournament performance to determine if a team was successful. We can also judge a player's value to their team.
 
