@@ -292,17 +292,17 @@ cor_data_stars |>
   )
 ```
 
-The data is pretty clear: there is no relationship between recruiting at a high level and winning games. In fact, the relationship isn't even statistically significant. The correlation value is basically 0 and the p value is 0.44, which is way too high. 
+The data is pretty clear: there is no relationship between recruiting at a high level and winning games. In fact, the relationship isn't even statistically significant. The correlation value is basically 0 and the p value is 0.44, which is way too high.
 
-I then put this relationship into a scatter plot so we can visualize it and the visual is indeed an incredibly obvious lack of relationship. The line of best fit is basically flat. There are a few interesting cases in this table, however. 
+I then put this relationship into a scatter plot so we can visualize it and the visual is indeed an incredibly obvious lack of relationship. The line of best fit is basically flat. There are a few interesting cases in this table, however.
 
-Saint Mary's and VCU both great perform the recruiting ranking of their players. Both teams recruit at a 3.5 average recruit ranking. Both schools landed four total top 150 recruits since between 2019 and 2024, which is enough to have a reasonable sample size, but of course the rosters at schools like those are also filled out by players who are not ranked at all. Yet both schools have among the 11 best winning percentages in the country during the same time frame. VCU also had two different head coaches (Mike Rhoades and Ryan Odom) during this time and continued winning at a high clip. Both Rhoades (Penn State) and Odom (Virginia) have gone onto major Power 4 jobs. At Saint Mary's, head coach Randy Bennett has been in charge since 2001 and has only had one losing season the whole time. That was his first season, too. Saint Mary's has become a well known name in the sport because of how much its done with less recruiting talent. The Gaels have made the NCAA Tournament five times during this data set, and would have been a high seed yet again in the 2020 NCAA Tournament had it occurred. 
+Saint Mary's and VCU both great perform the recruiting ranking of their players. Both teams recruit at a 3.5 average recruit ranking. Both schools landed four total top 150 recruits since between 2019 and 2024, which is enough to have a reasonable sample size, but of course the rosters at schools like those are also filled out by players who are not ranked at all. Yet both schools have among the 11 best winning percentages in the country during the same time frame. VCU also had two different head coaches (Mike Rhoades and Ryan Odom) during this time and continued winning at a high clip. Both Rhoades (Penn State) and Odom (Virginia) have gone onto major Power 4 jobs. At Saint Mary's, head coach Randy Bennett has been in charge since 2001 and has only had one losing season the whole time. That was his first season, too. Saint Mary's has become a well known name in the sport because of how much its done with less recruiting talent. The Gaels have made the NCAA Tournament five times during this data set, and would have been a high seed yet again in the 2020 NCAA Tournament had it occurred.
 
-The other end of the spectrum are smaller programs like Howard and Milwaukee which each landed a one-off five-star recruit. The point here is that the data shows one very highly rated player doesn't turn your program around. Maker was injured just two games into his freshman year at Howard and went to play professionally after that season. Similarly, Patrick Baldwin Jr. committed to UW-Milwaukee to play for his father, but spent his one and only college season back and forth dealing with injuries. Milwaukee went 10-22 that year. 
+The other end of the spectrum are smaller programs like Howard and Milwaukee which each landed a one-off five-star recruit. The point here is that the data shows one very highly rated player doesn't turn your program around. Maker was injured just two games into his freshman year at Howard and went to play professionally after that season. Similarly, Patrick Baldwin Jr. committed to UW-Milwaukee to play for his father, but spent his one and only college season back and forth dealing with injuries. Milwaukee went 10-22 that year.
 
-So landing top recruits doesn't guarantee success. In the case of Milwaukee and Howard, injuries played a major role in keeping their anticipated stars off the court. But unlike a program in Duke which both recruits at a high level and performs, neither of those smaller programs have the infrastructure to withstand the one time they get a highly rated player and said player can't consistently be on the court. 
+So landing top recruits doesn't guarantee success. In the case of Milwaukee and Howard, injuries played a major role in keeping their anticipated stars off the court. But unlike a program in Duke which both recruits at a high level and performs, neither of those smaller programs have the infrastructure to withstand the one time they get a highly rated player and said player can't consistently be on the court.
 
-There are clearly other factors at play here. Program success is not dependent on just recruiting the best talent. So let's look at those other factors in a correlation matrix. 
+There are clearly other factors at play here. Program success is not dependent on just recruiting the best talent. So let's look at those other factors in a correlation matrix.
 
 ```{r}
 matrix_prep <- joined_logs |> 
@@ -339,9 +339,9 @@ corrplot(cormatrix$r,
          tl.srt = 45)
 ```
 
-So this matrix gives us a couple of useful tidbits. There are some somewhat strong negative relationships between the rank of a recruit (lower rank number is better) and point differential, turnovers, points allowed, total points, and total rebounds. The average stars metric has some positive relationships with those same metrics (of course, again, that negative relationship for the rank is because R doesn't understand that a lower rank is a better rank). 
+So this matrix gives us a couple of useful tidbits. There are some somewhat strong negative relationships between the rank of a recruit (lower rank number is better) and point differential, turnovers, points allowed, total points, and total rebounds. The average stars metric has some positive relationships with those same metrics (of course, again, that negative relationship for the rank is because R doesn't understand that a lower rank is a better rank).
 
-Let's put some of those relationships into scatterplots. 
+Let's put some of those relationships into scatterplots.
 
 ```{r}
 #avg_rank vs point_dif
@@ -417,24 +417,10 @@ matrix_prep |>
 
 ```
 
-So what do these slight relationships mean? It is probably complicated. 
+So what do these slight relationships mean? It is probably complicated.
 
-Does it make sense that having better players may lead to better game statistics? Probably? Maybe? But if that's the case, then why isn't it correlated with winning? 
+Does it make sense that having better players may lead to better game statistics? Probably? Maybe? But if that's the case, then why isn't it correlated with winning?
 
-The teams in the upper left end of the point differential scatter plot are the usual suspects: Duke, Kentucky, Gonzaga, Arizona, North Carolina. Those are all schools that recruit at a high level and also have strong point differentials. And yet, those teams have accounted for exactly zero national championships during this data set. So something else is at play. Is it coaching? Program culture? Program development? Support staff? Strength training? This data doesn't account for that. 
+The teams in the upper left end of the point differential scatter plot are the usual suspects: Duke, Kentucky, Gonzaga, Arizona, North Carolina. Those are all schools that recruit at a high level and also have strong point differentials. And yet, those teams have accounted for exactly zero national championships during this data set. So something else is at play. Is it coaching? Program culture? Program development? Support staff? Strength training? This data doesn't account for that.
 
-But it is certainly interesting to see a relationship between game stats and recruiting rankings, but not winning. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+But it is certainly interesting to see a relationship between game stats and recruiting rankings, but not winning.
