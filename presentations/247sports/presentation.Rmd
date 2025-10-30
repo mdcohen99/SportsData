@@ -81,13 +81,15 @@ joined_recruiting |>
   geom_bar(stat = "identity", position = "dodge") +
   scale_fill_paletteer_d("calecopal::lupinus") +
   labs(title = "Which college landed the most top recruits between 2019 and 2024?",
+       subtitle = "The familiar faces of college basketball, expectedly, are leading the way.",
        x = "",
        y = "",
        fill = "Stars") +
   theme_minimal() +
   theme(
     axis.text = element_text(angle = 45, hjust = 1, family = "montserrat"),
-    title = element_text(size = 12, family = "montserrat")
+    title = element_text(size = 12, family = "montserrat"),
+    subtitle = element_text(size = 10, family = "montserrat")
   )
 ```
 
