@@ -33,6 +33,8 @@ library(conflicted)
 conflict_prefer("summarize", "dplyr")
 conflict_prefer("filter", "dplyr")
 conflict_prefer("select", "dplyr")
+library(cowplot)
+library(paletteer)
 ```
 
 First step is loading in the recruiting data. The web scraper I built took one year at a time, following the structure of the 247Sports website which had different URLs for each year's recruiting class. Here, we had to load in those data, edit how some columns were formatted and then join it all together into one big data frame so we can look at all the recruits at once.
@@ -67,14 +69,44 @@ joined_recruiting <- bind_rows(
   recruits_2023,
   recruits_2024)
 ```
+
+Which teams have recruited the best purely based on recruiting rankings between 2019 and 2024? Well we can figure that out now. I created a chart to look at which schools have landed the most recruits and how that breaks down over the different star rankings.
+
+```{r}
+joined_recruiting |> 
+  group_by(commitment, stars) |> 
+  summarize(total_recruits = n()) |> 
+  filter(commitment %in% c("Duke", "Kentucky", "Arizona", "Alabama", "Kansas", "UConn", "North Carolina", "Illinois", "Michigan", "Tennessee", "Maryland")) |> 
+  ggplot(aes(x = reorder(commitment, -total_recruits), y = total_recruits, fill = as.factor(stars))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_paletteer_d("calecopal::lupinus") +
+  labs(title = "Which college landed the most top recruits between 2019 and 2024?",
+       x = "",
+       y = "",
+       fill = "Stars") +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(angle = 45, hjust = 1, family = "montserrat"),
+    title = element_text(size = 12, family = "montserrat")
+  )
+```
+
+Certainly a lot of familiar names on that chart and, hey, look at Maryland. To the surprise of likely no one, Duke is fairly comfortably the best recruiting program in this time. Kentucky makes a case in terms of its total numer of five star recruits, but no other school quite matches the talent Duke pulled in.
+
+So surely Duke has won a national championship since 2019, right?
+
+.........right?
+
+Next, we go over to the college basketball game logs data set.
+
 ```{r}
 #loading in basketball game log data
 cbb_logs <- read_csv("https://dwillis.github.io/sports-data-files/cbblogs1525.csv")
-``` 
+```
 
 In loading in the basketball logs data, we care far more about summary statistics than individual game performance. We are comparing players relative to the team overall, not just in one game. So the next step is to group the teams into their various summary categories and pick which stats we might want summaries of.
 
-I decided to include total wins, total losses, point differential and win percentage as the main stats we are looking at. We want to ultimately see if recruiting at a high level led to more wins. 
+I decided to include total wins, total losses, point differential and win percentage as the main stats we are looking at. We want to ultimately see if recruiting at a high level led to more wins. Now, we have several ways to track that.
 
 ```{r}
 #creating summary tables and cleaning from basketball game log data
@@ -118,8 +150,216 @@ grouped_logs <- grouped_logs |>
                        Team))
 ```
 
+And lastly, let's join it all together with the recruiting data.
+
+```{r}
+joined_logs <- joined_recruiting |> 
+  left_join(grouped_logs, by = c("commitment" = "Team")) 
+
+#NOTE: The joined data frame here had NA values for all the various statistics for the recruits who decided either to play professionally or if there was no input for their college choice. Of course, there are no stats to join with if the player did not play in college. So we'll have to filter those out, or at least ignore them. We are strictly focused on college performance here. So it is pretty fundamental that you did actually have to play at a college.
+```
+
+Now that the data is all organized, we can get to the key part of this analysis: is good recruiting correlated with winning?
+
+We'll run a correlation test here between the average recruit's star ranking and both the team's win percentage and point differential. That seems to be best metric we have to see how these two metrics relate to each other. We must remember that the p value in the correlation test must be below 0.05 to be statistically significant, as well as the correlation value being closer to one signifies a stronger positive correlation. 
+
+```{r}
+cor_data_stars <- joined_logs |> 
+  select(commitment, stars, win_pct ,point_diff) |> 
+  group_by(commitment) |> 
+  summarize(avg_recruit = mean(stars),
+            win_pct = mean(win_pct, na.rm = TRUE),
+            point_diff = mean(point_diff, na.rm = TRUE),
+            .groups = "drop"
+            ) 
+  
+cor.test(cor_data_stars$avg_recruit, cor_data_stars$win_pct, method = "pearson")
+cor.test(cor_data_stars$avg_recruit, cor_data_stars$point_diff, method = "pearson")
+
+howard <- cor_data_stars |> filter(commitment == "Howard")
+milwaukee <- cor_data_stars |> filter(commitment == "Milwaukee")
+vcu <- cor_data_stars |> filter(commitment == "VCU")
+saint_marys <- cor_data_stars |> filter(commitment == "Saint Mary's")
+duke <- cor_data_stars |> filter(commitment == "Duke")
+gonzaga <- cor_data_stars |> filter(commitment == "Gonzaga")
+labeled_schools <- bind_rows(howard, milwaukee, vcu, saint_marys, duke, gonzaga)
 
 
+#scatterplot, yes i made duke carolina blue on purpose
+cor_data_stars |> 
+  ggplot() +
+  geom_point(data = cor_data_stars, aes(x = avg_recruit, y = win_pct)) +
+  geom_point(data = howard, aes(x = avg_recruit, y = win_pct), color = "red") +
+  geom_point(data = milwaukee, aes(x = avg_recruit, y = win_pct), color = "darkgreen") +
+  geom_point(data = vcu, aes(x = avg_recruit, y = win_pct), color = "gold") +
+  geom_point(data = saint_marys, aes(x = avg_recruit, y = win_pct), color = "blue") +
+  geom_point(data = duke, aes(x = avg_recruit, y = win_pct), color = "#4B9CD3") +
+  geom_point(data = gonzaga, aes(x = avg_recruit, y = win_pct), color = "orange") +
+  geom_smooth(data = cor_data_stars, aes(x = avg_recruit, y = win_pct), method = "lm", color = "purple") +
+  geom_text_repel(data = labeled_schools, 
+                  aes(x = avg_recruit, y = win_pct, label = commitment),
+                  family = "montserrat",
+                  size = 3.5,
+                  max.overlaps = 20) +
+  labs(title = "Elite recruiting doesn't equal elite winning",
+       subtitle = "But some teams do far outperform their recruits' ratings.",
+       x = "Average recruit star rating",
+       y = "Team win percentage") +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(family = "montserrat"),
+    title = element_text(size = 12, family = "montserrat")
+  )
+```
+
+The data is pretty clear: there is no relationship between recruiting at a high level and winning games. In fact, the relationship isn't even statistically significant. The correlation value is basically 0 and the p value is 0.44 when looking at a recruits star ranking correlated with win percentage, which is way too high. It's virtually the same numbers when win percentage is swapped out with point differential.
+
+I then put this relationship into a scatter plot so we can visualize it and the visual is indeed an incredibly obvious lack of relationship. The line of best fit is basically flat. Again, the chart looks almost identical when win percentage is swapped out with point differential. There are a few interesting cases in this table, however.
+
+Saint Mary's and VCU both great perform the recruiting ranking of their players. Both teams recruit at a 3.5 average recruit ranking. Both schools landed four total top 150 recruits since between 2019 and 2024, which is enough to have a reasonable sample size, but of course the rosters at schools like those are also filled out by players who are not ranked at all. Yet both schools have among the 11 best winning percentages in the country during the same time frame. VCU also had two different head coaches (Mike Rhoades and Ryan Odom) during this time and continued winning at a high clip. Both Rhoades (Penn State) and Odom (Virginia) have gone onto major Power 4 jobs. At Saint Mary's, head coach Randy Bennett has been in charge since 2001 and has only had one losing season the whole time. That was his first season, too. Saint Mary's has become a well known name in the sport because of how much its done with less recruiting talent. The Gaels have made the NCAA Tournament five times during this data set, and would have been a high seed yet again in the 2020 NCAA Tournament had it occurred.
+
+The other end of the spectrum are smaller programs like Howard and Milwaukee which each landed a one-off five-star recruit. The point here is that the data shows one very highly rated player doesn't turn your program around. Maker was injured just two games into his freshman year at Howard and went to play professionally after that season. Similarly, Patrick Baldwin Jr. committed to UW-Milwaukee to play for his father, but spent his one and only college season back and forth dealing with injuries. Milwaukee went 10-22 that year.
+
+So landing top recruits doesn't guarantee success. In the case of Milwaukee and Howard, injuries played a major role in keeping their anticipated stars off the court. But unlike a program in Duke which both recruits at a high level and performs, neither of those smaller programs have the infrastructure to withstand the one time they get a highly rated player and said player can't consistently be on the court.
+
+There are clearly other factors at play here. Program success is not dependent on just recruiting the best talent. So let's look at those other factors in a correlation matrix.
+
+```{r}
+matrix_prep <- joined_logs |> 
+  dplyr::group_by(commitment) |> 
+  dplyr::summarize(
+    avg_stars = mean(stars, na.rm = TRUE),
+    avg_rank = mean(rank, na.rm = TRUE),
+    win_pct = mean(win_pct, na.rm = TRUE),
+    totalpoints = sum(total_pts, na.rm = TRUE),
+    totalpointsallowed = sum(total_opp_pts, na.rm = TRUE),
+    pointdif = sum(total_pts, na.rm = TRUE) - sum(total_opp_pts, na.rm = TRUE),
+    total_rebounds = sum(total_rebounds, na.rm = TRUE),
+    total_turnovers = sum(total_turnovers, na.rm = TRUE),
+    avg_fgpct = mean(avg_fgpct, na.rm = TRUE),
+    avg_opp_fgpct = mean(avg_opp_fgpct, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+matrix_data <- matrix_prep |>
+  select(-commitment) |>
+  na.omit()
+
+cormatrix <- rcorr(as.matrix(matrix_data))
+cormatrix$r
+
+corrplot(cormatrix$r, 
+         method = "color",
+         type = "upper",
+         order = "hclust",
+         addCoef.col = "black",
+         number.cex = 0.7,
+         tl.col = "black",
+         tl.srt = 45)
+```
+
+So this matrix gives us a couple of useful tidbits. There are some somewhat strong negative relationships between the rank of a recruit (lower rank number is better) and point differential, turnovers, points allowed, total points, and total rebounds. The average stars metric has some positive relationships with those same metrics (of course, again, that negative relationship for the rank is because R doesn't understand that a lower rank is a better rank).
+
+Let's put some of those relationships into scatterplots.
+
+```{r}
+#avg_rank_vs_point_dif <- matrix_prep |> ggplot(aes(x = avg_rank, y = pointdif)) + geom_point() + geom_smooth(method = "lm", color = "purple") + labs(title = "", x = "Average recruit rank", y = "Point differential") + theme_minimal() + theme(axis.text = element_text(family = "montserrat", face = "plain"), axis.title = element_text(family = "montserrat", face = "plain", size = 10), title = element_text(size = 14, family = "montserrat", face = "bold"))
+
+avg_rank_vs_turnovers <- matrix_prep |> 
+  ggplot(aes(x = avg_rank, y = total_turnovers)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "purple") +
+  labs(title = "",
+       x = "Average recruit rank",
+       y = "Total turnovers") +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(family = "montserrat", face = "plain"),
+    axis.title = element_text(family = "montserrat", face = "plain", size = 10),
+    title = element_text(size = 14, family = "montserrat", face = "bold")
+  )
+
+avg_rank_vs_totalpts <- matrix_prep |> 
+  ggplot(aes(x = avg_rank, y = totalpoints)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "purple") +
+  labs(title = "",
+       x = "Average recruit rank",
+       y = "Total points") +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(family = "montserrat", face = "plain"),
+    axis.title = element_text(family = "montserrat", face = "plain", size = 10),
+    title = element_text(size = 14, family = "montserrat", face = "bold")
+  )
+
+avg_rank_vs_totalptsallowed <- matrix_prep |> 
+  ggplot(aes(x = avg_rank, y = totalpointsallowed)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "purple") +
+  labs(title = "",
+       x = "Average recruit rank",
+       y = "Total points allowed") +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(family = "montserrat"),
+    title = element_text(size = 12, family = "montserrat")
+  )
 
 
+avg_rank_vs_rebounds <- matrix_prep |> 
+  ggplot(aes(x = avg_rank, y = total_rebounds)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "purple") +
+  labs(title = "",
+       x = "Average recruit rank",
+       y = "Total rebounds") +
+  theme_minimal() +
+  theme(
+    axis.text = element_text(family = "montserrat"),
+    title = element_text(size = 12, family = "montserrat")
+  )
 
+
+title <- ggdraw() + 
+  draw_label(
+    "Better recruiting may lead to better team stats",
+    fontface = "bold",
+    fontfamily = "montserrat",
+    size = 20,
+    hjust = 0.5,
+    vjust = 1
+  ) +
+  theme(
+    plot.margin = margin(0, 0, 10, 0) 
+  )
+
+grid <- plot_grid(
+          avg_rank_vs_turnovers,
+          avg_rank_vs_totalpts,
+          avg_rank_vs_totalptsallowed,
+          avg_rank_vs_rebounds, 
+          ncol = 2, 
+          align = "hv")
+
+
+plot_grid(title, grid, ncol = 1, rel_heights = c(0.08, 1))
+```
+
+So what do these relationships mean? It is probably complicated — especially because we know that recruiting rankings relative to winning is not even a statistically significant relationship.
+
+Does it make sense that having better players may lead to better game statistics? Probably? Maybe? But if that's the case, then why isn't it correlated with winning?
+
+The teams in the upper left end of these plots are the most of the usual suspects: Duke, Kentucky, Gonzaga, Arizona, North Carolina, etc. Those are all schools that recruit at a high level and also have strong point differentials. Having the most talented players could mean a team is able to see better game statistics just being the best player on the floor.
+
+But that isn't enough to win on its own.
+
+Those teams mentioned above have accounted for exactly zero national championships during this data set. So something else is at play. This data doesn't account for that.
+
+But it is certainly interesting to see a relationship between game stats and recruiting rankings, but not winning.
+
+How can we test that?
+
+The data in this notebook won't answer those questions exactly. I'd want to look at other factors like whether program continuity with a coaching staff correlates to winning, does strength training staff matter or money invested into a program. Is it better to have older players or younger players? How do we measure the culture of a program, and if we can, how does that impact winning, if at all?
+
+In my opinion, being a winning program is not going to be attributable to any one stat. It is largely holistic. Likely, the better way we can answer these questions will be to collect of these data points I mentioned above, including the assumption that we can quantify some of the points that don't seem quantifiable, and then run it into a larger model. That would give us a much better understanding of how the individual pieces all combine to create a winning program.
