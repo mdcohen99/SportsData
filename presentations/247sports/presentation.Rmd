@@ -88,8 +88,10 @@ joined_recruiting |>
   theme_minimal() +
   theme(
     axis.text = element_text(angle = 45, hjust = 1, family = "montserrat"),
-    title = element_text(size = 12, family = "montserrat"),
-    subtitle = element_text(size = 10, family = "montserrat")
+    plot.title = element_text(size = 12, family = "montserrat"),
+    plot.subtitle = element_text(size = 10, family = "montserrat"),
+    legend.text = element_text(family = "montserrat"),
+    legend.title = element_text(family = "montserrat")
   )
 ```
 
@@ -163,7 +165,7 @@ joined_logs <- joined_recruiting |>
 
 Now that the data is all organized, we can get to the key part of this analysis: is good recruiting correlated with winning?
 
-We'll run a correlation test here between the average recruit's star ranking and both the team's win percentage and point differential. That seems to be best metric we have to see how these two metrics relate to each other. We must remember that the p value in the correlation test must be below 0.05 to be statistically significant, as well as the correlation value being closer to one signifies a stronger positive correlation. 
+We'll run a correlation test here between the average recruit's star ranking and both the team's win percentage and point differential. That seems to be best metric we have to see how these two metrics relate to each other. We must remember that the p value in the correlation test must be below 0.05 to be statistically significant, as well as the correlation value being closer to one signifies a stronger positive correlation.
 
 ```{r}
 cor_data_stars <- joined_logs |> 
