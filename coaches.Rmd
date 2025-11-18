@@ -1,0 +1,459 @@
+---
+title: "NCAA Women's Basketball Coaching Histories: Position Title Standardization"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(jsonlite)
+library(stringr)
+```
+
+# Data Loading
+
+```{r load-data}
+# Load the coaching histories data
+coaching_data <- fromJSON("data/coaching_histories.json", flatten = FALSE)
+
+# Create a data frame with nested structures
+coaches_df <- coaching_data |>
+  as_tibble() |>
+  mutate(coach_id = row_number())
+
+# Unnest positions for analysis
+positions_df <- coaches_df |>
+  select(coach_id, name, team, positions) |>
+  unnest(positions, keep_empty = TRUE) |>
+  rename(
+    position_college = college,
+    position_title = title,
+    position_start = start_year,
+    position_end = end_year
+  )
+
+cat("Total coaches:", nrow(coaches_df), "\n")
+cat("Total position records:", nrow(positions_df), "\n")
+```
+
+---
+
+# Position Title Standardization
+
+## 1.1 Current State Analysis
+
+```{r position-analysis}
+# Analyze position title distribution
+position_freq <- positions_df |>
+  count(position_title, sort = TRUE) |>
+  filter(!is.na(position_title))
+
+cat("Unique position titles:", nrow(position_freq), "\n")
+cat("Top 20 most common positions:\n")
+print(position_freq |> head(20), n = 20)
+
+# Fragmentation analysis
+cat("\nFragmentation ratio:",
+    round(nrow(position_freq) / nrow(positions_df) * 100, 1),
+    "% (1 unique per ~",
+    round(nrow(positions_df) / nrow(position_freq)),
+    "records)\n")
+```
+
+### Key Issues Identified
+
+**1. Case Sensitivity**
+```{r case-issues}
+# Find case variations
+position_freq |>
+  mutate(lower_title = str_to_lower(position_title)) |>
+  group_by(lower_title) |>
+  filter(n() > 1) |>
+  arrange(lower_title, desc(n)) |>
+  head(10)
+```
+
+**2. Separator Inconsistencies**
+```{r separator-issues}
+# Find different separator patterns for compound roles
+separator_patterns <- position_freq |>
+  filter(str_detect(position_title, "/|&| and |,")) |>
+  mutate(
+    has_slash = str_detect(position_title, "/"),
+    has_ampersand = str_detect(position_title, "&"),
+    has_and = str_detect(position_title, " and "),
+    has_comma = str_detect(position_title, ",")
+  )
+
+cat("Titles with separators:", nrow(separator_patterns), "\n")
+cat("  With /:", sum(separator_patterns$has_slash), "\n")
+cat("  With &:", sum(separator_patterns$has_ampersand), "\n")
+cat("  With 'and':", sum(separator_patterns$has_and), "\n")
+cat("  With comma:", sum(separator_patterns$has_comma), "\n")
+
+# Examples
+separator_patterns |>
+  filter(str_detect(position_title, "Assistant Coach")) |>
+  head(15)
+```
+
+**3. Sport Designation Placement**
+```{r sport-designation}
+# Variations in how sport is designated
+sport_variations <- position_freq |>
+  filter(str_detect(position_title, "Women's Basketball|Basketball")) |>
+  mutate(
+    prefix = str_detect(position_title, "^Women's Basketball"),
+    suffix = str_detect(position_title, "Women's Basketball$"),
+    inline = str_detect(position_title, "Women's Basketball") & !prefix & !suffix
+  )
+
+cat("Sport designation patterns:\n")
+cat("  Prefix (Women's Basketball ...):", sum(sport_variations$prefix), "\n")
+cat("  Suffix (... Women's Basketball):", sum(sport_variations$suffix), "\n")
+cat("  Inline (Assistant Women's Basketball Coach):", sum(sport_variations$inline), "\n")
+
+# Examples
+sport_variations |>
+  filter(prefix | suffix | inline) |>
+  select(position_title, n, prefix, suffix, inline) |>
+  head(15)
+```
+
+## 1.2 Standardization Strategy
+
+### Canonical Position Categories
+
+We'll consolidate 1,744 titles into **~20 canonical categories**:
+
+```{r canonical-positions}
+# Define canonical position categories
+canonical_positions <- tribble(
+  ~category, ~description, ~rank,
+  "Head Coach", "Primary head coaching role", 1,
+  "Interim Head Coach", "Temporary head coaching role", 2,
+  "Associate Head Coach", "Second-in-command coaching role", 3,
+  "Assistant Coach", "General assistant coaching role", 4,
+  "Lead Assistant Coach", "Senior assistant coaching role", 4,
+  "Recruiting Coordinator", "Primary recruiting responsibility", 5,
+  "Offensive Coordinator", "Offensive strategy responsibility", 5,
+  "Defensive Coordinator", "Defensive strategy responsibility", 5,
+  "Director of Basketball Operations", "Basketball operations management", 6,
+  "Director of Player Development", "Player development focus", 6,
+  "Director of Recruiting", "Recruiting operations focus", 6,
+  "Graduate Assistant", "Graduate student coaching role", 7,
+  "Volunteer Assistant", "Unpaid assistant coaching role", 7,
+  "Video Coordinator", "Video and film analysis", 8,
+  "Strength and Conditioning Coach", "Physical conditioning role", 8,
+  "Athletic Trainer", "Medical/training support", 8,
+  "Student Manager", "Student support role", 9,
+  "Student Assistant", "Student coaching support", 9,
+  "Manager", "Team management support", 9,
+  "Administrative Assistant", "Administrative support", 10
+)
+
+print(canonical_positions)
+```
+
+### Standardization Function
+
+```{r standardize-position-function}
+standardize_position_title <- function(title) {
+  if (is.na(title)) return(NA_character_)
+
+  # Convert to lowercase for matching
+  title_lower <- str_to_lower(title)
+
+  # Remove endowed position names (look for person names in caps)
+  title_lower <- str_replace_all(title_lower,
+                                  "the .+ (head|assistant|associate)", "\\1")
+
+  # Standardize separators (normalize to " / ")
+  title_clean <- str_replace_all(title_lower, " */ *", " / ")
+  title_clean <- str_replace_all(title_clean, " *& *| and ", " / ")
+  title_clean <- str_replace_all(title_clean, " *, *", " / ")
+
+  # Primary role matching (order matters - most specific first)
+  case_when(
+    # Head Coach variations
+    str_detect(title_clean, "interim.*head.*coach") ~ "Interim Head Coach",
+    str_detect(title_clean, "head.*coach") ~ "Head Coach",
+    str_detect(title_clean, "acting.*head.*coach") ~ "Interim Head Coach",
+
+    # Associate variations
+    str_detect(title_clean, "associate.*head") ~ "Associate Head Coach",
+    str_detect(title_clean, "associate.*coach") ~ "Associate Head Coach",
+
+    # Catch all other coach references (before specific non-coaching roles)
+    # If title contains "coach" and not head/associate head, standardize as Assistant Coach
+    str_detect(title_clean, "coach") ~ "Assistant Coach",
+
+    # Coordinator roles (only reached if no "coach" in title)
+    str_detect(title_clean, "recruiting.*coordinator") ~ "Recruiting Coordinator",
+    str_detect(title_clean, "offensive.*coordinator") ~ "Offensive Coordinator",
+    str_detect(title_clean, "defensive.*coordinator") ~ "Defensive Coordinator",
+
+    # Operations and development
+    str_detect(title_clean, "director.*basketball.*operations") ~ "Director of Basketball Operations",
+    str_detect(title_clean, "director.*operations") ~ "Director of Basketball Operations",
+    str_detect(title_clean, "director.*player.*development") ~ "Director of Player Development",
+    str_detect(title_clean, "director.*recruiting") ~ "Director of Recruiting",
+    str_detect(title_clean, "player.*development") ~ "Director of Player Development",
+
+    # Graduate and volunteer roles
+    str_detect(title_clean, "graduate.*assistant") ~ "Graduate Assistant",
+    str_detect(title_clean, "graduate.*manager") ~ "Graduate Assistant",
+    str_detect(title_clean, "volunteer.*assistant") ~ "Volunteer Assistant",
+
+    # Support staff
+    str_detect(title_clean, "video.*coordinator") ~ "Video Coordinator",
+    str_detect(title_clean, "strength.*conditioning") ~ "Strength and Conditioning Coach",
+    str_detect(title_clean, "athletic.*trainer") ~ "Athletic Trainer",
+    str_detect(title_clean, "student.*manager") ~ "Student Manager",
+    str_detect(title_clean, "student.*assistant") ~ "Student Assistant",
+    str_detect(title_clean, "team.*manager") ~ "Manager",
+    str_detect(title_clean, "^manager$") ~ "Manager",
+    str_detect(title_clean, "administrative.*assistant") ~ "Administrative Assistant",
+
+    # Default
+    TRUE ~ "Other"
+  )
+}
+
+# Test the function
+test_titles <- c(
+  "Head Women's Basketball Coach",
+  "Assistant Coach/Recruiting Coordinator",
+  "Associate Head Coach",
+  "Director of Basketball Operations",
+  "The Michael Price Family UCLA Women's Head Basketball Coach",
+  "Graduate Assistant",
+  "Women's Basketball Assistant Coach"
+)
+
+cat("Position standardization test:\n")
+tibble(
+  original = test_titles,
+  standardized = sapply(test_titles, standardize_position_title)
+) |> print(n = Inf)
+```
+
+### Apply Standardization
+
+```{r apply-position-standardization}
+# Apply standardization to positions
+positions_standardized <- positions_df |>
+  mutate(
+    position_title_standardized = sapply(position_title, standardize_position_title),
+    position_title_original = position_title
+  )
+
+# Check results
+cat("Standardization results:\n")
+positions_standardized |>
+  count(position_title_standardized, sort = TRUE) |>
+  mutate(percentage = n / sum(n) * 100) |>
+  print(n = 25)
+
+# Compare before/after unique counts
+cat("\nBefore standardization:",
+    n_distinct(positions_df$position_title, na.rm = TRUE), "unique titles\n")
+cat("After standardization:",
+    n_distinct(positions_standardized$position_title_standardized, na.rm = TRUE),
+    "unique titles\n")
+cat("Reduction:",
+    round((1 - n_distinct(positions_standardized$position_title_standardized, na.rm = TRUE) /
+           n_distinct(positions_df$position_title, na.rm = TRUE)) * 100, 1), "%\n")
+```
+
+### Extract Secondary Roles
+
+Many position titles contain multiple roles. We should extract these:
+
+```{r extract-secondary-roles}
+# For compound roles, extract all components
+extract_role_components <- function(title) {
+  if (is.na(title)) return(NA_character_)
+
+  # Split on separators
+  roles <- str_split(title, " */ *| *& *| and |, *")[[1]]
+
+  # Clean each component
+  roles <- str_squish(roles)
+  roles <- roles[roles != ""]
+
+  # Return the character vector (map() will handle the list wrapping)
+  roles
+}
+
+# Example of extracting multiple roles
+positions_with_roles <- positions_standardized |>
+  mutate(role_components = map(position_title_original, extract_role_components))
+
+# Count and show examples of compound roles
+compound_roles <- positions_with_roles |>
+  filter(map_int(role_components, length) > 1)
+
+cat("Found", nrow(compound_roles), "positions with multiple roles\n")
+cat("Examples of compound role titles:\n")
+compound_roles |>
+  select(position_title_original, role_components, position_title_standardized) |>
+  head(20)
+```
+
+---
+
+# Verification Exercises
+
+Now let's verify that our standardization is working correctly. Complete the following exercises to confirm the changes.
+
+## Exercise 1: Verify Case Normalization
+
+**Task:** Confirm that position titles with different cases are now standardized to the same value.
+
+```{r verify-case}
+# Example: Find positions that had different cases but are now the same
+case_examples <- positions_standardized |>
+  filter(position_title_original %in% c("Head Coach", "head coach", "HEAD COACH")) |>
+  select(position_title_original, position_title_standardized) |>
+  distinct()
+
+cat("Verification: Case normalization\n")
+print(case_examples)
+
+```
+
+## Exercise 2: Count Position Types
+
+**Task:** Find the three most common standardized position titles and their counts.
+
+```{r verify-top-positions}
+positions_standardized |>
+  group_by(position_title_standardized) |>
+  summarise(count = n()) |>
+  arrange(desc(count)) |>
+  top_n(3) 
+
+positions_standardized |> 
+  filter(position_title_standardized %in% c("Other")) |> 
+  group_by(position_title_original) |>
+  summarise(count = n()) |>
+  arrange(desc(count))
+```
+
+## Exercise 3: Verify Separator Standardization
+
+**Task:** Look at positions that originally had different separators (/, &, and, comma) and verify they are correctly standardized.
+
+```{r verify-separators}
+# Find examples of titles with different separators
+separator_examples <- positions_standardized |>
+  filter(str_detect(position_title_original, "Assistant.*Recruiting")) |>
+  select(position_title_original, position_title_standardized) |>
+  distinct() |>
+  arrange(position_title_original)
+
+cat("Verification: Separator handling\n")
+print(separator_examples, n = 20)
+
+# Are titles like "Assistant Coach/Recruiting Coordinator" and
+# "Assistant Coach & Recruiting Coordinator" now standardized the same way?
+```
+
+## Exercise 4: Check Reduction in Unique Titles
+
+**Task:** Calculate the percentage reduction in unique position titles after standardization.
+
+```{r verify-reduction}
+# Students should calculate the reduction
+original_unique <- n_distinct(positions_standardized$position_title_original, na.rm = TRUE)
+standardized_unique <- n_distinct(positions_standardized$position_title_standardized, na.rm = TRUE)
+reduction_pct <- round((1 - standardized_unique / original_unique) * 100, 1)
+
+cat("Original unique titles:", original_unique, "\n")
+cat("Standardized unique titles:", standardized_unique, "\n")
+cat("Reduction:", reduction_pct, "%\n")
+
+```
+
+## Exercise 5: Identify Compound Roles
+
+**Task:** Find all positions that contain multiple roles (compound positions) and count how many exist.
+
+```{r verify-compound}
+# Identify compound roles
+compound_count <- positions_with_roles |>
+  filter(map_int(role_components, length) > 1) |>
+  nrow()
+
+cat("Number of positions with multiple roles:", compound_count, "\n")
+
+# Show a few examples
+cat("\nExamples of compound roles:\n")
+positions_with_roles |>
+  filter(map_int(role_components, length) > 1) |>
+  select(position_title_original, role_components) |>
+  head(5)
+
+# Question: Are there any common patterns in compound roles?
+```
+
+## Exercise 6: Verify "Other" Category
+
+**Task:** Examine positions that were mapped to "Other" to understand what didn't fit our standardization rules.
+
+```{r verify-other}
+# Find positions mapped to "Other"
+other_positions <- positions_standardized |>
+  filter(position_title_standardized == "Other") |>
+  count(position_title_original, sort = TRUE)
+
+cat("Positions mapped to 'Other':", sum(other_positions$n), "\n")
+cat("Unique position types in 'Other':", nrow(other_positions), "\n")
+
+if (nrow(other_positions) > 0) {
+  cat("\nTop 10 positions in 'Other' category:\n")
+  print(other_positions |> head(10), n = 10)
+}
+
+# Question: What types of positions ended up in "Other"?
+# Should any of these be added to our standardization function? Are any of them worth exploring?
+```
+
+## Exercise 7: Analyze Coach Career Progression
+
+**Task:** For a specific coach, trace their career progression through different position titles.
+
+```{r verify-progression}
+# Find a coach with multiple positions
+coach_with_progression <- positions_standardized |>
+  group_by(name) |>
+  filter(n() >= 3) |>
+  ungroup() |>
+  slice(1) |>
+  pull(name)
+
+# Show their career progression
+career_path <- positions_standardized |>
+  filter(name == coach_with_progression) |>
+  arrange(position_start) |>
+  select(name, position_college, position_title, position_title_standardized,
+         position_start, position_end)
+
+cat("Career progression for:", coach_with_progression, "\n")
+print(career_path, n = Inf)
+```
+
+---
+
+## Summary
+
+In this notebook, we:
+
+1. **Analyzed** position title fragmentation (1,744 unique titles for ~5,000 positions)
+2. **Identified** key issues: case sensitivity, separator inconsistencies, sport designation variations
+3. **Created** a standardization function that reduces titles to ~20 canonical categories
+4. **Applied** standardization while preserving original titles
+5. **Extracted** multiple roles from compound position titles
+6. **Verified** the standardization through multiple exercises
+
+The standardized data is now ready for further analysis in subsequent notebooks.
