@@ -400,5 +400,6 @@ career_sequences |>
 3. What are the 2-3 most common career pathways to becoming a head coach?
 4. Are there any "non-traditional" pathways that appear in the data?
 
-ANSWER HERE
+
+
 
