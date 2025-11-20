@@ -1,0 +1,71 @@
+---
+title: "budgets"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(googlesheets4)
+library(lubridate)
+library(janitor)
+```
+
+Had Claude help me out here getting this loaded in from google sheets
+```{r}
+# Authenticate (if needed)
+gs4_auth()
+
+# Get the sheet URL or ID
+sheet_url <- "https://docs.google.com/spreadsheets/d/1s3e5prTQ28TBbMQYKF4XTbaN2qLCvEkxNM8oUZhahjI/edit?usp=sharing"
+
+# Get all sheet names
+sheet_names <- sheet_names(sheet_url)
+
+# Load all sheets into a named list
+all_sheets <- lapply(sheet_names, function(x) {
+  read_sheet(sheet_url, sheet = x)
+})
+names(all_sheets) <- sheet_names
+
+# Access individual sheets like:
+# all_sheets$Wisconsin
+# all_sheets$`Penn State`
+
+# Extract from your existing list into separate dataframes
+list2env(all_sheets, envir = .GlobalEnv)
+```
+
+```{r}
+b1gbudgets <- bind_rows(Illinois, Indiana, Iowa, Maryland, Michigan, `Michigan State`, Minnesota, Nebraska, `Ohio State`, `Penn State`, Purdue, Rutgers, Wisconsin, Washington, UCLA, USC, Oregon) |> 
+  clean_names() 
+
+
+b1gwide <- b1gbudgets  |> 
+  pivot_longer(cols = starts_with("x"),
+               names_to = "year",
+               values_to = "value")  |> 
+  pivot_wider(names_from = category,
+              values_from = value)  |> 
+  mutate(year = as.integer(str_remove(year, "x"))) |> clean_names()
+```
+
+Now, we're going to make a chart comparing various schools contributions for football 
+
+```{r}
+b1gwide |> 
+  group_by(school) |> 
+  summarize(total_football_contributions = sum(football_contributions, na.rm = TRUE)) |>
+  ggplot(aes(x = reorder(school, total_football_contributions), y = total_football_contributions)) +
+  geom_col(fill = "blue") +
+  coord_flip() +
+  labs(title = "Total Football Contributions by School",
+       x = "School",
+       y = "Total Football Contributions") +
+  theme_minimal()
+```
+
+
+
+
+
+
