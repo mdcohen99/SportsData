@@ -8,9 +8,19 @@ library(tidyverse)
 library(googlesheets4)
 library(lubridate)
 library(janitor)
+library(ggrepel)
+library(ggbeeswarm)
+library(showtext)
+font_add_google("Poppins", "poppins")
+showtext_auto()
 ```
 
-Had Claude help me out here getting this loaded in from google sheets
+#Notes
+
+NOTE: Had Claude help me out here getting this loaded in from google sheets. 
+
+NOTE: The data I have loaded in here is what I have available so far from my various public records requests. It is incomplete so we'll work with what we've got so far. There are a few areas of the data that I am working to clean up because the Python script I built didn't perfectly handle every school's data. As of Nov. 21, I have data for eight of the Big Ten schools and I have cleaned the mistakes the Python script made in each of those eight sets. The schools I don't have data for will show up blank in the charts for now.
+
 ```{r}
 # Authenticate (if needed)
 gs4_auth()
@@ -35,6 +45,18 @@ names(all_sheets) <- sheet_names
 list2env(all_sheets, envir = .GlobalEnv)
 ```
 
+#Intro 
+
+Ultimately, we want to look at Maryland athetlic director Jim Smith's comment about increasing funding for Maryland football and keeping Locksley. How far is Maryland lagging behind the Big Ten? We had Ross Dellenger in at the Povich Center recently, and I asked him what he would be looking for in the 2025 fiscal year budget reports when those come out. Did I asked him mostly because I wanted to know how he was analyzing public records? Yes. Did I also use that question because I knew I was doing this project and was quitely using it as guidance? Who can say!
+
+He said he would be looking at sponsorship, ticket sales and media rights money. 
+
+Granted, he was saying that specifically about the 2025 data which isn't actually accessible yet. But we're going to use those as the main metrics to compare Maryland football to the rest of the Big Ten. This notebook may also look at the contributions/donations to the football program. 
+
+This will also analyze how Maryland spends relative to other Big Ten programs with regard to football. That includes coaches salaries, support staff salaries and recruiting. 
+
+I'm going to create both a long and wide format of the data for the various analysis we will need to do. 
+
 ```{r}
 b1gbudgets <- bind_rows(Illinois, Indiana, Iowa, Maryland, Michigan, `Michigan State`, Minnesota, Nebraska, `Ohio State`, `Penn State`, Purdue, Rutgers, Wisconsin, Washington, UCLA, USC, Oregon) |> 
   clean_names() 
@@ -47,22 +69,104 @@ b1gwide <- b1gbudgets  |>
   pivot_wider(names_from = category,
               values_from = value)  |> 
   mutate(year = as.integer(str_remove(year, "x"))) |> clean_names()
+
+maryland_wide <- b1gwide |> 
+  filter(school == "Maryland")
 ```
 
-Now, we're going to make a chart comparing various schools contributions for football 
+Let's look at each of the three factors Ross mentioned.
+
+#First: Sponsorship dollars... 
+
+```{r}
+ggplot() +
+  geom_point(data = b1gwide, aes(x = year, y = royalties_and_sponsorships, color = "gray")) +
+  geom_point(data = maryland_wide, aes(x = year, y = royalties_and_sponsorships, color = "red")) +
+  labs(title = "Annually, Maryland's sponsorship dollars around middle of the Big Ten pack",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
+       x = "Year",
+       y = "Royalties and Sponsorships") +
+  geom_text_repel(data = maryland_wide,
+                  aes(x = year, y = royalties_and_sponsorships, label = school), family = "poppins", size = 3) +
+  scale_color_identity(guide = "legend", labels = c("Maryland", "Other Big Ten Schools"), breaks = c("red", "gray")) +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)
+      )
+```
+Note for above chart: The 2021 dollars are down likely as a result of the COVID-19 pandemic. The FY2021 reports are the ones which saw the COVID-19 impacts since those reports cover the Fall 2020 and Spring 2021 semesters. 
 
 ```{r}
 b1gwide |> 
+  select(school, year, royalties_and_sponsorships) |>
   group_by(school) |> 
-  summarize(total_football_contributions = sum(football_contributions, na.rm = TRUE)) |>
-  ggplot(aes(x = reorder(school, total_football_contributions), y = total_football_contributions)) +
-  geom_col(fill = "blue") +
+  summarize(
+    total_sponsorship = sum(royalties_and_sponsorships, na.rm = TRUE)
+  ) |> 
+  ggplot() +
+  geom_col(aes(x = reorder(school, total_sponsorship), y = total_sponsorship)) +
+  geom_col(data = filter(b1gwide, school == "Maryland") |> 
+             select(school, year, royalties_and_sponsorships) |>
+             group_by(school) |> 
+             summarize(
+               total_sponsorship = sum(royalties_and_sponsorships, na.rm = TRUE)
+             ),
+           aes(x = school, y = total_sponsorship), fill = "red") +
   coord_flip() +
-  labs(title = "Total Football Contributions by School",
-       x = "School",
-       y = "Total Football Contributions") +
-  theme_minimal()
+  labs(title = "Terps sponsorhip best B1G bottom feeders, lags behind elite FB schools",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
+       x = "",
+       y = "Total Royalties and Sponsorships") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)
+      )
 ```
+
+```{r}
+b1gbudgets |> 
+  filter(category == "Royalties and sponsorships") |> 
+  mutate(pct_change = ((x2024 - x2019) / x2019) * 100) |> 
+  ggplot() +
+  geom_col(aes(x = reorder(school, pct_change), y = pct_change, fill = pct_change > 0)) +
+  coord_flip() +
+  scale_fill_manual(values = c("TRUE" = "darkgreen", "FALSE" = "darkred"), guide = "none") +
+  labs(title = "Maryland, however, is growing its sponsorship dollars at a high rate",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
+       x = "",
+       y = "Percent Change in Royalties and Sponsorships (2019-2024)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8))
+```
+
+Still to come... 
+
+#Second: Ticket Sales 
+
+I have this data specifically broken down for football, but this may require some careful analysis because Covid hit this area more than any other category. A pct change may be the best option here cause that will look a bit more normal than a covid chart with a massive dip in the FY2021 budgets
+
+#Third : Media Rights Money
+
+This is a bit of a tough one to conflate as well. Maryland received zero (0!) dollars of media rights money during this whole time. Part of that is due to the number of years Maryland couldn't collect money because it wasn't a full member of the conference. But that is no longer the case by 2024 and Maryland still reports a zero for media rights revenue. At the same time, Maryland is collecting a SIGNIFICANTLY larger check than any other school in terms of its Big Ten money distribution. By significantly, we are talking about $50 MILLION more than any other school. I'm not entirely sure why it shows up that way in the report. I may have to call and ask. I'm not sure if I can fully do this part of the analysis until that difference is cleared up. 
+
+#Maryland spending: Recruiting and salaries 
+
+Coaches complain a lot about the resources they have, which will often mean the money they have to pay their assistant coaches/support staff (plus their own salary lol) as well as recruiting budget. This recruiting number is referring to travel costs and official visits and stuff. It's obviously not NIL or revenue sharing. The FY2025 reports will be fascinating when we get thsoe because that's when rev sharing will show up for the first time. That's something worth talking to Matt Brown about since I think that will be a huge story in those reports. I asked Dellenger about that and he said no one really knows what that's going to look like in terms of how the new budget reports are formatted/where the money is coming from, but it's going to be very different. 
+
+So this will at least set us up for some of those conversations. But we will be able to see what Maryland is providing to its football coaching staff in terms of dollars to work with to keep a good staff and bring in players, even in a bit of cherry picked scope given what isn't included here. 
 
 
 
