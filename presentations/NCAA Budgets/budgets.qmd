@@ -139,7 +139,7 @@ b1gbudgets |>
   geom_col(aes(x = reorder(school, pct_change), y = pct_change, fill = pct_change > 0)) +
   coord_flip() +
   scale_fill_manual(values = c("TRUE" = "darkgreen", "FALSE" = "darkred"), guide = "none") +
-  labs(title = "Maryland, however, is growing its sponsorship dollars at a high rate",
+  labs(title = "Maryland, however, is growing its sponsorship dollars",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Michigan State, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
        x = "",
        y = "Percent Change in Royalties and Sponsorships (2019-2024)") +
