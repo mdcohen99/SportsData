@@ -19,7 +19,7 @@ showtext_auto()
 
 NOTE: Had Claude help me out here getting this loaded in from google sheets. 
 
-NOTE: The data I have loaded in here is what I have available so far from my various public records requests. It is incomplete so we'll work with what we've got so far. There are a few areas of the data that I am working to clean up because the Python script I built didn't perfectly handle every school's data. As of Nov. 21, I have data for eight of the Big Ten schools and I have cleaned the mistakes the Python script made in each of those eight sets. The schools I don't have data for will show up blank in the charts for now.
+NOTE: The data I have loaded in here is what I have available so far from my various public records requests. It is incomplete so we'll work with what we've got so far. There are a few areas of the data that I am working to clean up because the Python script I built didn't perfectly handle every school's data. As of Nov. 23, I have data for nine of the Big Ten schools and I have cleaned the mistakes the Python script made in each of those eight sets. The schools I don't have data for will show up blank in the charts for now.
 
 ```{r}
 # Authenticate (if needed)
@@ -83,7 +83,7 @@ ggplot() +
   geom_point(data = b1gwide, aes(x = year, y = royalties_and_sponsorships, color = "gray")) +
   geom_point(data = maryland_wide, aes(x = year, y = royalties_and_sponsorships, color = "red")) +
   labs(title = "Annually, Maryland's sponsorship dollars around middle of the Big Ten pack",
-       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Michigan State, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
        x = "Year",
        y = "Royalties and Sponsorships") +
   geom_text_repel(data = maryland_wide,
@@ -118,7 +118,7 @@ b1gwide |>
            aes(x = school, y = total_sponsorship), fill = "red") +
   coord_flip() +
   labs(title = "Terps sponsorhip best B1G bottom feeders, lags behind elite FB schools",
-       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Michigan State, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
        x = "",
        y = "Total Royalties and Sponsorships") +
   theme_minimal() +
@@ -140,7 +140,7 @@ b1gbudgets |>
   coord_flip() +
   scale_fill_manual(values = c("TRUE" = "darkgreen", "FALSE" = "darkred"), guide = "none") +
   labs(title = "Maryland, however, is growing its sponsorship dollars at a high rate",
-       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Maryland, Michigan State, Ohio State, Oregon, Penn State, Nebraska, Purdue, Illinois, Rutgers",
        x = "",
        y = "Percent Change in Royalties and Sponsorships (2019-2024)") +
   theme_minimal() +
