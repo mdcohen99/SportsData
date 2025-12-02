@@ -89,6 +89,7 @@ ggplot() +
   geom_text_repel(data = maryland_wide,
                   aes(x = year, y = royalties_and_sponsorships, label = school), family = "poppins", size = 3) +
   scale_color_identity(guide = "legend", labels = c("Maryland", "Other Big Ten Schools"), breaks = c("red", "gray")) +
+  scale_y_continuous(labels = scales::label_dollar()) +
   theme_minimal() +
   theme(legend.position = "none",
         text = element_text(family = "poppins"),
@@ -116,6 +117,7 @@ b1gwide |>
                total_sponsorship = sum(royalties_and_sponsorships, na.rm = TRUE)
              ),
            aes(x = school, y = total_sponsorship), fill = "red") +
+  scale_y_continuous(labels = scales::label_dollar()) +
   coord_flip() +
   labs(title = "Terps sponsorhip best B1G bottom feeders, lags behind elite FB schools",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
@@ -139,6 +141,7 @@ b1gbudgets |>
   geom_col(aes(x = reorder(school, pct_change), y = pct_change, fill = pct_change > 0)) +
   coord_flip() +
   scale_fill_manual(values = c("TRUE" = "darkgreen", "FALSE" = "darkred"), guide = "none") +
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
   labs(title = "Maryland, however, is growing its sponsorship dollars",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "",
@@ -152,11 +155,91 @@ b1gbudgets |>
         axis.text = element_text(size = 8))
 ```
 
-Still to come... 
 
 #Second: Ticket Sales 
 
-I have this data specifically broken down for football, but this may require some careful analysis because Covid hit this area more than any other category. A pct change may be the best option here cause that will look a bit more normal than a covid chart with a massive dip in the FY2021 budgets
+First, wanted to look at just how Maryland has changed its own ticket sales revenue over time. The answer is... not much! Ticket sales are up just nine percent since the FY2020 data, so the 2019 football season. 
+
+```{r}
+maryland_wide |> 
+  select(school, year, ticket_sales) |> 
+  filter(year != "2021") |> 
+  ggplot() +
+  geom_col(aes(x = factor(year), y = ticket_sales), fill = "red") +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  labs(title = "Maryland ticket sales up in 2024, but largely unchanged since 2019",
+       subtitle = "Note: This chart does not include data from the 2020 season due to no tickets being sold\n as a result of the COVID-19 pandemic.",
+       x = "",
+       y = "Ticket sales revenue") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8))
+```
+
+But how does that compare to the rest of the conference? We're going to look at total ticket sales over this time. I will remove the 2020 COVID-19 season impacted season from this data because some schools sold tickets and others didn't based on their recklessness about pandemic safety. Doesn't seem fair to knock Maryland for trying not to kill people. 
+
+```{r}
+b1gwide |> 
+  filter(year != 2021) |> 
+  select(school, year, ticket_sales) |>
+  group_by(school) |> 
+  summarize(
+    total_ticket_sales = sum(ticket_sales, na.rm = TRUE)
+  ) |> 
+  ggplot() +
+  geom_col(aes(x = reorder(school, total_ticket_sales), y = total_ticket_sales)) +
+  geom_col(data = filter(b1gwide, school == "Maryland" & year != 2021) |> 
+             select(school, year, ticket_sales) |>
+             group_by(school) |> 
+             summarize(
+               total_ticket_sales = sum(ticket_sales, na.rm = TRUE)
+             ),
+           aes(x = school, y = total_ticket_sales), fill = "red") +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  coord_flip() +
+  labs(title = "Maryland's ticket sales revenue among Big Ten's lowest",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
+       x = "",
+       y = "Total Ticket Sales (excluding the 2020 season)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)
+      )
+```
+
+And how is its growth going compared to the rest of the league? 
+
+```{r}
+b1gbudgets |> 
+  filter(category == "Ticket sales") |> 
+  mutate(pct_change = ((x2024 - x2019) / x2019) * 100) |> 
+  ggplot() +
+  geom_col(aes(x = reorder(school, pct_change), y = pct_change, fill = pct_change > 0)) +
+  coord_flip() +
+  scale_fill_manual(values = c("TRUE" = "darkgreen", "FALSE" = "darkred"), guide = "none") +
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
+  labs(title = "Maryland's ticket sales growth lags behind most Big Ten schools",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
+       x = "",
+       y = "Percent Change in Ticket Sales (2019-2024)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8))
+```
+
+So Maryland lags behind here in revenue. There are a few reasons for this. In part, tickets aren't expensive. But that's also a supply and demand issue. Maryland's stadium is smaller than much of the Big Ten, but the demand isn't particularly high unless a school like Michigan with a large local alumni base is in town. 
 
 #Third : Media Rights Money
 
@@ -164,9 +247,86 @@ This is a bit of a tough one to conflate as well. Maryland received zero (0!) do
 
 #Maryland spending: Recruiting and salaries 
 
-Coaches complain a lot about the resources they have, which will often mean the money they have to pay their assistant coaches/support staff (plus their own salary lol) as well as recruiting budget. This recruiting number is referring to travel costs and official visits and stuff. It's obviously not NIL or revenue sharing. The FY2025 reports will be fascinating when we get thsoe because that's when rev sharing will show up for the first time. That's something worth talking to Matt Brown about since I think that will be a huge story in those reports. I asked Dellenger about that and he said no one really knows what that's going to look like in terms of how the new budget reports are formatted/where the money is coming from, but it's going to be very different. 
+Coaches complain a lot about the resources they have, which will often mean the money they have to pay their assistant coaches/support staff (plus their own salary lol) as well as recruiting budget. This recruiting number is referring to travel costs and official visits and stuff. It's obviously not NIL or revenue sharing. The FY2025 reports will be fascinating when we get those because that's when rev sharing will show up for the first time. That's something worth talking to Matt Brown about since I think that will be a huge story in those reports. I asked Dellenger about that and he said no one really knows what that's going to look like in terms of how the new budget reports are formatted/where the money is coming from, but it's going to be very different. 
 
 So this will at least set us up for some of those conversations. But we will be able to see what Maryland is providing to its football coaching staff in terms of dollars to work with to keep a good staff and bring in players, even in a bit of cherry picked scope given what isn't included here. 
+
+
+
+First, Maryland is NOT spending on its support staff. 
+
+```{r}
+b1gwide |> 
+  select(school, year, support_staff_football) |>
+  group_by(school) |> 
+  summarize(
+    total_coach_salaries = sum(support_staff_football, na.rm = TRUE)
+  ) |> 
+  ggplot() +
+  geom_col(aes(x = reorder(school, total_coach_salaries), y = total_coach_salaries)) +
+  geom_col(data = filter(b1gwide, school == "Maryland") |> 
+             select(school, year, support_staff_football) |>
+             group_by(school) |> 
+             summarize(
+               total_coach_salaries = sum(support_staff_football, na.rm = TRUE)
+             ),
+           aes(x = school, y = total_coach_salaries), fill = "red") +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  coord_flip() +
+  labs(title = "Maryland spending on football support staff is last in the Big Ten",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
+       x = "",
+       y = "Total Football Coaching Staff Salaries") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)
+      )
+```
+Rutgers is pumping a ton of money into its staff. And it is accomplishing..... what exactly?
+
+It's recruiting spending isn't bad. But spending on recruiting doesn't necessarily mean getting good players. Insert Rutgers. 
+```{r}
+b1gwide |> 
+  select(school, year, football_recruiting) |>
+  group_by(school) |> 
+  summarize(
+    total_coach_salaries = sum(football_recruiting, na.rm = TRUE)
+  ) |> 
+  ggplot() +
+  geom_col(aes(x = reorder(school, total_coach_salaries), y = total_coach_salaries)) +
+  geom_col(data = filter(b1gwide, school == "Maryland") |> 
+             select(school, year, football_recruiting) |>
+             group_by(school) |> 
+             summarize(
+               total_coach_salaries = sum(football_recruiting, na.rm = TRUE)
+             ),
+           aes(x = school, y = total_coach_salaries), fill = "red") +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  coord_flip() +
+  labs(title = "Maryland among middle of Big Ten recruiting spenders,\n but lots of money doesn't equal great teams",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
+       x = "",
+       y = "Total football recruiting expenses") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)
+      )
+```
+
+
+
+My main question here: Is this too many bar charts? I'm not sure if there is a better way to display the information? I don't think a line chart makes as good of a point?
+
+
+
 
 
 
