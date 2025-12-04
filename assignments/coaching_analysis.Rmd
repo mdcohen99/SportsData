@@ -1,0 +1,726 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+---
+title: "Coaching Networks and Career Pathways Analysis"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(igraph)
+library(ggraph)
+library(tidygraph)
+library(lubridate)
+```
+
+# Overview
+
+This analysis explores coaching networks and career pathways in NCAA women's basketball, focusing on which schools produce future head coaches and identifying coaching "trees."
+
+Your Task: Work through each section, making decisions and identifying potential story angles from the data.
+
+---
+
+# Data Loading
+
+Load the CSV file and check out the data to see what you're working with.
+
+```{r load-data}
+coaching <- read_csv("https://raw.githubusercontent.com/dwillis/wbb/refs/heads/main/ncaa/coaches/coaching_histories_merged.csv")
+
+cat("\nDataset summary:\n")
+cat("Total records:", nrow(coaching), "\n")
+cat("Unique coaches:", n_distinct(coaching$coach), "\n")
+cat("Unique schools:", n_distinct(coaching$college), "\n")
+cat("Division I records:", sum(coaching$division == "I", na.rm = TRUE), "\n")
+```
+
+---
+
+# Analysis 1: Head Coach Production Pipeline
+
+## DECISION POINT 1: Defining "Future Head Coaches"
+
+**Question for you**: Should we focus only on coaches who became D1 head coaches, or also include those who became head coaches at D2, D3, or other levels? How does this choice affect the story? Does it matter if someone became a D3 head coach vs. stayed in D1 as an assistant?
+
+**Your choice** (modify the code below):
+
+```{r head-coach-pipeline}
+# STUDENT DECISION: Modify this filter as needed
+# Option A: Only D1 head coaches (current setting)
+# Option B: All NCAA head coaches (remove division filter)
+# Option C: D1 + D2 only (division %in% c("I", "II"))
+
+d1_head_coaches <- coaching |>
+  filter(division == "I", position_title_standardized == "Head Coach") |>  # i kept as is, i want just the division 1 coaches
+  distinct(coach) |>
+  pull(coach)
+
+cat("Number of head coaches identified:", length(d1_head_coaches), "\n")
+```
+
+
+## Finding Previous Positions
+
+```{r previous-positions}
+# Find their previous positions (before becoming head coach)
+future_hc_positions <- coaching |>
+  filter(coach %in% d1_head_coaches, position_title_standardized != 'Head Coach') |>
+  arrange(coach, start_year) |>
+  group_by(coach) |>
+  mutate(
+    is_head_coach = position_title_standardized == "Head Coach",
+    first_hc_year = min(start_year[is_head_coach], na.rm = TRUE),
+    before_hc = start_year < first_hc_year | is.na(first_hc_year)
+  ) |>
+  ungroup() 
+
+cat("Total positions held by future head coaches:", nrow(future_hc_positions), "\n")
+```
+
+## DECISION POINT 2: Which Division Matters for Training?
+
+**Question for you**: When looking at which schools produce future head coaches, should we only count their D1 experience, or also their D2/D3/other experience?
+
+```{r production-schools}
+# STUDENT DECISION: Modify the division filter
+# Current: Only counting D1 positions
+# Alternative: Remove division filter to count all positions
+
+#i kept all the previous jobs before becoming a D1 head coach
+
+hc_production_schools <- future_hc_positions |>
+  group_by(college_clean, position_title_standardized) |>
+  summarize(
+    future_hcs = n_distinct(coach),
+    .groups = "drop"
+  ) |>
+  arrange(desc(future_hcs))
+
+cat("\nTop 20 D1 schools producing future head coaches (all positions):\n")
+hc_production_schools |>
+  group_by(college_clean) |>
+  summarize(total_future_hcs = sum(future_hcs), .groups = "drop") |>
+  arrange(desc(total_future_hcs)) |>
+  head(20) |>
+  print(n = 20)
+```
+
+**Think about**: Does a stint at a D3 school early in someone's career "count" as part of their development?
+
+## Position Type Breakdown
+
+```{r position-breakdown}
+cat("\n\nTop schools by position type:\n")
+hc_production_schools |>
+  filter(position_title_standardized %in% c("Assistant Coach", "Associate Head Coach")) |>
+  group_by(position_title_standardized) |>
+  slice_max(future_hcs, n = 10) |>
+  arrange(position_title_standardized, desc(future_hcs))
+```
+
+### 💡 STORY IDEAS - Section 1
+
+**Based on what you see above, brainstorm 2-3 story angles:**
+
+1. What about some programs lead to developing future head coaches? 
+2. Largely, these are not the elite programs on this list. Why? 
+3. Is a program's likelihood to develop future head coaches based on the current head coach at said program? Or is it more about the school itself?
+
+**Questions to consider:**
+- Which school dominates the list? Is this surprising?
+- Are there mid-major schools punching above their weight?
+- Are there regional patterns?
+
+---
+
+# Analysis 2: Career Ladder Analysis
+
+## DECISION POINT 3: Minimum Position Threshold
+
+**Question for you**: Should we require a minimum number of positions before someone counts as having a "career ladder"? (e.g., exclude people who went straight from 1 assistant job to head coach?)
+
+```{r career-ladder}
+# STUDENT DECISION: Set minimum number of positions
+MIN_POSITIONS <- 1  # i kept as is, i even considered getting rid of this entirely in a world where someone started out as a head coach 
+
+# Sequence of positions before becoming head coach
+career_sequences <- future_hc_positions |>
+  filter(before_hc, division == "I") |>
+  arrange(coach, start_year) |>
+  group_by(coach) |>
+  summarize(
+    positions_held = list(position_title_standardized),
+    n_positions = n(),
+    final_position = last(position_title_standardized),
+    .groups = "drop"
+  ) |>
+  filter(n_positions >= MIN_POSITIONS)  # APPLIES YOUR THRESHOLD
+
+cat("Coaches meeting threshold:", nrow(career_sequences), "\n")
+
+cat("\nMost common final position before becoming D1 head coach:\n")
+career_sequences |>
+  count(final_position, sort = TRUE) |>
+  mutate(pct = n / sum(n) * 100) |>
+  head(10)
+
+# Average number of positions held before head coach role
+cat("\n\nAverage D1 positions held before becoming head coach:",
+    round(mean(career_sequences$n_positions, na.rm = TRUE), 1))
+```
+
+## Common Career Pathways
+
+```{r pathways}
+# STUDENT DECISION: How many positions should we examine?
+PATHWAY_LENGTH_long <- 5  
+PATHWAY_LENGTH_short <- 2
+
+#i wanted to try multiple options here 
+
+cat("\n\nCommon", PATHWAY_LENGTH, "-position pathways to head coach:\n")
+
+career_sequences |>
+  filter(n_positions == PATHWAY_LENGTH_long) |>
+  mutate(pathway = map_chr(positions_held, ~paste(.x, collapse = " → "))) |>
+  count(pathway, sort = TRUE) |>
+  head(15) |>
+  print(n = 15)
+
+career_sequences |>
+  filter(n_positions == PATHWAY_LENGTH_short) |>
+  mutate(pathway = map_chr(positions_held, ~paste(.x, collapse = " → "))) |>
+  count(pathway, sort = TRUE) |>
+  head(15) |>
+  print(n = 15)
+```
+
+### 💡 STORY IDEAS - Section 2
+
+**Based on the career ladder data, brainstorm 2-3 story angles:**
+
+1. Who toiled the longest through a bunch of assistant jobs (12 people who had five straight assistant titles)? Why? 
+2. For those in the long paths who went from assistant head coaches to associate head coaches to assistant again, what makes for that path? Is that getting fired and then having a so-called lower title?
+3. one coach had three assistant jobs, then recruiting coordinator, then associate head coach. what? why? that makes no sense?
+
+**Questions to consider:**
+- Are there "fast track" coaches who skipped steps?
+- Does the Associate Head Coach position matter, or do people jump from Assistant to Head?
+- How important is the "Staff" level as a starting point?
+
+---
+
+# Analysis 3: Coaching Trees and Mentorship Networks
+
+## DECISION POINT 4: Time Overlap Requirements
+
+**Question for you**: How should we define "worked under"? Should we require they overlapped for at least one full year, or is any overlap sufficient?
+
+```{r coaching-trees}
+# STUDENT DECISION: Set minimum overlap threshold
+MIN_OVERLAP_YEARS <- 1  # i picked one because a year working under someone means you learned from them, and to me, I think to be in a coaching tree means the coach you worked under developed you to some extent or had an impact. So there has to be at least a year of overlap. 
+
+# Create edges: assistant coaches who worked under head coaches
+coaching_relationships <- coaching |>
+  filter(division == "I") |>
+  select(coach, college_clean, position_title_standardized, start_year, end_year) |>
+  # For each school/timeframe, find head coaches
+  left_join(
+    coaching |>
+      filter(division == "I", position_title_standardized == "Head Coach") |>
+      select(hc_name = coach, college_clean, 
+             hc_start = start_year, hc_end = end_year),
+    by = "college_clean",
+    relationship = "many-to-many"
+  ) |>
+  # Keep only overlapping tenures (assistant worked under this head coach)
+  filter(
+    !is.na(hc_start),
+    coach != hc_name,
+    position_title_standardized %in% c("Assistant Coach", "Associate Head Coach"),
+    # Check for time overlap
+    start_year <= coalesce(hc_end, 2025),
+    coalesce(end_year, 2025) >= hc_start
+  ) |>
+  # STUDENT DECISION: Add minimum overlap requirement
+  mutate(
+    overlap_years = pmin(coalesce(end_year, 2025), coalesce(hc_end, 2025)) - 
+                    pmax(start_year, hc_start)
+  ) |>
+  filter(overlap_years >= MIN_OVERLAP_YEARS) |>  # APPLIES YOUR THRESHOLD
+  distinct(coach, hc_name, college_clean)
+
+cat("Coaching relationships identified:", nrow(coaching_relationships), "\n")
+```
+
+## Top Mentors
+
+```{r mentors}
+# Most prolific mentors (head coaches who produced assistants who became HCs)
+prolific_mentors <- coaching_relationships |>
+  filter(coach %in% d1_head_coaches) |>
+  count(hc_name, sort = TRUE) |>
+  rename(mentor = hc_name, proteges_who_became_hc = n)
+
+cat("\nTop 20 mentors (head coaches whose assistants became D1 head coaches):\n")
+print(prolific_mentors |> head(20), n = 20)
+```
+
+### 💡 STORY IDEAS - Section 3
+
+**Based on the coaching trees data, brainstorm 2-3 story angles:**
+
+1. Well, well, well. It's Brenda Frese! She's the top mentor based on this data. What does she do that helps develop future head coaches? 
+2. Whereas the earlier list didn't have a ton of Big Ten programs in terms of producing future head coaches, this list has a lot of big name coaches as mentors. When hiring a head coach, is it important to schools that they worked under an established top coach? 
+3. Does working for a top coach like Frese or Dawn Staley make you more likely to succeed as a head coach?
+
+**Questions to consider:**
+- Who are the most prolific "mentor" coaches?
+- Are there surprising names?
+- Do certain coaches have "coaching trees" at multiple schools?
+- Could you profile a specific coaching tree? Which one?
+
+## DECISION POINT 5: Network Visualization Scope
+
+**Question for you**: How many top mentors should we include in the visualization? Too many = cluttered, too few = missing important connections.
+
+```{r network-visualization, fig.width=12, fig.height=10}
+# STUDENT DECISION: Number of top mentors to visualize
+N_MENTORS_TO_SHOW <- 25  # I picked 25 because I really liked how, with more mentors, there was so much more network together and connectivity between various coaching trees. It is like a visual LinkedIn
+
+# Create network of top mentors (for visualization clarity)
+top_mentors <- prolific_mentors |>
+  head(N_MENTORS_TO_SHOW) |>
+  pull(mentor)
+
+network_edges <- coaching_relationships |>
+  filter(
+    hc_name %in% top_mentors,
+    coach %in% d1_head_coaches
+  ) |>
+  select(from = hc_name, to = coach, school = college_clean)
+
+# Build network graph
+coaching_network <- as_tbl_graph(network_edges, directed = TRUE)
+
+# Plot
+ggraph(coaching_network, layout = 'fr') +
+  geom_edge_link(aes(alpha = 0.3), arrow = arrow(length = unit(2, 'mm'))) +
+  geom_node_point(size = 5, color = "steelblue") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3) +
+  theme_void() +
+  labs(
+    title = "Coaching Trees: Top Mentors and Their Protégés",
+    subtitle = paste("Top", N_MENTORS_TO_SHOW, "D1 head coaches who mentored future D1 head coaches")
+  )
+```
+
+---
+
+# Analysis 4: School-to-School Coaching Pipelines
+
+```{r school-pipelines}
+# Track coach movement between schools
+coach_movements <- coaching |>
+  filter(division == "I") |>
+  arrange(coach, start_year) |>
+  group_by(coach) |>
+  mutate(
+    next_school = lead(college_clean),
+    next_position = lead(position_title_standardized),
+    next_start = lead(start_year)
+  ) |>
+  filter(!is.na(next_school), college_clean != next_school) |>
+  ungroup()
+
+# Most common school-to-school transitions
+cat("\nTop 30 school-to-school coaching pipelines:\n")
+coach_movements |>
+  count(college_clean, next_school, sort = TRUE) |>
+  rename(from_school = college_clean, to_school = next_school, coaches = n) |>
+  head(30) |>
+  print(n = 30)
+```
+
+## Schools that Export to Head Coaching
+
+```{r exports}
+# Schools that "export" coaches to D1 head coaching jobs
+coach_exports <- coach_movements |>
+  filter(next_position == "Head Coach") |>
+  count(college_clean, sort = TRUE) |>
+  rename(school = college_clean, coaches_to_hc = n)
+
+cat("\n\nTop 20 schools that export coaches to D1 head coaching positions:\n")
+print(coach_exports |> head(20), n = 20)
+```
+
+### 💡 STORY IDEAS - Section 4
+
+**Based on school-to-school movement patterns, brainstorm 2-3 story angles:**
+
+1. Going back to the networking chart, Geno Auriemma's tree is a bit of an island. Why? What is his philosophy that keeps him outside and not connected to the broader connectivity of NCAA coaching trees?
+2. Why are certain schools seen as pipelines to head coaches, specifically Mississippi State and Texas? In that case is it geography plus MS State being a good program and Texas being a great one with more money? But most of that list is mid-major coaches being hired by bigger programs. Why those schools? 
+3. Why are the schools listed as the most recent job before being a head coach the ones that repeated? What about those programs set someone up for a head coach job? Most of those programs are not particularly successful over their history. 
+
+**Questions to consider:**
+- Are there strong regional pipelines (e.g., schools from the same conference feeding each other)?
+- Do assistant coaches at top programs tend to move to head coaching at mid-majors first?
+- Are there unusual cross-country connections?
+- Which schools are "feeders" vs. "destinations"?
+
+---
+
+# Analysis 5: Conference-Level Analysis
+
+## DECISION POINT 6: Conference Focus
+
+**Question for you**: Should we analyze all conferences equally, or focus on major/Power 5 conferences? Should we combine some smaller conferences?
+
+```{r conference-analysis}
+# STUDENT DECISION: Define which conferences to highlight
+# Option A: Analyze all conferences (current)
+# Option B: Create a "Power 5" vs "Mid-Major" vs "Small" grouping
+# Option C: Focus only on specific conferences
+
+
+#given the trends above, I think we have to consider all conferences
+
+# Conferences producing future head coaches
+conference_production <- future_hc_positions |>
+  filter(before_hc, division == "I") |>
+  count(conference, position_title_standardized) |>
+  arrange(desc(n))
+
+cat("\nTop conferences producing future D1 head coaches:\n")
+conference_production |>
+  group_by(conference) |>
+  summarize(total = sum(n), .groups = "drop") |>
+  arrange(desc(total)) |>
+  head(15) |>
+  print(n = 15)
+```
+
+## Conference Loyalty
+
+```{r loyalty}
+# Conference loyalty: coaches who stay within conference
+conference_loyalty <- coach_movements |>
+  left_join(
+    coaching |> 
+      filter(division == "I") |>
+      select(coach, college_clean, conference),
+    by = c("next_school" = "college_clean", "coach" = "coach"),
+    relationship = "many-to-many"
+  ) |>
+  filter(!is.na(conference.x), !is.na(conference.y)) |>
+  mutate(same_conference = conference.x == conference.y) |>
+  group_by(conference.x) |>
+  summarize(
+    total_moves = n(),
+    same_conference_moves = sum(same_conference),
+    loyalty_rate = same_conference_moves / total_moves * 100,
+    .groups = "drop"
+  ) |>
+  arrange(desc(loyalty_rate))
+
+cat("\n\nConference retention rates (coaches staying within conference):\n")
+print(conference_loyalty |> head(15), n = 15)
+```
+
+### 💡 STORY IDEAS - Section 5
+
+**Based on conference patterns, brainstorm 2-3 story angles:**
+
+1. The A10 has produced more future head coaches than the Big Ten, Pac 12, Big 12 and Big East. That's pretty surprising. Why? A lot of competent mid-majors? 
+2. The ACC is really not loyal in terms of its head coach hires. But it also produces the most future head coaches. Why not hire from within? Is it about rivalries? Being too close to each other and not wanting direct opponents to take advantage of your development?
+3. And in turn, why do other leagues look to the ACC to hire coaches if they aren't staying in the ACC? If other leagues view the ACC as a good league and thus hires coaches from it, where is the ACC hiring from? 
+
+**Questions to consider:**
+- Do certain conferences "develop" more coaches than others?
+- Is there high loyalty within conferences, or do coaches move around?
+- Are there conferences that import talent vs. export it?
+
+---
+
+# Analysis 6: Time to Head Coach Role
+
+## DECISION POINT 7: Career Start Definition
+
+**Question for you**: When calculating "time to head coach," should we count ALL positions (including high school, community college) or only college-level positions?
+
+```{r time-to-hc}
+# STUDENT DECISION: Filter on category
+# Current: All positions included
+# Alternative: Add filter like "category == 'College'" to exclude high school, etc.
+
+time_to_hc <- coaching |>
+  filter(coach %in% d1_head_coaches) |>
+  filter(category == "College") |>  # i un-commented because i don't want to see all the random non-college jobs
+  arrange(coach, start_year) |>
+  group_by(coach) |>
+  summarize(
+    first_position_year = min(start_year, na.rm = TRUE),
+    first_hc_year = min(start_year[position_title_standardized == "Head Coach" & 
+                                     division == "I"], na.rm = TRUE),
+    years_to_hc = first_hc_year - first_position_year,
+    .groups = "drop"
+  ) |>
+  filter(is.finite(years_to_hc), years_to_hc >= 0)
+
+cat("\nTime to D1 head coach position:\n")
+cat("Mean:", round(mean(time_to_hc$years_to_hc, na.rm = TRUE), 1), "years\n")
+cat("Median:", median(time_to_hc$years_to_hc, na.rm = TRUE), "years\n")
+cat("Min:", min(time_to_hc$years_to_hc, na.rm = TRUE), "years\n")
+cat("Max:", max(time_to_hc$years_to_hc, na.rm = TRUE), "years\n")
+
+# Distribution
+ggplot(time_to_hc, aes(x = years_to_hc)) +
+  geom_histogram(binwidth = 2, fill = "steelblue", alpha = 0.7) +
+  geom_vline(xintercept = median(time_to_hc$years_to_hc, na.rm = TRUE), 
+             linetype = "dashed", color = "red", size = 1) +
+  labs(
+    title = "Years to First D1 Head Coaching Position",
+    subtitle = "From first coaching role to D1 head coach",
+    x = "Years",
+    y = "Count of coaches"
+  ) +
+  theme_minimal()
+```
+
+### 💡 STORY IDEAS - Section 6
+
+**Based on career timeline data, brainstorm 2-3 story angles:**
+
+1. It seems like a lot of coaches move up quickly to being a head coach. Why? What qualities must they have 
+2. Who is the coach that took over 30 years to get a job? Why keep sticking it out?
+3. If just over 10 years is about average to become a head coach, why is that viewed as enough experience?
+
+**Questions to consider:**
+- What's the typical timeline to becoming a D1 head coach?
+- Who are the outliers (very fast or very slow)?
+
+---
+
+# Analysis 7: Elite Program "Finishing Schools"
+
+## DECISION POINT 8: Defining "Elite Programs"
+
+**Question for you**: Which schools should count as "elite" or "blue blood" programs? 
+This is subjective - modify the list based on your knowledge or research.
+
+```{r finishing-schools}
+# STUDENT DECISION: Modify this list of top programs
+# Consider: recent success, historical success, resources, national profile
+
+top_programs <- c("UConn", "Tennessee", "Stanford", "Notre Dame", "Baylor",
+                  "South Carolina", "LSU", "Texas", "Duke", "UCLA",
+                  "Louisville", "Maryland", "Ohio St.", "Iowa", "Indiana")
+# i kept as is
+
+cat("Analyzing", length(top_programs), "programs\n")
+
+# Assistant coaches from top programs who became head coaches
+finishing_school_analysis <- future_hc_positions |>
+  filter(
+    before_hc,
+    division == "I",
+    college_clean %in% top_programs,
+    position_title_standardized %in% c("Assistant Coach", "Associate Head Coach")
+  ) |>
+  group_by(college_clean) |>
+  summarize(
+    future_head_coaches = n_distinct(coach),
+    .groups = "drop"
+  ) |>
+  arrange(desc(future_head_coaches))
+
+cat("\n'Finishing schools' - top programs producing future head coaches:\n")
+print(finishing_school_analysis, n = Inf)
+
+# Average years spent at top program before becoming HC
+years_at_top_programs <- future_hc_positions |>
+  filter(
+    before_hc,
+    division == "I",
+    college_clean %in% top_programs,
+    position_title_standardized %in% c("Assistant Coach", "Associate Head Coach")
+  ) |>
+  mutate(years_at_school = coalesce(end_year, 2025) - start_year) |>
+  group_by(college_clean) |>
+  summarize(
+    avg_years = mean(years_at_school, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(desc(avg_years))
+
+cat("\n\nAverage years spent at top programs (for future HCs):\n")
+print(years_at_top_programs, n = Inf)
+```
+
+### 💡 STORY IDEAS - Section 7
+
+**Based on elite program patterns, brainstorm 2-3 story angles:**
+
+1. Why would a coach stay at a school for so long? At Iowa I assume because long tenured head coach?
+2. But in turn, why would the same not apply at UConn or Maryland? 
+3. Why does UConn produce so few future head coaches relative to the other schools here? Given that it's, ya know, UConn?
+
+**Questions to consider:**
+- Do the biggest brand names produce the most head coaches?
+- Are there "hidden gems" - programs that punch above their weight?
+- Does time spent at elite programs matter (short stint vs. long apprenticeship)?
+- Are there programs that hoard talent vs. those that develop and release it?
+
+---
+
+# Analysis 8: "Stepping Stone" Schools
+
+```{r stepping-stones}
+# Head coaches who left for another D1 head coaching job
+stepping_stone_moves <- coaching |>
+  filter(division == "I", position_title_standardized == "Head Coach") |>
+  arrange(coach, start_year) |>
+  group_by(coach) |>
+  mutate(
+    next_school = lead(college_clean),
+    next_position = lead(position_title_standardized),
+    moved_to_hc = next_position == "Head Coach" & !is.na(next_school)
+  ) |>
+  filter(moved_to_hc) |>
+  ungroup()
+
+cat("\nSchools most commonly serving as stepping stones (HC → HC moves):\n")
+stepping_stone_moves |>
+  count(college_clean, sort = TRUE) |>
+  rename(school = college_clean, hc_departures = n) |>
+  head(20) |>
+  print(n = 20)
+
+# Most common destination schools
+cat("\n\nMost common destination schools for head coaches:\n")
+stepping_stone_moves |>
+  count(next_school, sort = TRUE) |>
+  rename(destination = next_school, hc_arrivals = n) |>
+  head(20) |>
+  print(n = 20)
+```
+
+### 💡 STORY IDEAS - Section 8
+
+**Based on stepping stone patterns, brainstorm 2-3 story angles:**
+
+1. GW? What? Why? Georgetown too? Something about the Foggy Bottom metro stop leads to glory?
+2. Why are some of the schools here which have good mens basketball teams (Texas Tech, Wisconsin Auburn), seen as feeder schools for womens basketball? Unequal resource allocation? 
+3. 
+
+**Questions to consider:**
+- Which schools can't keep their successful head coaches?
+- What makes a school a "destination" vs. a "stepping stone"?
+- Are there schools that serve as consistent "first head coaching jobs"?
+- Can you identify a "ladder" of schools (small to medium to major)?
+
+---
+
+# Analysis 9: Position Mobility Analysis
+
+```{r position-mobility}
+# Years spent in each position before moving up
+position_duration <- coaching |>
+  filter(division == "I") |>
+  mutate(years_in_position = coalesce(end_year, 2025) - start_year) |>
+  group_by(position_title_standardized) |>
+  summarize(
+    n_positions = n(),
+    avg_duration = mean(years_in_position, na.rm = TRUE),
+    median_duration = median(years_in_position, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(desc(n_positions))
+
+cat("\nAverage years in each position type:\n")
+print(position_duration, n = Inf)
+
+# Promotion rates by position
+promotions <- coaching |>
+  filter(division == "I") |>
+  arrange(coach, start_year) |>
+  group_by(coach) |>
+  mutate(
+    next_position = lead(position_title_standardized),
+    promoted = case_when(
+      position_title_standardized == "Staff" & 
+        next_position %in% c("Assistant Coach", "Associate Head Coach", "Head Coach") ~ TRUE,
+      position_title_standardized == "Assistant Coach" & 
+        next_position %in% c("Associate Head Coach", "Head Coach") ~ TRUE,
+      position_title_standardized == "Associate Head Coach" & 
+        next_position == "Head Coach" ~ TRUE,
+      TRUE ~ FALSE
+    )
+  ) |>
+  filter(!is.na(next_position)) |>
+  group_by(position_title_standardized) |>
+  summarize(
+    total_moves = n(),
+    promotions = sum(promoted),
+    promotion_rate = promotions / total_moves * 100,
+    .groups = "drop"
+  ) |>
+  arrange(desc(promotion_rate))
+
+cat("\n\nPromotion rates by position:\n")
+print(promotions, n = Inf)
+```
+
+### 💡 STORY IDEAS - Section 9
+
+**Based on mobility and promotion patterns, brainstorm 2-3 story angles:**
+
+1. Why are associate head coaches more likely to be promoted? Even though it's an assitant role, do other schools view that as an elevated title?
+2. If associate head coaches are more likely to be promoted based on this data, why does the average duration in the role of an assistant coach last longer than that of an assistant
+3. Head coaches last for five years on average. Is that seen as a enough time to make a determination about how a head coach is doing? 
+
+**Questions to consider:**
+- Which positions are "dead ends" vs. "springboards"?
+- Do people spend more time in certain positions?
+- Is there a "right" amount of time to spend before moving up?
+
+---
+
+# FINAL REFLECTION: Your Best Story Ideas
+
+Review all your story ideas from each section. Which 3 would you pursue as full stories?
+
+Does working for a top coach like Brenda Frese or Dawn Staley make you more likely to succeed as a head coach?
+
+Frese and Staley have produced a lot of future head coaches, per this data. Why? Obviously those are great coaches, but why them specifically and not others like Kim Mulkey? What makes a good mentor of future head coaches? What qualities must they have. That would be an interesting story to understand the personality factor or the make up of a coach if we wanted to create an archetype. 
+
+---
+
+The A10 has produced more future head coaches than the Big Ten, Pac 12, Big 12 and Big East. That's pretty surprising. Why? A lot of competent mid-majors? 
+
+Honestly, I just think this is interesting. Why is the A10 producing so many future coaches. What is about that league compared to all the other smaller leagues that makes someone more likely to become a head coach, and on top of that, are they good head coaches? Some of that could be pretty easily obtained if we ran a correlation test against a coach's record to see if it was more beneficial to come from the A10 vs another small league like the Sun Belt or American, for example. In theory, it would also be good to interview athletic directors about why the A10 produces good candidates. 
+
+---
+
+Among the elite programs 
+1. Why would a coach stay at a school for so long? At Iowa I assume because long tenured head coach?
+2. But in turn, why would the same not apply at UConn or Maryland? 
+
+This, in a way, relates to the current football coaching cycle where a lot of coaches have decided to stay at their school. What makes a good situation to stay at a school while a head coach job could lure you away elsewhere? In a perfect world we could create a model for how coaches make decisions about staying or going when the coaching cycle comes up. 
+
+---
+
+# Additional Analysis Ideas to Explore
+
+Now that you've worked through these analyses, what other questions could this data answer?
+
+**Your ideas:**
+
+1. Build more predictive models, for example what types of paths are more likely to lead to a head coaching job. Can we model a coach's most likely journey including schools, titles, number of stops, etc.?
+2. Paired with actual game results, who are the best mentors for producing successful coaches 
+3. same as No. 2 but for schools as well
