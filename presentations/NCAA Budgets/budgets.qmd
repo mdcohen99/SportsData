@@ -48,7 +48,7 @@ list2env(all_sheets, envir = .GlobalEnv)
 #Intro 
 
 When Maryland athletic director Jim Smith announced that Mike Locksley would be returning as football coach, it came with an assurance that Maryland would increase its funding and investment in football going forward. 
-Since Maryland joined the Big Ten, it has been one of the league's more medicore football programs, and one of its worth in terms of financial backing. 
+Since Maryland joined the Big Ten, it has been one of the league's more medicore football programs, and one of its worst in terms of financial backing. 
 
 But how far, exactly, is Maryland lagging behind? Quite a lot, actually. 
 
@@ -123,7 +123,7 @@ b1gwide |>
            aes(x = school, y = total_sponsorship), fill = "red") +
   scale_y_continuous(labels = scales::label_dollar()) +
   coord_flip() +
-  labs(title = "Terps sponsorhip best B1G bottom feeders, lags behind elite FB schools",
+  labs(title = "Terps sponsorhip best Big Ten bottom feeders,\n lags behind elite FB schools",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "",
        y = "Total Royalties and Sponsorships") +
