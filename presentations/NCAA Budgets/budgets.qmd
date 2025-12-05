@@ -47,18 +47,22 @@ list2env(all_sheets, envir = .GlobalEnv)
 
 #Intro 
 
-Ultimately, we want to look at Maryland athetlic director Jim Smith's comment about increasing funding for Maryland football and keeping Locksley. How far is Maryland lagging behind the Big Ten? We had Ross Dellenger in at the Povich Center recently, and I asked him what he would be looking for in the 2025 fiscal year budget reports when those come out. Did I asked him mostly because I wanted to know how he was analyzing public records? Yes. Did I also use that question because I knew I was doing this project and was quitely using it as guidance? Who can say!
+When Maryland athletic director Jim Smith announced that Mike Locksley would be returning as football coach, it came with an assurance that Maryland would increase its funding and investment in football going forward. 
+Since Maryland joined the Big Ten, it has been one of the league's more medicore football programs, and one of its worth in terms of financial backing. 
 
-He said he would be looking at sponsorship, ticket sales and media rights money. 
+But how far, exactly, is Maryland lagging behind? Quite a lot, actually. 
 
-Granted, he was saying that specifically about the 2025 data which isn't actually accessible yet. But we're going to use those as the main metrics to compare Maryland football to the rest of the Big Ten. This notebook may also look at the contributions/donations to the football program. 
+A review of the last five years worth of NCAA budget reports from Big Ten institutions, acquired by Cohen News Service through a public records request, Maryland is near the bottom of the league in several important categories that dictate football financial success. 
 
-This will also analyze how Maryland spends relative to other Big Ten programs with regard to football. That includes coaches salaries, support staff salaries and recruiting. 
+Upon his visit to the esteemed Shirley Povich Center for Sports Journalism earlier this fall, Yahoo Sports reporter Ross Dellenger said that he looks at sponsorship dollars, ticket sales and media rights money when he gets budget reports for college football programs. Maryland doesn't receive media rights checks as of the most recent budget report based on its status as a newer member of the league. But much of the money Maryland wasn't getting the the Big Ten's TV deals, the Big Ten paid Maryland directly. 
 
-I'm going to create both a long and wide format of the data for the various analysis we will need to do. 
+But it's ticket sales and sponsorship revenues are low. As Dellenger said, those will be areas Maryland must focus to improve if it plans to compete in the Big Ten with Locksley or any coach after him. 
 
 ```{r}
-b1gbudgets <- bind_rows(Illinois, Indiana, Iowa, Maryland, Michigan, `Michigan State`, Minnesota, Nebraska, `Ohio State`, `Penn State`, Purdue, Rutgers, Wisconsin, Washington, UCLA, USC, Oregon) |> 
+b1gbudgets <- bind_rows(Illinois, Indiana, #Iowa, 
+                        Maryland, Michigan, `Michigan State`, #Minnesota, 
+                        Nebraska, `Ohio State`, `Penn State`, Purdue, Rutgers, #Wisconsin, #Washington, #UCLA, #USC, 
+                        Oregon) |> 
   clean_names() 
 
 
@@ -74,15 +78,15 @@ maryland_wide <- b1gwide |>
   filter(school == "Maryland")
 ```
 
-Let's look at each of the three factors Ross mentioned.
+Let's look at each of the three factors Dellenger mentioned.
 
-#First: Sponsorship dollars... 
+#First: Sponsorship dollars
 
 ```{r}
 ggplot() +
   geom_point(data = b1gwide, aes(x = year, y = royalties_and_sponsorships, color = "gray")) +
   geom_point(data = maryland_wide, aes(x = year, y = royalties_and_sponsorships, color = "red")) +
-  labs(title = "Annually, Maryland's sponsorship dollars around middle of the Big Ten pack",
+  labs(title = "Annually, Maryland's sponsorship dollars around middle of the \nBig Ten pack",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "Year",
        y = "Royalties and Sponsorships") +
@@ -145,7 +149,7 @@ b1gbudgets |>
   labs(title = "Maryland, however, is growing its sponsorship dollars",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "",
-       y = "Percent Change in Royalties and Sponsorships (2019-2024)") +
+       y = "Percent Change in Royalties and Sponsorships (FY2019-2024)") +
   theme_minimal() +
   theme(legend.position = "none",
         text = element_text(family = "poppins"),
@@ -154,11 +158,17 @@ b1gbudgets |>
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8))
 ```
+Of the 11 schools which returned records to the Cohen News Service request, Maryland earned the fourth smallest revenue from sponsorships. Expectedly, the Big Ten's best programs are the top of the list. 
 
+Maryland, however, is among the better programs in terms of growing its revenue in this category. Only Michigan State and Ohio State have seen more growth in their sponsorship revenue from the 2019 fiscal year through 2024. Michigan State has seen a massive spike in its growth, with an increase of more than 650% since 2019. It hasn't resulted in Michigan State's football program improving, but may be setting it up well for the revenue sharing era (which will not show in these reports). 
 
 #Second: Ticket Sales 
 
-First, wanted to look at just how Maryland has changed its own ticket sales revenue over time. The answer is... not much! Ticket sales are up just nine percent since the FY2020 data, so the 2019 football season. 
+Maryland is frequently criticized for low attendance at football games. But how bad is it, really. 
+
+Well, it's pretty bad. 
+
+Over the course of this data set, Maryland's ticket sales revenue is up just 9%, since the 2019 football season. Ticket revenue from the 2020 COVID-19 impacted football season is excluded throughout this section because some schools sold tickets and others didn't based on their recklessness about pandemic safety. Doesn't seem fair to knock Maryland for trying not to kill people. 
 
 ```{r}
 maryland_wide |> 
@@ -180,7 +190,7 @@ maryland_wide |>
         axis.text = element_text(size = 8))
 ```
 
-But how does that compare to the rest of the conference? We're going to look at total ticket sales over this time. I will remove the 2020 COVID-19 season impacted season from this data because some schools sold tickets and others didn't based on their recklessness about pandemic safety. Doesn't seem fair to knock Maryland for trying not to kill people. 
+But how does Maryland's revenue on tickets compare to the rest of the conference? 
 
 ```{r}
 b1gwide |> 
@@ -215,6 +225,8 @@ b1gwide |>
       )
 ```
 
+Only Rutgers has a smaller revenue total than Maryland for ticket sales over this period. That's not ideal. 
+
 And how is its growth going compared to the rest of the league? 
 
 ```{r}
@@ -229,7 +241,7 @@ b1gbudgets |>
   labs(title = "Maryland's ticket sales growth lags behind most Big Ten schools",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "",
-       y = "Percent Change in Ticket Sales (2019-2024)") +
+       y = "Percent Change in Ticket Sales (FY2019-2024)") +
   theme_minimal() +
   theme(legend.position = "none",
         text = element_text(family = "poppins"),
@@ -241,19 +253,50 @@ b1gbudgets |>
 
 So Maryland lags behind here in revenue. There are a few reasons for this. In part, tickets aren't expensive. But that's also a supply and demand issue. Maryland's stadium is smaller than much of the Big Ten, but the demand isn't particularly high unless a school like Michigan with a large local alumni base is in town. 
 
-#Third : Media Rights Money
+But it isn't just an issue of Maryland having a smaller stadium because other teams with similar sized stadiums have much better revenue numbers. And, compared to other Big Ten programs, Maryland has also played fewer home games over the life of this data. 
 
-This is a bit of a tough one to conflate as well. Maryland received zero (0!) dollars of media rights money during this whole time. Part of that is due to the number of years Maryland couldn't collect money because it wasn't a full member of the conference. But that is no longer the case by 2024 and Maryland still reports a zero for media rights revenue. At the same time, Maryland is collecting a SIGNIFICANTLY larger check than any other school in terms of its Big Ten money distribution. By significantly, we are talking about $50 MILLION more than any other school. I'm not entirely sure why it shows up that way in the report. I may have to call and ask. I'm not sure if I can fully do this part of the analysis until that difference is cleared up. 
+```{r}
+total_home_games <- tibble(
+  school = c("Indiana", "Maryland", "Michigan", "Michigan State", "Ohio State", "Oregon", "Penn State", "Nebraska", "Purdue", "Illinois", "Rutgers"),
+  n_home_games = c(35, 35, 39, 37, 38, 36, 40, 37, 37, 37, 38
+))
+
+total_tickets <- b1gwide |> 
+  filter(year != 2021) |> 
+  select(school, year, ticket_sales) |>
+  group_by(school) |> 
+  summarize(
+    total_ticket_sales = sum(ticket_sales, na.rm = TRUE)
+  )
+
+total_tickets <- total_tickets |> 
+  left_join(total_home_games, by = "school") |> 
+  mutate(avg_ticket_per_game = total_ticket_sales / n_home_games)
+
+ggplot() + 
+  geom_point(data = total_tickets, aes(x = n_home_games, y = avg_ticket_per_game)) +
+  geom_text_repel(data = total_tickets,
+                  aes(x = n_home_games, y = avg_ticket_per_game, label = school), family = "poppins", size = 3) +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  labs(title = "Maryland behind in football ticket revenue... \nand having home games at all",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
+       x = "Total Home Games Played (FY2019-2024, excluding 2020 season)",
+       y = "Total Ticket Sales (excluding the 2020 season)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8))
+```
+
 
 #Maryland spending: Recruiting and salaries 
 
-Coaches complain a lot about the resources they have, which will often mean the money they have to pay their assistant coaches/support staff (plus their own salary lol) as well as recruiting budget. This recruiting number is referring to travel costs and official visits and stuff. It's obviously not NIL or revenue sharing. The FY2025 reports will be fascinating when we get those because that's when rev sharing will show up for the first time. That's something worth talking to Matt Brown about since I think that will be a huge story in those reports. I asked Dellenger about that and he said no one really knows what that's going to look like in terms of how the new budget reports are formatted/where the money is coming from, but it's going to be very different. 
+Coaches complain a lot about the resources they have, which will often mean the money they have to pay their assistant coaches/support staff (plus their own salary) as well as recruiting budget. This recruiting number is referring to travel costs and official visits and stuff. It's not NIL or revenue sharing. 
 
-So this will at least set us up for some of those conversations. But we will be able to see what Maryland is providing to its football coaching staff in terms of dollars to work with to keep a good staff and bring in players, even in a bit of cherry picked scope given what isn't included here. 
-
-
-
-First, Maryland is NOT spending on its support staff. 
+If there's a complaint for Locksley about resources (similar to Kevin Willard before his departure as men's basketball coach), it could be about the pool of money he has for his support staff. Maryland has the lowest amount spent on football support staff of any scool which responded to the public records request.
 
 ```{r}
 b1gwide |> 
@@ -321,14 +364,17 @@ b1gwide |>
       )
 ```
 
+Of course, none of this data includes other factors Smith is likely referring to when he says Maryland will increase his funding. This doesn't include NIL and this doesn't include revenue sharing. It will not be until the FY2026 reports that revenue sharing even shows up in school's budgets. NIL happens outside the realm of the athletic department, and thus isn't reported nor is subject to public record. 
 
+Existing reporting shows Maryland is likely behind in NIL, too. This year, Maryland football landed Zion Elee, a five-star rated recruit. He is the second-highest rated recruit in team history, per 247Sports. 
 
-My main question here: Is this too many bar charts? I'm not sure if there is a better way to display the information? I don't think a line chart makes as good of a point?
+But while Maryland will be looking to increase its NIL funds, it will also need to make improvements within its budgeting to get to the upper levels of the Big Ten, assuming that is its intention. Given the logical comparison between the two programs after being tied together for so long in the same division, comparing Indiana's FY2025 report, when released, and Maryland's will be an interesting metric given that it is the report where Indiana's major jump in football will show up financially for the first time. Maryland could be compared to what was a very similar program just a few years ago and see what financial moves it made to become a relevant contender. 
 
+There also is a chicken/egg question in terms of raising revenue: Can Maryland increase sponsorship and ticket sales revenue if it isn't putting out a good team? Or is the reason that Maryland isn't putting out a good team because the NIL money has to come first to get the better players. 
 
+Or, lastly, do players not want to come to Maryland because there isn't the same investment in sponsors in the program or fans in the stands as other options in the Big Ten. 
 
-
-
+All of the investment and financial support across the athletic department and NIL collective sides works together. Maryland will need improvements in all areas. 
 
 
 
