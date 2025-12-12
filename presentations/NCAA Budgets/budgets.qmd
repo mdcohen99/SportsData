@@ -45,19 +45,6 @@ names(all_sheets) <- sheet_names
 list2env(all_sheets, envir = .GlobalEnv)
 ```
 
-#Intro 
-
-When Maryland athletic director Jim Smith announced that Mike Locksley would be returning as football coach, it came with an assurance that Maryland would increase its funding and investment in football going forward. 
-Since Maryland joined the Big Ten, it has been one of the league's more medicore football programs, and one of its worst in terms of financial backing. 
-
-But how far, exactly, is Maryland lagging behind? Quite a lot, actually. 
-
-A review of the last five years worth of NCAA budget reports from Big Ten institutions, acquired by Cohen News Service through a public records request, Maryland is near the bottom of the league in several important categories that dictate football financial success. 
-
-Upon his visit to the esteemed Shirley Povich Center for Sports Journalism earlier this fall, Yahoo Sports reporter Ross Dellenger said that he looks at sponsorship dollars, ticket sales and media rights money when he gets budget reports for college football programs. Maryland doesn't receive media rights checks as of the most recent budget report based on its status as a newer member of the league. But much of the money Maryland wasn't getting the the Big Ten's TV deals, the Big Ten paid Maryland directly. 
-
-But it's ticket sales and sponsorship revenues are low. As Dellenger said, those will be areas Maryland must focus to improve if it plans to compete in the Big Ten with Locksley or any coach after him. 
-
 ```{r}
 b1gbudgets <- bind_rows(Illinois, Indiana, #Iowa, 
                         Maryland, Michigan, `Michigan State`, #Minnesota, 
@@ -78,32 +65,25 @@ maryland_wide <- b1gwide |>
   filter(school == "Maryland")
 ```
 
-Let's look at each of the three factors Dellenger mentioned.
+#Intro 
+
+When Maryland athletic director Jim Smith announced that Mike Locksley would be returning as football coach, it came with an assurance that Maryland would increase its funding and investment in football going forward. 
+
+Since Maryland joined the Big Ten, it has been one of the league's more mediocre football programs, and one of its worst in terms of financial backing. 
+
+But how far, exactly, is Maryland lagging behind? Quite a lot, actually. 
+
+A review of the last five years worth of NCAA budget reports from Big Ten institutions, acquired by Cohen News Service through a public records request, Maryland is near the bottom of the league in several important categories that dictate football financial success. 
+
+Upon his visit to the esteemed Shirley Povich Center for Sports Journalism earlier this fall, Yahoo Sports reporter Ross Dellenger said that he looks at sponsorship dollars, ticket sales and media rights money when he gets budget reports for college football programs. Maryland doesn't receive media rights checks as of the most recent budget report based on its status as a newer member of the league. But much of the money Maryland wasn't getting the the Big Ten's TV deals, the Big Ten paid Maryland directly. 
+
+But it's ticket sales and sponsorship revenues are low. As Dellenger said, those will be areas Maryland must focus to improve if it plans to compete in the Big Ten with Locksley or any coach after him. 
 
 #First: Sponsorship dollars
 
-```{r}
-ggplot() +
-  geom_point(data = b1gwide, aes(x = year, y = royalties_and_sponsorships, color = "gray")) +
-  geom_point(data = maryland_wide, aes(x = year, y = royalties_and_sponsorships, color = "red")) +
-  labs(title = "Annually, Maryland's sponsorship dollars around middle of the \nBig Ten pack",
-       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
-       x = "Year",
-       y = "Royalties and Sponsorships") +
-  geom_text_repel(data = maryland_wide,
-                  aes(x = year, y = royalties_and_sponsorships, label = school), family = "poppins", size = 3) +
-  scale_color_identity(guide = "legend", labels = c("Maryland", "Other Big Ten Schools"), breaks = c("red", "gray")) +
-  scale_y_continuous(labels = scales::label_dollar()) +
-  theme_minimal() +
-  theme(legend.position = "none",
-        text = element_text(family = "poppins"),
-        plot.title = element_text(size = 12, face = "bold"),
-        plot.subtitle = element_text(size = 10),
-        axis.title = element_text(size = 10),
-        axis.text = element_text(size = 8)
-      )
-```
-Note for above chart: The 2021 dollars are down likely as a result of the COVID-19 pandemic. The FY2021 reports are the ones which saw the COVID-19 impacts since those reports cover the Fall 2020 and Spring 2021 semesters. 
+Bringing in sponsorship dollars is also dependent on having a top product. Maryland hasn't been winning enough football games to warrant bigger companies — other than its built in partnership with Under Armour. Unsurprisingly, the Big Ten's best football programs also bring in the largest total of sponsorship revenue during the period of the dataset. 
+
+Dellenger suggested a school can try to find raises in sponsorship dollars to lead to bringing in better players and thus improving the play on the field. In essence, putting the sponsorship ahead of winning instead of vice versa. To help fund revenue sharing payments, Dellenger said he expects to see major increases in the reported sponsor revenues in these budget reports. That data, however, will likely not truly appear until the 2026 fiscal year reports. 
 
 ```{r}
 b1gwide |> 
@@ -137,6 +117,34 @@ b1gwide |>
       )
 ```
 
+Though Maryland's total sponsorship dollars are among the worst of the Big Ten schools included, it is improving at a strong rate. 
+
+```{r}
+b1gwide |> 
+  select(school, year, royalties_and_sponsorships) |> 
+  mutate(color_group = ifelse(school == "Maryland", "Maryland", "Other")) |> 
+  ggplot(aes(x = factor(year), y = royalties_and_sponsorships, group = school, color = color_group)) +
+  geom_line(data = function(x) filter(x, school != "Maryland"), 
+            linewidth = 1, 
+            alpha = 0.7) +
+  geom_line(data = function(x) filter(x, school == "Maryland"), 
+            linewidth = 1.5) +
+    scale_color_manual(values = c("Maryland" = "red", "Other" = "gray70")) +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  labs(title = "Maryland's sponorship revenue is low, but it is growing",
+       subtitle = "Other Big Ten schools have seen far more sponsorship fluctuation,\n especially during the pandemic, than Maryland.",
+       x = "",
+       y = "Ticket sales revenue") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)) +
+  facet_wrap(~school)
+```
+
 ```{r}
 b1gbudgets |> 
   filter(category == "Royalties and sponsorships") |> 
@@ -146,7 +154,7 @@ b1gbudgets |>
   coord_flip() +
   scale_fill_manual(values = c("TRUE" = "darkgreen", "FALSE" = "darkred"), guide = "none") +
   scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
-  labs(title = "Maryland, however, is growing its sponsorship dollars",
+  labs(title = "And Maryland's sponsorship growth is outpacing other\n Big Ten football powers",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "",
        y = "Percent Change in Royalties and Sponsorships (FY2019-2024)") +
@@ -158,7 +166,7 @@ b1gbudgets |>
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8))
 ```
-Of the 11 schools which returned records to the Cohen News Service request, Maryland earned the fourth smallest revenue from sponsorships. Expectedly, the Big Ten's best programs are the top of the list. 
+Of the 11 schools which returned records to the Cohen News Service request, Maryland earned the fourth smallest revenue from sponsorship. Expectedly, the Big Ten's best programs are the top of the list. 
 
 Maryland, however, is among the better programs in terms of growing its revenue in this category. Only Michigan State and Ohio State have seen more growth in their sponsorship revenue from the 2019 fiscal year through 2024. Michigan State has seen a massive spike in its growth, with an increase of more than 650% since 2019. It hasn't resulted in Michigan State's football program improving, but may be setting it up well for the revenue sharing era (which will not show in these reports). 
 
@@ -230,6 +238,33 @@ Only Rutgers has a smaller revenue total than Maryland for ticket sales over thi
 And how is its growth going compared to the rest of the league? 
 
 ```{r}
+b1gwide |> 
+  select(school, year, ticket_sales) |> 
+  filter(year != "2021") |> 
+  mutate(color_group = ifelse(school == "Maryland", "Maryland", "Other")) |> 
+  ggplot(aes(x = factor(year), y = ticket_sales, group = school, color = color_group)) +
+  geom_line(data = function(x) filter(x, school != "Maryland"), 
+            linewidth = 1, 
+            alpha = 0.7) +
+  geom_line(data = function(x) filter(x, school == "Maryland"), 
+            linewidth = 1.5) +
+    scale_color_manual(values = c("Maryland" = "red", "Other" = "gray70")) +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  labs(title = "Compared to other Big Ten schools, Maryland's ticket sales\n growth is fairly flat",
+       subtitle = "Note: This chart does not include data from the 2020 season due to no tickets being sold\n as a result of the COVID-19 pandemic.",
+       x = "",
+       y = "Ticket sales revenue") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)) +
+  facet_wrap(~school)
+```
+
+```{r}
 b1gbudgets |> 
   filter(category == "Ticket sales") |> 
   mutate(pct_change = ((x2024 - x2019) / x2019) * 100) |> 
@@ -238,7 +273,7 @@ b1gbudgets |>
   coord_flip() +
   scale_fill_manual(values = c("TRUE" = "darkgreen", "FALSE" = "darkred"), guide = "none") +
   scale_y_continuous(labels = scales::label_percent(accuracy = 1)) +
-  labs(title = "Maryland's ticket sales growth lags behind most Big Ten schools",
+  labs(title = "But Maryland is growing its sales as a better rate\n than Ohio State and Michigan.",
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "",
        y = "Percent Change in Ticket Sales (FY2019-2024)") +
@@ -282,6 +317,58 @@ ggplot() +
        subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
        x = "Total Home Games Played (FY2019-2024, excluding 2020 season)",
        y = "Total Ticket Sales (excluding the 2020 season)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 9),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8))
+```
+
+Maryland's ticket sales have other problems, too. Maryland's stadium is the third smallest in the Big Ten. That, of course, puts a cap on Maryland's possible ticket revenue. And in that smaller stadium, Maryland still has the second lowest utilization rate of its seats among the schools with available data in this story. Some schools with smaller stadiums, like Purdue, fill up their seats at a much higher rate. 
+
+And adjusted for the utilization rate of the Big Ten stadiums from schools in this data set, Maryland has the third lowest revenue per seat. 
+
+```{r}
+ticket_revenue <- b1gwide |> 
+  filter(year != 2021) |> 
+  select(school, year, ticket_sales) |>
+  group_by(school) |> 
+  summarize(
+    total_ticket_sales = sum(ticket_sales, na.rm = TRUE)
+  ) 
+
+attendance <- tibble(
+  school = c("Illinois", "Indiana", "Maryland", "Michigan", "Michigan State", "Nebraska", "Ohio State", "Oregon", "Penn State", "Purdue", "Rutgers"),
+  five_year_average = c(40166, 44126, 36345, 110235, 69959, 87599, 102108, 53384, 106750, 55370, 42504),
+  stadium_capacity = c(60670, 52626, 51802, 107601, 74866, 85485, 102780, 54000, 106572, 57236, 52454),
+  n_home_games = c(37, 35, 35, 39, 37, 37, 38, 36, 40, 37, 38))
+
+attendance <- attendance |> 
+  left_join(ticket_revenue, by = "school") |> 
+  rename(
+    total_revenue = total_ticket_sales
+  ) 
+
+attendance <- attendance |>
+  mutate(
+    revenue_per_seat = total_revenue / stadium_capacity, 
+    utilization_rate = five_year_average / (stadium_capacity * n_home_games),
+    revenue_per_attendee = total_revenue / five_year_average,
+    utilization_adjusted_revenue = revenue_per_seat * utilization_rate
+  )
+  
+ggplot(data = attendance, aes(x = reorder(school, utilization_adjusted_revenue), y = utilization_adjusted_revenue)) +
+  geom_col() +
+  geom_col(data = filter(attendance, school == "Maryland"), 
+           aes(x = school, y = utilization_adjusted_revenue), fill = "red") +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  coord_flip() +
+  labs(title = "Adjusted for utilization, Maryland still near bottom of Big Ten ticket\n revenue per seat",
+       subtitle = "Note: only currently returned public record requests are included in this data. Those schools\nare Indiana, Maryland, Michigan, Michigan State, Ohio State, Oregon, Penn State,\n Nebraska, Purdue, Illinois, Rutgers",
+       x = "",
+       y = "Utilization-adjusted revenue per seat") +
   theme_minimal() +
   theme(legend.position = "none",
         text = element_text(family = "poppins"),
@@ -362,6 +449,34 @@ b1gwide |>
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 8)
       )
+```
+
+Much of Maryland's spending on recruiting has come in fairly steady increases since the COVID-19 pandemic. And while Maryland has been consistent in boosting its expenditures, it isn't happening at the same rate as its Big Ten competition. 
+
+```{r}
+b1gwide |> 
+  select(school, year, football_recruiting) |> 
+  mutate(color_group = ifelse(school == "Maryland", "Maryland", "Other")) |> 
+  ggplot(aes(x = factor(year), y = football_recruiting, group = school, color = color_group)) +
+  geom_line(data = function(x) filter(x, school != "Maryland"), 
+            linewidth = 1, 
+            alpha = 0.7) +
+  geom_line(data = function(x) filter(x, school == "Maryland"), 
+            linewidth = 1.5) +
+    scale_color_manual(values = c("Maryland" = "red", "Other" = "gray70")) +
+  scale_y_continuous(labels = scales::label_dollar()) +
+  labs(title = "Maryland, like its Big Ten counterparts, has increased\n recruiting spending since the pandemic",
+       subtitle = "Maryland has not raised its spending at the same rate as other Big Ten schools, however.",
+       x = "",
+       y = "Ticket sales revenue") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        text = element_text(family = "poppins"),
+        plot.title = element_text(size = 12, face = "bold"),
+        plot.subtitle = element_text(size = 10),
+        axis.title = element_text(size = 10),
+        axis.text = element_text(size = 8)) +
+  facet_wrap(~school)
 ```
 
 Of course, none of this data includes other factors Smith is likely referring to when he says Maryland will increase his funding. This doesn't include NIL and this doesn't include revenue sharing. It will not be until the FY2026 reports that revenue sharing even shows up in school's budgets. NIL happens outside the realm of the athletic department, and thus isn't reported nor is subject to public record. 
